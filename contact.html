@@ -725,7 +725,8 @@
                 <h2><i class="fas fa-briefcase" style="font-size:1.4rem; -webkit-text-fill-color: var(--accent-cyan); background: none;"></i> 仕事のご依頼フォーム</h2>
                 <p class="form-subtitle">以下のフォームに必要事項をご記入ください。<span style="color:var(--accent-cyan)">24時間以内</span>にご返信いたします。</p>
                 
-                <form id="workForm" class="contact-form-content" novalidate>
+                <form id="workForm" class="contact-form-content" name="work-form" method="POST" data-netlify="true" novalidate>
+                    <input type="hidden" name="form-name" value="work-form">
                     <div class="form-row">
                         <div class="form-group">
                             <label class="form-label" for="workName">お名前<span class="required">*</span></label>
@@ -791,7 +792,8 @@
                 <h2><i class="fas fa-comments" style="font-size:1.4rem; -webkit-text-fill-color: var(--accent-purple); background: none;"></i> ご質問・相談フォーム</h2>
                 <p class="form-subtitle">ITスクール体験やプログラミング学習について、何でもお気軽にご質問ください。</p>
                 
-                <form id="questionForm" class="contact-form-content" novalidate>
+                <form id="questionForm" class="contact-form-content" name="question-form" method="POST" data-netlify="true" novalidate>
+                    <input type="hidden" name="form-name" value="question-form">
                     <div class="form-row">
                         <div class="form-group">
                             <label class="form-label" for="questionName">お名前<span class="required">*</span></label>
@@ -948,7 +950,13 @@
                 });
             }
 
-            /* ---- Form submission ---- */
+            /* ---- Form submission (Netlify Forms) ---- */
+            function encode(data) {
+                return Object.keys(data)
+                    .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key]))
+                    .join('&');
+            }
+
             function setupForm(form, submitBtn, successMsg) {
                 form.addEventListener('submit', function(e) {
                     e.preventDefault();
@@ -957,11 +965,26 @@
                     submitBtn.disabled = true;
                     submitBtn.classList.add('loading');
 
-                    setTimeout(() => {
+                    const formData = new FormData(form);
+                    const data = {};
+                    formData.forEach((value, key) => { data[key] = value; });
+
+                    fetch('/', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: encode(data)
+                    })
+                    .then(() => {
                         form.style.display = 'none';
                         successMsg.classList.add('show');
                         successMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    }, 1800);
+                    })
+                    .catch(error => {
+                        console.error('送信エラー:', error);
+                        submitBtn.disabled = false;
+                        submitBtn.classList.remove('loading');
+                        alert('送信に失敗しました。お手数ですが、もう一度お試しください。');
+                    });
                 });
             }
 
