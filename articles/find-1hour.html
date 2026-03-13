@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>子育て中でも確保できる「1時間」の見つけ方 - CodeAcademy ITスクール体験記</title>
+    <meta name="description" content="子育て中の主婦が在宅ワークで使える1時間を確保する方法をご紹介。実践的な工夫と具体的な時間の作り方を詳しく解説します。">
+    <meta name="keywords" content="子育て, 1時間, 時間の作り方, ITスクール, プログラミング学習, CodeAcademy">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@400;600&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../assets/css/style.css">
+    
+    <style>
+        .article-hero {
+            background: var(--gradient-dark);
+            padding: 8rem 2rem 4rem;
+            text-align: center;
+            position: relative;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        
+        .article-hero h1 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            background: var(--gradient-text);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .article-meta {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            flex-wrap: wrap;
+        }
+        
+        .article-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            line-height: 1.8;
+        }
+        
+        .article-content h2 {
+            color: var(--text-primary);
+            margin: 3rem 0 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-cyan);
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+        
+        .article-content h3 {
+            color: var(--text-secondary);
+            margin: 2rem 0 1rem;
+            font-size: 1.4rem;
+            border-left: 4px solid var(--accent-cyan);
+            padding-left: 1rem;
+        }
+        
+        .article-content p {
+            margin-bottom: 1.8rem;
+            text-align: justify;
+        }
+        
+        .article-tags {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .article-tag {
+            background: rgba(0, 212, 255, 0.1);
+            color: var(--accent-cyan);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+        }
+        
+        .time-schedule {
+            background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-hover) 100%);
+            border: 2px solid var(--accent-cyan);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            margin: 2.5rem 0;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-card);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .time-schedule::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+        }
+        
+        .schedule-title {
+            color: var(--accent-cyan);
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .schedule-title i {
+            margin-right: 0.5rem;
+            font-size: 1.5rem;
+        }
+        
+        .time-slot {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            border-radius: var(--radius-sm);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-subtle);
+            transition: all 0.3s ease;
+        }
+        
+        .time-slot:hover {
+            background: rgba(0, 212, 255, 0.1);
+            border-color: var(--accent-cyan);
+            transform: translateX(5px);
+        }
+        
+        .time-slot:last-child {
+            margin-bottom: 0;
+        }
+        
+        .time-label {
+            font-weight: 700;
+            color: var(--accent-cyan);
+            min-width: 100px;
+            margin-right: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.95rem;
+        }
+        
+        .time-description {
+            flex: 1;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        
+        .time-description strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+        
+        .tips-box {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+            border: 2px solid var(--accent-cyan);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            margin: 2.5rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .tips-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+        }
+        
+        .tips-box h4 {
+            color: var(--accent-cyan);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            font-size: 1.3rem;
+        }
+        
+        .tips-box h4 i {
+            margin-right: 0.5rem;
+            font-size: 1.5rem;
+        }
+        
+        .tips-box ul {
+            margin: 0;
+            padding-left: 1.5rem;
+        }
+        
+        .tips-box li {
+            margin-bottom: 0.8rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        
+        .tips-box li:last-child {
+            margin-bottom: 0;
+        }
+        
+        .tips-box strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+        
+        .challenge-box {
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.1) 0%, rgba(239, 68, 68, 0.1) 100%);
+            border: 2px solid var(--accent-pink);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            margin: 2.5rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .challenge-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-pink), #ef4444);
+        }
+        
+        .challenge-box h4 {
+            color: var(--accent-pink);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            font-size: 1.3rem;
+        }
+        
+        .challenge-box h4 i {
+            margin-right: 0.5rem;
+            font-size: 1.5rem;
+        }
+        
+        .challenge-box p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin: 0;
+        }
+        
+        .experience-box {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(236, 72, 153, 0.1) 100%);
+            border: 2px solid var(--accent-purple);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            margin: 2.5rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .experience-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-purple), var(--accent-pink));
+        }
+        
+        .experience-box::after {
+            content: '💡';
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            font-size: 1.5rem;
+            background: var(--bg-card);
+            padding: 0 10px;
+        }
+        
+        .experience-box h4 {
+            color: var(--accent-purple);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .experience-box ul {
+            margin: 0;
+            padding-left: 1.5rem;
+        }
+        
+        .experience-box li {
+            margin-bottom: 0.8rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        
+        .experience-box li:last-child {
+            margin-bottom: 0;
+        }
+        
+        .highlight {
+            background: linear-gradient(transparent 60%, rgba(100, 180, 255, 0.3) 60%);
+            font-weight: 700;
+            padding: 0 0.2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .article-hero {
+                padding: 6rem 1rem 3rem;
+            }
+            
+            .article-content {
+                padding: 2rem 1rem;
+            }
+            
+            .article-meta {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            
+            .time-slot {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .time-label {
+                margin-right: 0;
+                margin-bottom: 0.5rem;
+                min-width: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <div class="logo">
+                <i class="fas fa-code"></i> CodeAcademy
+            </div>
+            <ul class="nav-links">
+                <li><a href="../index.html">ホーム</a></li>
+                <li><a href="../about.html">私について</a></li>
+                <li><a href="../blog.html">ブログ</a></li>
+                <li><a href="../contact.html">お問い合わせ</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Article Hero Section -->
+    <section class="article-hero">
+        <div class="container">
+            <h1><i class="fas fa-clock"></i> 子育て中でも確保できる「1時間」の見つけ方</h1>
+            <div class="article-meta">
+                <span><i class="far fa-calendar"></i> 2026年3月12日</span>
+                <span><i class="far fa-clock"></i> 4分読む</span>
+                <span><i class="far fa-user"></i> CodeAcademy</span></span>
+                <span><i class="far fa-folder"></i> ライフハック</span>
+            </div>
+            <div class="article-tags">
+                <span class="article-tag">ライフハック</span>
+                <span class="article-tag">ITスクール</span>
+                <span class="article-tag">時間管理</span>
+                <span class="article-tag">プログラミング学習</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main>
+        <article class="article-content">
+            <p>
+                子育て中の主婦にとって、「自分の時間」を確保することは本当に難しいですよね。
+                私も最初は「1時間も連続で時間がとれるわけがない」「プログラミングなんて難しすぎる」と思っていました。
+                でも、少しの工夫で毎日<span class="highlight">1時間</span>は確保できるようになりました。
+                今回は、実際に私が実践している時間の作り方と、そこでどうプログラミングを学習しているかをご紹介します。
+            </p>
+
+            <h2>まず現状を把握することが大切</h2>
+            <p>
+                ITスクールでプログラミングを学習し始める前に、まず1週間程度自分の時間の使い方を記録してみました。
+                すると、意外なことに「<strong>勉強に使える時間</strong>」がいくつかあることに気づきました。
+            </p>
+
+            <div class="time-schedule">
+                <div class="schedule-title">
+                    <i class="fas fa-calendar-alt"></i> 私の1日のスケジュールと勉強時間
+                </div>
+                
+                <div class="time-slot">
+                    <div class="time-label">6:00-7:00</div>
+                    <div class="time-description">朝の支度、子どもの世話、朝ごはん</div>
+                </div>
+                
+                <div class="time-slot">
+                    <div class="time-label">7:00-8:00</div>
+                    <div class="time-description">子どもを学校へ送迎（片道15分、往復30分）</div>
+                </div>
+                
+                <div class="time-slot">
+                    <div class="time-label">8:00-12:00</div>
+                    <div class="time-description">家事、買い物、洗濯など（<strong>ポイント：子どもが学校に行っている間、空き時間がちょこちょこある</strong>）</div>
+                </div>
+                
+                <div class="time-slot">
+                    <div class="time-label">12:00-13:00</div>
+                    <div class="time-description">昼ごはん、片付け</div>
+                </div>
+                
+                <div class="time-slot">
+                    <div class="time-label">13:00-15:00</div>
+                    <div class="time-description">子どもの昼寝時間（<strong>ポイント：ここがメインの勉強時間！</strong>）</div>
+                </div>
+                
+                <div class="time-slot">
+                    <div class="time-label">15:00-18:00</div>
+                    <div class="time-description">午後の家事、子どもと遊ぶ時間</div>
+                </div>
+                
+                <div class="time-slot">
+                    <div class="time-label">18:00-20:00</div>
+                    <div class="time-description">夕ごはんの準備と片付け</div>
+                </div>
+                
+                <div class="time-slot">
+                    <div class="time-label">20:00-21:00</div>
+                    <div class="time-description">子どもの寝かしつけ（<strong>ポイント：ここも1時間！</strong>）</div>
+                </div>
+                
+                <div class="time-slot">
+                    <div class="time-label">21:00-23:00</div>
+                    <div class="time-description">自分の時間（<strong>ポイント：ここも勉強時間！</strong>）</div>
+                </div>
+            </div>
+
+            <h2>実際に確保している「勉強時間」はここ</h2>
+            
+            <h3>1. 子どもの昼寝時間（13:00-15:00）</h3>
+            <p>
+                これが私のメインのプログラミング学習時間です。子どもが2歳のときから、昼寝は必ず13時からと決めています。
+                最初は「そんなに正確に寝てくれるわけがない」と思っていましたが、<span class="highlight">毎日同じ時間に寝かせることで、
+                子どもの体内時計が調整されてきました。</span> そして、この貴重な2時間をプログラミングの基礎学習に充てています。
+            </p>
+
+            <div class="tips-box">
+                <h4><i class="fas fa-clock"></i> 昼寝時間を有効に使うコツ（プログラミング学習編）</h4>
+                <ul>
+                    <li>昼ごはんの後は必ずトイレに連れて行く（寝る直前に目が覚めてしまうのを防ぐため）</li>
+                    <li>寝る前に同じ曲を流す（これが寝るサインになります）</li>
+                    <li>部屋を暗くして、静かな環境を作る（子どもも自分も落ち着けるため）</li>
+                    <li>自分も一緒に横になって、寝る雰囲気を作る（15分ほどで寝たらPCを開く）</li>
+                    <li><strong>重要：子どもが寝たらすぐに学習開始！SNSチェックは後回し</strong></li>
+                </ul>
+            </div>
+
+            <h3>2. 子どもを寝かしつけた後（21:00-22:00）</h3>
+            <p>
+                もう1つの重要な時間帯です。子どもを寝かしつけるのは大変ですが、寝かせた後の1時間は
+                <span class="highlight">「今日1日頑張ったご褒美」</span>として大切にしています。
+                この時間は比較的集中できるので、<strong>CodeAcademyの課題に取り組んだり、復習をしたり、次の日の予習をしたり</strong>しています。
+            </p>
+
+            <div class="challenge-box">
+                <h4><i class="fas fa-exclamation-triangle"></i> 注意点</h4>
+                <p>
+                    この時間帯は私自身も疲れているので、無理なスケジュールは組まないようにしています。
+                    また、夫が帰宅して一緒に寝かしつけを手伝ってくれる日もあるので、その日はもっと時間がとれます。
+                </p>
+            </div>
+
+            <h2>工夫していること（プログラミング学習編）</h2>
+            
+            <h3>朝の時間も有効活用（スマホ学習で）</h3>
+            <p>
+                朝の送迎の往復30分も、実は有効に使えます。行きは子どもとおしゃべりしながら歩くので
+                使えませんが、帰りは一人なので、その間に<strong>スマホでドットインストールやProgateの復習</strong>をしたり、
+                翌日の学習スケジュールを考えたりしています。
+            </p>
+
+            <h3>家事の効率化（＝学習時間増やすため）</h3>
+            <p>
+                家事にかかる時間を減らすことで、プログラミング学習時間を増やしています。例えば、
+                洗濯物は夜に干して、朝には干し終わっている状態に。朝ごはんは前日の夜に準備して、
+                朝は温めるだけに。これだけで30分は浮きます。その30分で<strong>Pythonの基礎文法の復習</strong>ができます。
+            </p>
+
+            <h3>子どもとの約束事（ママの学校の時間）</h3>
+            <p>
+                「ママがパソコンをしているときは、学校で勉強しているときだから静かにしていてね」という約束をしています。
+                もちろん、すぐに理解してもらえるわけではありませんでしたが、
+                毎日同じことを繰り返すことで、次第に理解してもらえるようになりました。
+                最近では「ママ、今日はPythonの日？」なんて聞いてくれるようになりました。
+            </p>
+
+            <div class="tips-box">
+                <h4><i class="fas fa-heart"></i> 子どもにも理解してもらうコツ</h4>
+                <ul>
+                    <li>「ママは今学校（CodeAcademy）で勉強している最中」ということを言葉で伝える</li>
+                    <li>勉強が終わったら、必ず「ありがとう」と感謝を伝える</li>
+                    <li>一緒に遊ぶ時間もちゃんと作る（「勉強が終わったら一緒に遊ぼうね」）</li>
+                    <li>子どもが我慢してくれたことを褒める</li>
+                </ul>
+            </div>
+
+            <h2>実際の1時間の使い方（プログラミング学習編）</h2>
+            <p>
+                この1時間で、私は<strong>HTMLの基礎を1レッスン終える、またはPythonの演習問題を3問解く、またはJavaScriptの復習</strong>ができます。
+                最初の頃は「変数って何？」というレベルで1時間があっという間に過ぎていましたが、だんだん慣れてきました。
+                月に20日程度勉強できるとして、<strong>3ヶ月で60時間の学習時間</strong>になります。これがプログラミングの基礎を身につける十分な時間でした。
+            </p>
+
+            <div class="experience-box">
+                <h4>1時間で学習できることの目安</h4>
+                <ul>
+                    <li>HTML/CSSの基礎レッスン 1章（30〜45分）＋復習（15分）</li>
+                    <li>Pythonの演習問題 3〜5問（基礎文法レベル）</li>
+                    <li>JavaScriptの基礎レッスン 1章（復習込み）</li>
+                    <li>前日の復習＋当日の予習（復習が重要！）</li>
+                    <li>簡単なコーディング演習（小さなWebページ作成）</li>
+                    <li>校正と修正作業</li>
+                </ul>
+            </div>
+
+            <h2>失敗したことも正直に（プログラミング学習編）</h2>
+            
+            <div class="challenge-box">
+                <h4><i class="fas fa-times-circle"></i> 失敗1：無理な学習スケジュール</h4>
+                <p>
+                    最初は「子どもが寝たら3時間は勉強できる」と思っていましたが、現実はそんなに甘くありません。
+                    子どもがすぐに寝てくれない日もあれば、寝てもすぐ起きてしまう日もあります。
+                    無理なスケジュールを立てて、できなかったときの落ち込みが大きかったです。
+                    今は「1日1時間」でなく「1日30分でもOK」と柔軟に考えるようにしています。
+                </p>
+            </div>
+
+            <div class="challenge-box">
+                <h4><i class="fas fa-times-circle"></i> 失敗2：基礎を飛ばして応用に進んでしまう</h4>
+                <p>
+                    HTMLの基礎がまだしっかりしていないのに、早くJavaScriptがやりたくてCSSをササッと終わらせてしまいました。
+                    結果的に、JavaScriptでDOM操作をする際にCSSの知識が足りていないことに気づき、
+                    戻って勉強し直すという時間の無駄をしてしまいました。
+                    基礎は大事、と痛感しました。
+                </p>
+            </div>
+
+            <h2>まとめ</h2>
+            <p>
+                子育て中でも「1時間」は確保できます。大切なのは、<span class="highlight">「完璧を求めないこと」</span>
+                と「<span class="highlight">毎日続けること</span>」です。そしてプログラミング学習では、<span class="highlight">「基礎を大切にすること」</span>も重要です。
+                私もまだまだ修行中ですが、少しずつでも毎日続けることで、確実にスキルは身につくと信じています。
+            </p>
+
+            <div class="tips-box">
+                <h4><i class="fas fa-star"></i> 最後にアドバイス</h4>
+                <p>
+                    まずは、あなたの1日を振り返ってみてください。きっと、勉強に使える時間が見つかります。
+                    その時間を大切に、そして無理のない範囲で続けてみてください。
+                    CodeAcademyでも、あなたの学習を応援しています！
+                </p>
+            </div>
+        </article>
+
+        <!-- Article Navigation -->
+        <div class="article-navigation">
+            <a href="../blog.html" class="nav-button prev">
+                <i class="fas fa-arrow-left"></i> ブログ一覧に戻る
+            </a>
+            <a href="web-writer-30k.html" class="nav-button next">
+                次の記事へ <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="social-links">
+                <a href="https://note.com/shiromiya" target="_blank" rel="noopener noreferrer">
+                    <i class="fas fa-notebook"></i>
+                </a>
+            </div>
+            <p>&copy; 2026 CodeAcademy - ITスクールでプログラミングを学ぶ記録</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="../assets/js/main.js"></script>
+    <script src="../assets/js/header-scroll.js"></script>
+</body>
+</html>

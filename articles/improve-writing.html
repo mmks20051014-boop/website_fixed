@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>プログラミングスキルを向上させる学習方法 - CodeAcademy ITスクール体験記</title>
+    <meta name="description" content="ITスクールでプログラミングスキルを向上させる、効果的な学習方法を詳しくご紹介します。">
+    <meta name="keywords" content="プログラミングスキル, 向上, 学習方法, ITスクール, CodeAcademy">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@400;600&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../assets/css/style.css">
+    
+    <style>
+        .article-hero {
+            background: var(--gradient-dark);
+            padding: 8rem 2rem 4rem;
+            text-align: center;
+            position: relative;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        
+        .article-hero h1 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            background: var(--gradient-text);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .article-meta {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            flex-wrap: wrap;
+        }
+        
+        .article-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            line-height: 1.8;
+        }
+        
+        .article-content h2 {
+            color: var(--text-primary);
+            margin: 3rem 0 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-cyan);
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+        
+        .article-content h3 {
+            color: var(--text-secondary);
+            margin: 2rem 0 1rem;
+            font-size: 1.4rem;
+            border-left: 4px solid var(--accent-cyan);
+            padding-left: 1rem;
+        }
+        
+        .article-content p {
+            margin-bottom: 1.8rem;
+            text-align: justify;
+        }
+        
+        .article-tags {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .article-tag {
+            background: rgba(0, 212, 255, 0.1);
+            color: var(--accent-cyan);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+        }
+        
+        .exercise-card {
+            background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-hover) 100%);
+            border: 2px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            margin: 2.5rem 0;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-card);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .exercise-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+        }
+        
+        .exercise-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--accent-cyan);
+        }
+        
+        .exercise-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .exercise-icon {
+            font-size: 2rem;
+            color: var(--accent-cyan);
+            margin-right: 1rem;
+            text-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+        }
+        
+        .exercise-title {
+            color: var(--text-primary);
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin: 0;
+        }
+        
+        .exercise-description {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+        
+        .exercise-steps {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: var(--radius-sm);
+            margin: 1.5rem 0;
+            border: 1px solid var(--border-subtle);
+        }
+        
+        .exercise-steps h4 {
+            color: var(--accent-cyan);
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .exercise-steps h4 i {
+            margin-right: 0.5rem;
+        }
+        
+        .exercise-steps ol {
+            margin: 0;
+            padding-left: 1.5rem;
+        }
+        
+        .exercise-steps li {
+            margin-bottom: 0.8rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        
+        .exercise-steps li:last-child {
+            margin-bottom: 0;
+        }
+        
+        .exercise-tip {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+            border: 2px solid var(--accent-cyan);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            margin: 2.5rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .exercise-tip::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+        }
+        
+        .exercise-tip h4 {
+            color: var(--accent-cyan);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            font-size: 1.3rem;
+        }
+        
+        .exercise-tip h4 i {
+            margin-right: 0.5rem;
+            font-size: 1.5rem;
+        }
+        
+        .exercise-tip p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin: 0;
+        }
+        
+        .exercise-tip strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+        
+        .tips-box {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+            border: 2px solid var(--accent-cyan);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            margin: 2.5rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .tips-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+        }
+        
+        .tips-box h4 {
+            color: var(--accent-cyan);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            font-size: 1.3rem;
+        }
+        
+        .tips-box h4 i {
+            margin-right: 0.5rem;
+            font-size: 1.5rem;
+        }
+        
+        .tips-box ul {
+            margin: 0;
+            padding-left: 1.5rem;
+        }
+        
+        .tips-box li {
+            margin-bottom: 0.8rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        
+        .tips-box li:last-child {
+            margin-bottom: 0;
+        }
+        
+        .tips-box strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+        
+        .highlight {
+            background: linear-gradient(transparent 60%, rgba(100, 180, 255, 0.3) 60%);
+            font-weight: 700;
+            padding: 0 0.2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .article-hero {
+                padding: 6rem 1rem 3rem;
+            }
+            
+            .article-content {
+                padding: 2rem 1rem;
+            }
+            
+            .article-meta {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            
+            .exercise-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .exercise-icon {
+                margin-right: 0;
+                margin-bottom: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <div class="logo">
+                <i class="fas fa-code"></i> CodeAcademy
+            </div>
+            <ul class="nav-links">
+                <li><a href="../index.html">ホーム</a></li>
+                <li><a href="../about.html">私について</a></li>
+                <li><a href="../blog.html">ブログ</a></li>
+                <li><a href="../contact.html">お問い合わせ</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Article Hero Section -->
+    <section class="article-hero">
+        <div class="container">
+            <h1><i class="fas fa-dumbbell"></i> 文章力を向上させる練習方法</h1>
+            <div class="article-meta">
+                <span><i class="far fa-calendar"></i> 2026年2月10日</span>
+                <span><i class="far fa-clock"></i> 5分読む</span>
+                <span><i class="far fa-user"></i> CodeAcademy</span>
+                <span><i class="far fa-folder"></i> スキルアップ</span>
+            </div>
+            <div class="article-tags">
+                <span class="article-tag">スキルアップ</span>
+                <span class="article-tag">練習法</span>
+                <span class="article-tag">文章力</span>
+                <span class="article-tag">上達</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main>
+        <article class="article-content">
+            <p>
+                ITスクールでプログラミングを学習する上で重要なのは「プログラミングスキル」です。でも、「プログラミングは難しそう」
+                と思っていませんか？実は、<span class="highlight">プログラミングスキルは練習で確実に向上します</span>。
+                私も最初は「変数って何？」というレベルでしたが、日々の練習で着実に上達できました。
+                今回は、実際に私が実践しているプログラミングスキル向上の学習方法をご紹介します。
+            </p>
+
+            <h2>文章力が向上する理由</h2>
+            <p>
+                プログラミングスキルは、生まれつきの才能ではありません。正しい学習方法で継続的に練習することで、
+                誰でも向上させることができます。大切なのは、<span class="highlight">「正しい方法で続けること」</span>です。
+            </p>
+
+            <h2>基本的な練習方法</h2>
+
+            <div class="exercise-card">
+                <div class="exercise-header">
+                    <i class="fas fa-code" class="exercise-icon"></i>
+                    <h3 class="exercise-title">1. 写経練習（コーディング）</h3>
+                </div>
+                <div class="exercise-description">
+                    良いコードを真似して書くことで、プログラミングの構文や考え方を学びます。
+                    簡単なWebページやプログラムを選んで、同じ機能を自分で書いてみます。
+                </div>
+                
+                <div class="exercise-steps">
+                    <h4>練習方法</h4>
+                    <ol>
+                        <li>良いコードを選ぶ（チュートリアル、参考書、ドキュメントなど）</li>
+                        <li>コードの動きを理解する</li>
+                        <li>一度コードを閉じて、自分で書く</li>
+                        <li>動作確認して、違いを確認する</li>
+                        <li>良いコードパターンをメモしておく</li>
+                    </ol>
+                </div>
+                
+                <div class="exercise-tip">
+                    <h4><i class="fas fa-clock"></i> おすすめの頻度</h4>
+                    <p>
+                        週に2〜3回、1回につき30分程度。最初は短いコードから始めて、
+                        慣れてきたら実践的なプログラムに挑戦してください。
+                    </p>
+                </div>
+            </div>
+
+            <div class="exercise-card">
+                <div class="exercise-header">
+                    <i class="fas fa-laptop-code" class="exercise-icon"></i>
+                    <h3 class="exercise-title">2. 小さなプログラムを作る</h3>
+                </div>
+                <div class="exercise-description">
+                    毎日小さなプログラムを作ることで、自然にコーディングの練習ができます。
+                    最初は簡単なもので構いません。大切的是続けることです。
+                </div>
+                
+                <div class="exercise-steps">
+                    <h4>作るときのコツ</h4>
+                    <ol>
+                        <li>毎日1つテーマを決める（電卓、タイマー、ToDoリストなど）</li>
+                        <li>1時間で作れる範囲で作る</li>
+                        <li>動作確認は必ず行う</li>
+                        <li>新しい構文を使ってみる</li>
+                        <li>明日見返して、改善点を考える</li>
+                    </ol>
+                </div>
+                
+                <div class="exercise-tip">
+                    <h4><i class="fas fa-heart"></i> ポイント</h4>
+                    <p>
+                        「動くプログラムを作る」意識で書くと、自然と実用的なコードになります。
+                        CodePenでも、ローカル環境でも、続けられる方法を選んでください。
+                    </p>
+                </div>
+            </div>
+
+            <div class="exercise-card">
+                <div class="exercise-header">
+                    <i class="fas fa-code-branch" class="exercise-icon"></i>
+                    <h3 class="exercise-title">3. チュートリアルの実践</h3>
+                </div>
+                <div class="exercise-description">
+                    学んだチュートリアルを実際にコーディングすることで、理解力と実践力を同時に鍛えることができます。
+                </div>
+                    読んだ内容を誰かに説明するつもりで書いてみます。
+                </div>
+                
+                <div class="exercise-steps">
+                    <h4>練習方法</h4>
+                    <ol>
+                        <li>短い記事や本の一節を選ぶ</li>
+                        <li>内容を理解する</li>
+                        <li>主要なポイントを3つ書き出す</li>
+                        <li>それぞれを100文字程度で説明する</li>
+                        <li>最後に全体を50文字でまとめる</li>
+                    </ol>
+                </div>
+                
+                <div class="exercise-tip">
+                    <h4><i class="fas fa-star"></i> 効果</h4>
+                    <p>
+                        要約することで、本質を捉える力と、簡潔に伝える力が身につきます。
+                        これはWebライティングでとても重要なスキルです。
+                    </p>
+                </div>
+            </div>
+
+            <h2>実践的な練習方法</h2>
+
+            <div class="exercise-card">
+                <div class="exercise-header">
+                    <i class="fas fa-bug" class="exercise-icon"></i>
+                    <h3 class="exercise-title">4. デバッグ練習</h3>
+                </div>
+                <div class="exercise-description">
+                    エラーを解決する能力は、プログラミングでとても重要です。
+                    エラー文を読み解いて、正しく修正することができます。
+                </div>
+                
+                <div class="exercise-steps">
+                    <h4>練習方法</h4>
+                    <ol>
+                        <li>意図的にエラーを含むコードを書く</li>
+                        <li>エラーメッセージを読み解く</li>
+                        <li>エラーの原因を特定する</li>
+                        <li>正しいコードに修正する</li>
+                        <li>動作確認をする</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="exercise-card">
+                <div class="exercise-header">
+                    <i class="fas fa-terminal" class="exercise-icon"></i>
+                    <h3 class="exercise-title">5. リファクタリング練習</h3>
+                </div>
+                <div class="exercise-description">
+                    書いたコードを見直して、より読みやすく、効率的にする練習です。
+                    美しいコードを書く力は、将来のために重要です。
+                </div>
+                
+                <div class="exercise-steps">
+                    <h4>練習方法</h4>
+                    <ol>
+                        <li>書いたコードを1日放置する</li>
+                        <li>変数名が適切かチェックする</li>
+                        <li>重複しているコードを関数化する</li>
+                        <li>コメントを追加する</li>
+                        <li>他人が読んでも分かるコードにする</li>
+                    </ol>
+                </div>
+            </div>
+
+            <h2>上級者向けの練習（プログラミング編）</h2>
+
+            <div class="exercise-card">
+                <div class="exercise-header">
+                    <i class="fas fa-project-diagram" class="exercise-icon"></i>
+                    <h3 class="exercise-title">6. アルゴリズム練習</h3>
+                </div>
+                <div class="exercise-description">
+                    効率的な処理方法を考える練習です。
+                    同じ問題を、違う方法で解いてみます。
+                </div>
+                
+                <div class="exercise-steps">
+                    <h4>練習方法</h4>
+                    <ol>
+                        <li>一つの簡単な問題を選ぶ（例：1から100までの和）</li>
+                        <li>for文を使った方法で解く</li>
+                        <li>while文を使った方法で解く</li>
+                        <li>数学的な方法で解く</li>
+                        <li>それぞれの違いを比較する</li>
+                    </ol>
+                </div>
+            </div>
+
+            <h2>練習を続けるコツ</h2>
+            
+            <div class="tips-box">
+                <h4><i class="fas fa-trophy"></i> 成功の秘訣</h4>
+                <ul>
+                    <li><strong>毎日続ける</strong> - 短くても毎日練習する</li>
+                    <li><strong>無理のない範囲で</strong> - 最初は5分から始める</li>
+                    <li><strong>楽しむこと</strong> - 新しい言葉を使うなど変化をつける</li>
+                    <li><strong>振り返ること</strong> - 定期的に過去の文章を見直す</li>
+                    <li><strong>褒めること</strong> - 少しでも上達したら自分を褒める</li>
+                </ul>
+            </div>
+
+            <h2>最後に</h2>
+            <p>
+                文章力は、<span class="highlight">毎日の積み重ね</span>で確実に向上します。
+                私も最初は苦手でしたが、毎日練習した結果、今では仕事で使えるレベルになりました。
+            </p>
+
+            <div class="exercise-tip">
+                <h4><i class="fas fa-heart"></i> 最後のメッセージ</h4>
+                <p>
+                    完璧を求めず、まずは始めてみてください。下手でも構いません。
+                    大切的是続けることです。あなたも必ず上達できます！
+                    私がその証明です。一緒に頑張りましょう！
+                </p>
+            </div>
+        </article>
+
+        <!-- Article Navigation -->
+        <div class="article-navigation">
+            <a href="beginner-writing-jobs.html" class="nav-button prev">
+                <i class="fas fa-arrow-left"></i> 前の記事へ
+            </a>
+            <a href="../blog.html" class="nav-button next">
+                ブログ一覧に戻る <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="social-links">
+                <a href="https://note.com/shiromiya" target="_blank" rel="noopener noreferrer">
+                    <i class="fas fa-notebook"></i>
+                </a>
+            </div>
+            <p>&copy; 2026 CodeAcademy - ITスクールでプログラミングを学ぶ記録</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="../assets/js/main.js"></script>
+    <script src="../assets/js/header-scroll.js"></script>
+</body>
+</html>

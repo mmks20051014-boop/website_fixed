@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ITスクール未経験スタートから基礎習得まで - CodeAcademy ITスクール体験記</title>
+    <meta name="description" content="ITスクールを未経験から始めて、プログラミングの基礎スキルを習得するまでの道のりを詳しくご紹介します。">
+    <meta name="keywords" content="ITスクール, 未経験, プログラミング学習, 基礎習得, CodeAcademy">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@400;600&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../assets/css/style.css">
+    
+    <style>
+        .article-hero {
+            background: var(--gradient-dark);
+            padding: 8rem 2rem 4rem;
+            text-align: center;
+            position: relative;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        
+        .article-hero h1 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            background: var(--gradient-text);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .article-meta {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            flex-wrap: wrap;
+        }
+        
+        .article-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            line-height: 1.8;
+        }
+        
+        .article-content h2 {
+            color: var(--text-primary);
+            margin: 3rem 0 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-cyan);
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+        
+        .article-content h3 {
+            color: var(--text-secondary);
+            margin: 2rem 0 1rem;
+            font-size: 1.4rem;
+            border-left: 4px solid var(--accent-cyan);
+            padding-left: 1rem;
+        }
+        
+        .article-content p {
+            margin-bottom: 1.8rem;
+            text-align: justify;
+        }
+        
+        .article-tags {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .article-tag {
+            background: rgba(0, 212, 255, 0.1);
+            color: var(--accent-cyan);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+        }
+        
+        .progress-bar {
+            background: var(--bg-hover);
+            height: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 1rem 0;
+            border: 1px solid var(--border-subtle);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .progress-fill {
+            background: var(--gradient-primary);
+            height: 100%;
+            transition: width 0.3s ease;
+            box-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+        }
+        
+        .earnings-box {
+            background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-hover) 100%);
+            border: 2px solid var(--accent-cyan);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            margin: 2.5rem 0;
+            text-align: center;
+            box-shadow: var(--shadow-card);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .earnings-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+        }
+        
+        .earnings-amount {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent-cyan);
+            display: block;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+        }
+        
+        .earnings-label {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+        
+        .tips-box {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+            border: 2px solid var(--accent-cyan);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            margin: 2.5rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .tips-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+        }
+        
+        .tips-box h4 {
+            color: var(--accent-cyan);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            font-size: 1.3rem;
+        }
+        
+        .tips-box h4 i {
+            margin-right: 0.5rem;
+            font-size: 1.5rem;
+        }
+        
+        .tips-box ul {
+            margin: 0;
+            padding-left: 1.5rem;
+        }
+        
+        .tips-box li {
+            margin-bottom: 0.8rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        
+        .tips-box li:last-child {
+            margin-bottom: 0;
+        }
+        
+        .tips-box strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+        
+        .highlight {
+            background: linear-gradient(transparent 60%, rgba(100, 180, 255, 0.3) 60%);
+            font-weight: 700;
+            padding: 0 0.2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .article-hero {
+                padding: 6rem 1rem 3rem;
+            }
+            
+            .article-content {
+                padding: 2rem 1rem;
+            }
+            
+            .article-meta {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <div class="logo">
+                <i class="fas fa-code"></i> CodeAcademy
+            </div>
+            <ul class="nav-links">
+                <li><a href="../index.html">ホーム</a></li>
+                <li><a href="../about.html">私について</a></li>
+                <li><a href="../blog.html">ブログ</a></li>
+                <li><a href="../contact.html">お問い合わせ</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Article Hero Section -->
+    <section class="article-hero">
+        <div class="container">
+            <h1><i class="fas fa-chart-line"></i> ITスクール未経験スタートから基礎習得まで</h1>
+            <div class="article-meta">
+                <span><i class="far fa-calendar"></i> 2026年2月28日</span>
+                <span><i class="far fa-clock"></i> 6分読む</span>
+                <span><i class="far fa-user"></i> CodeAcademy</span>
+                <span><i class="far fa-folder"></i> ITスクール体験</span>
+            </div>
+            <div class="article-tags">
+                <span class="article-tag">ITスクール体験</span>
+                <span class="article-tag">体験談</span>
+                <span class="article-tag">収益</span>
+                <span class="article-tag">未経験</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main>
+        <article class="article-content">
+            <p>
+                ITスクールでプログラミングを学習し始めてから約3ヶ月。ついにプログラミングの基礎スキルを身につけることができました。
+                最初は「プログラミングなんて難しすぎる」「私にできるわけがない」と思っていましたが、
+                着実にステップアップできたことを実感しています。
+            </p>
+
+            <h2>スタート地点：プログラミング未経験からのスタート</h2>
+            <p>
+                私がITスクールでプログラミングを学習し始めたとき、特別な知識も経験もありませんでした。唯一の経験は「Excelで簡単な関数を使ったことがある」程度。
+                それでも、「まずは始めてみよう」と思い、CodeAcademyの基礎コースから始めることにしました。
+            </p>
+
+            <div class="tips-box">
+                <h4><i class="fas fa-play"></i> なぜ基礎から始めたのか</h4>
+                <ul>
+                    <li>確実な基礎知識を身につけるため</li>
+                    <li>プログラミングの考え方を理解するため</li>
+                    <li>実践的なスキルを学ぶため</li>
+                    <li>エラーの対処法を学ぶため</li>
+                </ul>
+            </div>
+
+            <h2>基礎学習完了まで（1〜2ヶ月目）</h2>
+            <p>
+                HTML/CSSの基礎を学習するには、<strong>毎日1時間×2ヶ月＝約60時間</strong>の学習時間が必要でした。
+                最初は「&lt;h1&gt;って何？」というレベルでしたが、だんだん理解できるようになってきました。
+            </p>
+
+            <h3>1〜2ヶ月目の学習実績</h3>
+            <div class="earnings-box">
+                <span class="earnings-amount">HTML基礎完了</span>
+                <div class="earnings-label">タグの意味と使い方をマスター</div>
+            </div>
+
+            <div class="earnings-box">
+                <span class="earnings-amount">CSS基礎完了</span>
+                <div class="earnings-label">セレクタ・プロパティ・値の理解</div>
+            </div>
+
+            <h2>JavaScript基礎習得（3ヶ月目）</h2>
+            <p>
+                そして3ヶ月目、ついにJavaScriptの基礎を習得することができました。この月は特に充実していて、
+                HTML/CSSで作ったWebページに動きをつけることができるようになりました。
+            </p>
+
+            <h3>3ヶ月目の学習実績</h3>
+            <div class="earnings-box">
+                <span class="earnings-amount">JavaScript基礎完了！</span>
+                <div class="earnings-label">変数・条件分岐・繰り返し・関数をマスター</div>
+            </div>
+
+            <div class="tips-box">
+                <h4><i class="fas fa-arrow-up"></i> 基礎力を上げるためにしたこと</h4>
+                <ul>
+                    <li>毎日コーディング練習</li>
+                    <li>エラー文を読み解く練習</li>
+                    <li>参考書を3回読み直す</li>
+                    <li>同じコードを3回書く（覚えるため）</li>
+                </ul>
+            </div>
+
+            <h3>3〜4ヶ月目の実績</h3>
+            <div class="earnings-box">
+                <span class="earnings-amount">¥18,600</span>
+                <div class="earnings-label">3ヶ月目の総売上</div>
+            </div>
+
+            <div class="earnings-box">
+                <span class="earnings-amount">¥24,800</span>
+                <div class="earnings-label">4ヶ月目の総売上</div>
+            </div>
+
+            <h2>月3万円達成（5ヶ月目）</h2>
+            <p>
+                そして5ヶ月目、ついに月3万円を達成することができました。この月は特に好調で、
+                リピートのお客様も増え、1文字0.8円以上の案件が中心になりました。
+            </p>
+
+            <h3>5ヶ月目の実績</h3>
+            <div class="earnings-box">
+                <span class="earnings-amount">¥32,500</span>
+                <div class="earnings-label">5ヶ月目の総売上（目標達成！）</div>
+            </div>
+
+            <h2>達成できた要因分析（プログラミング学習編）</h2>
+            
+            <h3>1. 継続したこと（最も重要）</h3>
+            <p>
+                最も大きな要因は、<span class="highlight">毎日続けたこと</span>です。体調が悪い日も、
+                子どもがぐずっている日も、できる限り1行でもコードを書くようにしました。
+                コードを書くスピードも、確実に向上しました。最初は1時間で10行だったのが、30分行けるようになりました。
+            </p>
+
+            <h3>2. 基礎力の向上</h3>
+            <p>
+                プログラミング言語の文法だけでなく、論理的思考力、問題解決能力、エラー対応能力も向上しました。
+                これにより、より高度なプログラムでも対応できるようになり、学習の幅が広がっていきました。
+            </p>
+
+            <h3>3. スキルの向上（段階的に）</h3>
+            <p>
+                HTML/CSSを書くだけでなく、JavaScriptの基礎、デバッグ能力、ドキュメント読解能力も向上しました。
+                これにより、より高度なWeb開発でも対応できるようになり、スキルの幅が広がっていきました。
+            </p>
+
+            <div class="tips-box">
+                <h4><i class="fas fa-key"></i> 学習成功の鍵</h4>
+                <ul>
+                    <li><strong>継続力</strong> - 毎日少しずつでもコードを書く</li>
+                    <li><strong>基礎力</strong> - 文法と考え方を大切にする</li>
+                    <li><strong>実践力</strong> - 実際に手を動かして学ぶ</li>
+                    <li><strong>忍耐力</strong> - すぐにできるようにはならない</li>
+                </ul>
+            </div>
+
+            <h2>今後の学習目標</h2>
+            <p>
+                JavaScriptの基礎を習得できたことで、次は<strong>ReactやVue.jsのようなフレームワーク</strong>を学びたいと思っています。
+                そのために、より高度なWebアプリケーション開発や、<strong>API連携</strong>の勉強をしていきたいと考えています。
+            </p>
+
+            <h2>最後に（プログラミング学習編）</h2>
+            <p>
+                未経験から始めて、プログラミングの基礎スキルを身につけることができました。特別な才能や数学の知識がなくても、
+                <span class="highlight">努力と継続</span>で確実にスキルは身につくと信じています。
+                あなたも「まずは始めてみよう」と思ったら、ぜひ一歩を踏み出してみてください。
+            </p>
+
+            <p>
+                私のような普通の主婦でもプログラミングは学べるのですから、あなたにも必ずできます。
+                小さな一歩が、大きなスキルにつながることを実感してください。
+                CodeAcademyで、あなたの学習を応援しています！
+            </p>
+        </article>
+
+        <!-- Article Navigation -->
+        <div class="article-navigation">
+            <a href="work-home-3months.html" class="nav-button prev">
+                <i class="fas fa-arrow-left"></i> 前の記事へ
+            </a>
+            <a href="character-rate.html" class="nav-button next">
+                次の記事へ <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="social-links">
+                <a href="https://note.com/shiromiya" target="_blank" rel="noopener noreferrer">
+                    <i class="fas fa-notebook"></i>
+                </a>
+            </div>
+            <p>&copy; 2026 CodeAcademy - ITスクールでプログラミングを学ぶ記録</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="../assets/js/main.js"></script>
+    <script src="../assets/js/header-scroll.js"></script>
+</body>
+</html>

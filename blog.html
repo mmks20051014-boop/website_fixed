@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ブログ - CodeAcademy ITスクール体験記</title>
+    <meta name="description" content="ITスクールでプログラミングを学習した体験談、学習方法、おすすめスクール情報などを綴ったブログ記事一覧。初心者でもプログラミングを習得する方法をご紹介します。">
+    <meta name="keywords" content="ブログ, ITスクール, プログラミング学習, 体験談, 初心者, CodeAcademy">
+    
+    <!-- OGP -->
+    <meta property="og:title" content="ブログ - CodeAcademy">
+    <meta property="og:description" content="ITスクールでプログラミングを学習した体験談、学習方法、おすすめスクール情報">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://codeacademy.example.com/blog.html">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@400;600&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    
+    <style>
+        .blog-hero {
+            background: var(--gradient-hero);
+            color: var(--text-light);
+            padding: 8rem 2rem 4rem;
+            text-align: center;
+            position: relative;
+        }
+        
+        .blog-hero h1 {
+            color: var(--text-light);
+            margin-bottom: 1rem;
+        }
+        
+        .blog-hero p {
+            font-size: 1.2rem;
+            color: var(--slate-gray);
+        }
+        
+        .category-filter {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 3rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .category-btn {
+            background: white;
+            border: 2px solid var(--border-color);
+            color: var(--text-dark);
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .category-btn:hover,
+        .category-btn.active {
+            background: var(--accent-blue);
+            color: white;
+            border-color: var(--accent-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(100, 180, 255, 0.3);
+        }
+        
+        .article-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .article-card.hidden {
+            display: none;
+        }
+        
+        .article-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        
+        .article-title {
+            flex: 1;
+            margin-right: 1rem;
+        }
+        
+        .article-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            background: var(--gradient-cta);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            flex-shrink: 0;
+        }
+        
+        .read-more {
+            display: inline-flex;
+            align-items: center;
+            color: var(--accent-blue);
+            font-weight: 500;
+            margin-top: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .read-more:hover {
+            color: #3a7ec4;
+            transform: translateX(5px);
+        }
+        
+        .read-more i {
+            margin-left: 0.5rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .read-more:hover i {
+            transform: translateX(3px);
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin: 4rem 0;
+        }
+        
+        .page-btn {
+            background: white;
+            border: 2px solid var(--border-color);
+            color: var(--text-dark);
+            padding: 0.8rem 1.2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .page-btn:hover,
+        .page-btn.active {
+            background: var(--accent-blue);
+            color: white;
+            border-color: var(--accent-blue);
+        }
+        
+        .page-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .search-box {
+            max-width: 600px;
+            margin: 2rem auto;
+            position: relative;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 1rem 3rem 1rem 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 25px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 20px rgba(100, 180, 255, 0.2);
+        }
+        
+        .search-icon {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--slate-gray);
+            pointer-events: none;
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--slate-gray);
+        }
+        
+        .no-results i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+        
+        .article-excerpt {
+            color: var(--slate-gray);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+        
+        .article-tags {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .tag {
+            background: rgba(100, 180, 255, 0.1);
+            color: var(--accent-blue);
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .popular-articles {
+            background: var(--gradient-section);
+            padding: 3rem 2rem;
+            margin: 3rem -2rem;
+            border-radius: 20px;
+        }
+        
+        .popular-articles h3 {
+            text-align: center;
+            color: var(--primary-bg);
+            margin-bottom: 2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .category-filter {
+                gap: 0.5rem;
+            }
+            
+            .category-btn {
+                padding: 0.6rem 1rem;
+                font-size: 0.9rem;
+            }
+            
+            .article-header {
+                flex-direction: column;
+            }
+            
+            .article-image {
+                width: 100%;
+                height: 120px;
+                margin-top: 1rem;
+            }
+            
+            .popular-articles {
+                margin: 2rem -1rem;
+                padding: 2rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <div class="logo">
+                <i class="fas fa-graduation-cap"></i> CodeAcademy
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">ホーム</a></li>
+                <li><a href="about.html">私について</a></li>
+                <li><a href="#blog">ブログ</a></li>
+                <li><a href="contact.html">お問い合わせ</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Blog Hero Section -->
+    <section class="blog-hero">
+        <div class="container">
+            <h1><i class="fas fa-blog"></i> ブログ</h1>
+            <p>ITスクールでプログラミングを学習した体験談、学習方法、おすすめスクール情報</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Search Box -->
+        <div class="search-box">
+            <input type="text" class="search-input" placeholder="記事を検索..." id="searchInput">
+            <i class="fas fa-search search-icon"></i>
+        </div>
+
+        <!-- Category Filter -->
+        <div class="category-filter">
+            <button class="category-btn active" data-category="all">すべて</button>
+            <button class="category-btn" data-category="it-school">ITスクール</button>
+            <button class="category-btn" data-category="programming">プログラミング</button>
+            <button class="category-btn" data-category="learning">学習方法</button>
+            <button class="category-btn" data-category="experience">体験談</button>
+        </div>
+
+        <!-- Articles Grid -->
+        <section id="blog" class="section">
+            <div class="articles-grid" id="articlesGrid">
+                <!-- ITスクール体験談カテゴリー -->
+                <article class="article-card" data-category="it-school experience">
+                    <div class="article-header">
+                        <div class="article-title">
+                            <h3>【体験談】ITスクールに通って3ヶ月でプログラミングを使いこなせるようになった話</h3>
+                        </div>
+                        <div class="article-image">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                    </div>
+                    <div class="article-excerpt">
+                        ITスクールに通い始めて3ヶ月が経ち、思っていた以上にプログラミングスキルが身につきました。最初は何も分からなかったけど、今では自分で簡単なアプリが作れるようになりました。学習の過程で大切だったこと、失敗談も含めて公開します。
+                    </div>
+                    <div class="article-tags">
+                        <span class="tag">ITスクール</span>
+                        <span class="tag">体験談</span>
+                        <span class="tag">プログラミング</span>
+                    </div>
+                    <div class="article-meta">
+                        <span><i class="far fa-calendar"></i> 2026年3月15日</span>
+                        <span><i class="far fa-clock"></i> 5分読む</span>
+                    </div>
+                    <a href="articles/work-home-3months.html" class="read-more">
+                        続きを読む <i class="fas fa-arrow-right"></i>
+                    </a>
+                </article>
+
+                <article class="article-card" data-category="programming learning">
+                    <div class="article-header">
+                        <div class="article-title">
+                            <h3>プログラミング初心者におすすめのITスクール5選</h3>
+                        </div>
+                        <div class="article-image">
+                            <i class="fas fa-list"></i>
+                        </div>
+                    </div>
+                    <div class="article-excerpt">
+                        プログラミングを学びたい初心者に最適なITスクールを厳選しました。料金体系、カリキュラム、サポート体制などを比較しています。オンライン・オフラインの両方から選定しました。
+                    </div>
+                    <div class="article-tags">
+                        <span class="tag">プログラミング</span>
+                        <span class="tag">学習方法</span>
+                        <span class="tag">スクール比較</span>
+                    </div>
+                    <div class="article-meta">
+                        <span><i class="far fa-calendar"></i> 2026年3月12日</span>
+                        <span><i class="far fa-clock"></i> 8分読む</span>
+                    </div>
+                    <a href="articles/find-1hour.html" class="read-more">
+                        続きを読む <i class="fas fa-arrow-right"></i>
+                    </a>
+                </article>
+
+                <!-- 学習方法カテゴリー -->
+                <article class="article-card" data-category="learning experience">
+                    <div class="article-header">
+                        <div class="article-title">
+                            <h3>未経験からITスクールで3ヶ月でプログラミングスキルを身につけるまで</h3>
+                        </div>
+                        <div class="article-image">
+                            <i class="fas fa-code"></i>
+                        </div>
+                    </div>
+                    <div class="article-excerpt">
+                        プログラミングの知識ゼロから始めて、ついに実践的なスキルを身につけることができました。学習の過程で大切だったこと、失敗談も含めて公開します。初心者が最初に挫折しやすいポイントも解説します。
+                    </div>
+                    <div class="article-tags">
+                        <span class="tag">学習方法</span>
+                        <span class="tag">体験談</span>
+                        <span class="tag">初心者</span>
+                    </div>
+                    <div class="article-meta">
+                        <span><i class="far fa-calendar"></i> 2026年2月28日</span>
+                        <span><i class="far fa-clock"></i> 6分読む</span>
+                    </div>
+                    <a href="articles/web-writer-30k.html" class="read-more">
+                        続きを読む <i class="fas fa-arrow-right"></i>
+                    </a>
+                </article>
+
+                <article class="article-card" data-category="programming learning">
+                    <div class="article-header">
+                        <div class="article-title">
+                            <h3>HTML/CSSから始めるプログラミング学習のすすめ</h3>
+                        </div>
+                        <div class="article-image">
+                            <i class="fab fa-html5"></i>
+                        </div>
+                    </div>
+                    <div class="article-excerpt">
+                        プログラミング学習はHTML/CSSから始めるのがおすすめです。なぜなら、視覚的な成果がすぐに得られるから。初心者が最初に取り組むべき理由と学習方法を解説します。
+                    </div>
+                    <div class="article-tags">
+                        <span class="tag">プログラミング</span>
+                        <span class="tag">HTML/CSS</span>
+                        <span class="tag">学習方法</span>
+                    </div>
+                    <div class="article-meta">
+                        <span><i class="far fa-calendar"></i> 2026年2月20日</span>
+                        <span><i class="far fa-clock"></i> 5分読む</span>
+                    </div>
+                    <a href="articles/character-rate.html" class="read-more">
+                        続きを読む <i class="fas fa-arrow-right"></i>
+                    </a>
+                </article>
+
+                <article class="article-card" data-category="programming learning">
+                    <div class="article-header">
+                        <div class="article-title">
+                            <h3>Python学習で最初に取り組むべき基礎文法5つ</h3>
+                        </div>
+                        <div class="article-image">
+                            <i class="fab fa-python"></i>
+                        </div>
+                    </div>
+                    <div class="article-excerpt">
+                        Pythonは初心者に人気のプログラミング言語です。でも、何から始めればいいか分からない方のために、最初にマスターすべき基礎文法を5つ厳選しました。これらを覚えれば、簡単なプログラムは書けるようになります。
+                    </div>
+                    <div class="article-tags">
+                        <span class="tag">Python</span>
+                        <span class="tag">基礎文法</span>
+                        <span class="tag">初心者</span>
+                    </div>
+                    <div class="article-meta">
+                        <span><i class="far fa-calendar"></i> 2026年2月15日</span>
+                        <span><i class="far fa-clock"></i> 4分読む</span>
+                    </div>
+                    <a href="articles/beginner-writing-jobs.html" class="read-more">
+                        続きを読む <i class="fas fa-arrow-right"></i>
+                    </a>
+                </article>
+
+                <article class="article-card" data-category="it-school experience">
+                    <div class="article-header">
+                        <div class="article-title">
+                            <h3>ITスクール選びで失敗しないための3つのポイント</h3>
+                        </div>
+                        <div class="article-image">
+                            <i class="fas fa-search"></i>
+                        </div>
+                    </div>
+                    <div class="article-excerpt">
+                        ITスクールは数多くありますが、すべてが同じというわけではありません。スクール選びで失敗しないため、私が実際に確認してよかった3つのポイントをご紹介します。これを知っておけば、後悔しない選択ができます。
+                    </div>
+                    <div class="article-tags">
+                        <span class="tag">ITスクール</span>
+                        <span class="tag">体験談</span>
+                        <span class="tag">選び方</span>
+                    </div>
+                    <div class="article-meta">
+                        <span><i class="far fa-calendar"></i> 2026年2月10日</span>
+                        <span><i class="far fa-clock"></i> 5分読む</span>
+                    </div>
+                    <a href="articles/improve-writing.html" class="read-more">
+                        続きを読む <i class="fas fa-arrow-right"></i>
+                    </a>
+                </article>
+            </div>
+
+            <!-- No Results Message -->
+            <div class="no-results" id="noResults" style="display: none;">
+                <i class="fas fa-search"></i>
+                <h3>記事が見つかりませんでした</h3>
+                <p>検索条件を変えてお試しください。</p>
+            </div>
+        </section>
+
+        <!-- Popular Articles Section -->
+        <section class="popular-articles">
+            <h3><i class="fas fa-fire"></i> 人気の記事</h3>
+            <div class="articles-grid">
+                <article class="article-card">
+                    <h3><i class="fas fa-graduation-cap"></i> ITスクールで3ヶ月でプログラミング習得</h3>
+                    <p>ITスクールで3ヶ月でプログラミングを使いこなせるようになった体験談をシェアします。</p>
+                    <a href="articles/work-home-3months.html" class="read-more">読む <i class="fas fa-arrow-right"></i></a>
+                </article>
+                
+                <article class="article-card">
+                    <h3><i class="fas fa-list"></i> 初心者向けITスクール5選</h3>
+                    <p>プログラミング初心者に最適なITスクールを厳選して比較しました。</p>
+                    <a href="articles/find-1hour.html" class="read-more">読む <i class="fas fa-arrow-right"></i></a>
+                </article>
+                
+                <article class="article-card">
+                    <h3><i class="fas fa-code"></i> Python基礎文法5つ</h3>
+                    <p>Python学習で最初にマスターすべき基礎文法を解説。</p>
+                    <a href="articles/web-writer-30k.html" class="read-more">読む <i class="fas fa-arrow-right"></i></a>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="social-links">
+                <a href="https://note.com/codeacademy" target="_blank" rel="noopener noreferrer">
+                    <i class="fas fa-notebook"></i>
+                </a>
+            </div>
+            <p>&copy; 2026 CodeAcademy - ITスクールで3ヶ月でプログラミングを使いこなせるようになるまで</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/header-scroll.js"></script>
+    <script>
+        // Blog functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const categoryButtons = document.querySelectorAll('.category-btn');
+            const articleCards = document.querySelectorAll('.article-card');
+            const searchInput = document.getElementById('searchInput');
+            const noResults = document.getElementById('noResults');
+            let currentCategory = 'all';
+
+            // Category filtering
+            categoryButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const category = this.dataset.category;
+                    
+                    // Update active button
+                    categoryButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    currentCategory = category;
+                    filterArticles();
+                });
+            });
+
+            // Search functionality
+            searchInput.addEventListener('input', function() {
+                filterArticles();
+            });
+
+            // Filter articles based on category and search
+            function filterArticles() {
+                const searchTerm = searchInput.value.toLowerCase();
+                let visibleCount = 0;
+
+                articleCards.forEach(card => {
+                    const title = card.querySelector('h3').textContent.toLowerCase();
+                    const excerpt = card.querySelector('.article-excerpt').textContent.toLowerCase();
+                    const tags = Array.from(card.querySelectorAll('.tag')).map(tag => tag.textContent.toLowerCase());
+                    
+                    const matchesSearch = title.includes(searchTerm) || 
+                                        excerpt.includes(searchTerm) ||
+                                        tags.some(tag => tag.includes(searchTerm));
+                    
+                    const matchesCategory = currentCategory === 'all' || 
+                                          card.dataset.category.includes(currentCategory);
+                    
+                    if (matchesSearch && matchesCategory) {
+                        card.style.display = 'block';
+                        card.classList.remove('hidden');
+                        visibleCount++;
+                    } else {
+                        card.style.display = 'none';
+                        card.classList.add('hidden');
+                    }
+                });
+
+                // Show/hide no results message
+                if (visibleCount === 0) {
+                    noResults.style.display = 'block';
+                } else {
+                    noResults.style.display = 'none';
+                }
+            }
+
+            // Article card click handlers
+            articleCards.forEach(card => {
+                card.addEventListener('click', function(e) {
+                    // Don't trigger if clicking on links
+                    if (e.target.tagName === 'A' || e.target.closest('a')) {
+                        return;
+                    }
+                    
+                    const readMoreLink = card.querySelector('.read-more');
+                    if (readMoreLink) {
+                        readMoreLink.click();
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>プログラミング学習の始め方から現在に至るまで - CodeAcademy ITスクール体験記</title>
+    <meta name="description" content="ITスクールでプログラミング学習を始めて、現在のスキルレベルまで成長した道のりを詳しくご紹介します。">
+    <meta name="keywords" content="プログラミング学習, ITスクール, スキル習得, 成長記録, CodeAcademy">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@400;600&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../assets/css/style.css">
+    
+    <style>
+        .article-hero {
+            background: var(--gradient-dark);
+            padding: 8rem 2rem 4rem;
+            text-align: center;
+            position: relative;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        
+        .article-hero h1 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            background: var(--gradient-text);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .article-meta {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            flex-wrap: wrap;
+        }
+        
+        .article-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            line-height: 1.8;
+        }
+        
+        .article-content h2 {
+            color: var(--text-primary);
+            margin: 3rem 0 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-cyan);
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+        
+        .article-content h3 {
+            color: var(--text-secondary);
+            margin: 2rem 0 1rem;
+            font-size: 1.4rem;
+            border-left: 4px solid var(--accent-cyan);
+            padding-left: 1rem;
+        }
+        
+        .article-content p {
+            margin-bottom: 1.8rem;
+            text-align: justify;
+        }
+        
+        .article-tags {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .article-tag {
+            background: rgba(0, 212, 255, 0.1);
+            color: var(--accent-cyan);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+        }
+        
+        .price-timeline {
+            position: relative;
+            padding: 2rem 0;
+            margin: 3rem 0;
+        }
+        
+        .price-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2rem;
+            background: var(--bg-card);
+            padding: 1.5rem;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-subtle);
+            box-shadow: var(--shadow-card);
+            transition: all 0.3s ease;
+        }
+        
+        .price-item:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--accent-cyan);
+        }
+        
+        .price-label {
+            font-weight: 700;
+            color: var(--accent-cyan);
+            min-width: 120px;
+            margin-right: 1rem;
+            font-size: 1.1rem;
+        }
+        
+        .price-value {
+            flex: 1;
+            color: var(--text-primary);
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .earnings-box {
+            background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-hover) 100%);
+            border: 2px solid var(--accent-cyan);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            margin: 2.5rem 0;
+            text-align: center;
+            box-shadow: var(--shadow-card);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .earnings-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+        }
+        
+        .earnings-amount {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent-cyan);
+            display: block;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+        }
+        
+        .tips-box {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+            border: 2px solid var(--accent-cyan);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            margin: 2.5rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .tips-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+        }
+        
+        .tips-box h4 {
+            color: var(--accent-cyan);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            font-size: 1.3rem;
+        }
+        
+        .tips-box h4 i {
+            margin-right: 0.5rem;
+            font-size: 1.5rem;
+        }
+        
+        .tips-box ul {
+            margin: 0;
+            padding-left: 1.5rem;
+        }
+        
+        .tips-box li {
+            margin-bottom: 0.8rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        
+        .tips-box strong {
+            color: var(--text-primary);
+            font-weight: 600);
+        }
+        
+        .experience-box {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(236, 72, 153, 0.1) 100%);
+            border: 2px solid var(--accent-purple);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            margin: 2.5rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .experience-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-purple), var(--accent-pink));
+        }
+        
+        .experience-box::after {
+            content: '💡';
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            font-size: 1.5rem;
+            background: var(--bg-card);
+            padding: 0 10px;
+        }
+        
+        .experience-box h4 {
+            color: var(--accent-purple);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .experience-box p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin: 0;
+        }
+        
+        .challenge-box {
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.1) 0%, rgba(239, 68, 68, 0.1) 100%);
+            border: 2px solid var(--accent-pink);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            margin: 2.5rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .challenge-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-pink), #ef4444);
+        }
+        
+        .challenge-box h4 {
+            color: var(--accent-pink);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            font-size: 1.3rem;
+        }
+        
+        .challenge-box h4 i {
+            margin-right: 0.5rem;
+        }
+        
+        .challenge-box p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin: 0;
+        }
+        
+        .warning-box {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(245, 101, 101, 0.1) 100%);
+            border: 2px solid #ef4444;
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            margin: 2.5rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .warning-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ef4444, #f56565);
+        }
+        
+        .warning-box h4 {
+            color: #ef4444;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            font-size: 1.3rem;
+        }
+        
+        .warning-box h4 i {
+            margin-right: 0.5rem;
+        }
+        
+        .warning-box p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin: 0;
+        }
+        
+        .highlight {
+            background: linear-gradient(transparent 60%, rgba(100, 180, 255, 0.3) 60%);
+            font-weight: 700;
+            padding: 0 0.2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .article-hero {
+                padding: 6rem 1rem 3rem;
+            }
+            
+            .article-content {
+                padding: 2rem 1rem;
+            }
+            
+            .article-meta {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            
+            .price-item {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .price-label {
+                margin-right: 0;
+                margin-bottom: 0.5rem;
+                min-width: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <div class="logo">
+                <i class="fas fa-code"></i> CodeAcademy
+            </div>
+            <ul class="nav-links">
+                <li><a href="../index.html">ホーム</a></li>
+                <li><a href="../about.html">私について</a></li>
+                <li><a href="../blog.html">ブログ</a></li>
+                <li><a href="../contact.html">お問い合わせ</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Article Hero Section -->
+    <section class="article-hero">
+        <div class="container">
+            <h1><i class="fas fa-graduation-cap"></i> プログラミング学習の始め方から現在に至るまで</h1>
+            <div class="article-meta">
+                <span><i class="far fa-calendar"></i> 2026年2月20日</span>
+                <span><i class="far fa-clock"></i> 5分読む</span>
+                <span><i class="far fa-user"></i> CodeAcademy</span>
+                <span><i class="far fa-folder"></i> ITスクール体験</span>
+            </div>
+            <div class="article-tags">
+                <span class="article-tag">ITスクール体験</span>
+                <span class="article-tag">学習法</span>
+                <span class="article-tag">スキルアップ</span>
+                <span class="article-tag">経験談</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main>
+        <article class="article-content">
+            <p>
+                ITスクールでプログラミングを学習し始めた当初、私のスキルレベルは「変数って何？」という完全初心者でした。今では平均的なWebサイトを一から作成できるレベルになりました。
+                この記事では、完全初心者から始めて、どのようにスキルを身につけていったのか、具体的な方法を含めて詳しくお伝えします。
+            </p>
+
+            <h2>スタート：完全初心者の頃</h2>
+            <p>
+                2025年6月、私はITスクールでプログラミングを学習し始めました。最初の頃は「HTMLって何？」「CSSって食べ物？」というレベル。
+                これはかなり低いスタートでしたが、初めてのことにチャレンジするという喜びの方が大きかったです。
+            </p>
+
+            <div class="earnings-box">
+                <span class="earnings-amount">レベル1（初心者）</span>
+                <div class="earnings-label">スタート時のスキルレベル</div>
+            </div>
+
+            <h3>初心者時代に学んだこと</h3>
+            <ul>
+                <li>HTMLの基本構造（head, body, div, p, h1など）</li>
+                <li>CSSの書き方（セレクタ・プロパティ・値）</li>
+                <li>エラー文を読むことの大切さ</li>
+                <li>検索して解決する能力</li>
+                <li>諦めない心構え</li>
+            </ul>
+
+            <h2>ステップアップ：基礎→実践→応用</h2>
+            <p>
+                1ヶ月ほど経つと、HTML/CSSの基礎はある程度身について、「次はJavaScriptかな？」と思っていました。
+                これが私にとって<span class="highlight">次のステップアップ</span>でした。
+            </p>
+
+            <div class="price-timeline">
+                <div class="price-item">
+                    <div class="price-label">基礎レベル</div>
+                    <div class="price-value">2ヶ月目：HTML/CSSマスター</div>
+                </div>
+                
+                <div class="price-item">
+                    <div class="price-label">実践レベル</div>
+                    <div class="price-value">3ヶ月目：JavaScript基礎習得</div>
+                </div>
+            </div>
+
+            <h2>現在：中級レベル</h2>
+            <p>
+                現在、私のスキルレベルは「HTML/CSS基礎習得＋JavaScript基礎学習中」です。時には簡単なWebアプリも作れるようになりました。
+                初心者の頃と比べて、同じ時間学習しても約3倍の理解度になりました。
+            </p>
+
+            <div class="earnings-box">
+                <span class="earnings-amount">中級レベル</span>
+                <div class="earnings-label">現在のスキルレベル</div>
+            </div>
+
+            <h3>スキルアップのポイント</h3>
+            <div class="tips-box">
+                <h4><i class="fas fa-chart-line"></i> スキルを上げるために大切なこと</h4>
+                <ul>
+                    <li><strong>基礎重視</strong> - 基礎がしっかりしていないと応用はできません</li>
+                    <li><strong>実践練習</strong> - コードは書いてこそ身につきます</li>
+                    <li><strong>エラー対応</strong> - エラーは学習のチャンスです</li>
+                    <li><strong>復習意識</strong> - 定期的に振り返り、次に活かす</li>
+                </ul>
+            </div>
+
+            <h2>今後の学習目標</h2>
+            <p>
+                次の目標は、<strong>ReactやVue.jsのようなフレームワーク</strong>を学習することです。そのために、より高度なJavaScriptの知識が必要なので、
+                勉強を続けて、<span class="highlight">「フロントエンドエンジニア」</span>を目指したいと思っています。
+            </p>
+
+            <h2>最後に（プログラミング学習編）</h2>
+            <p>
+                完全初心者から始めて、現在の中級レベルまで上げることができました。これは決して高いレベルではありませんが、
+                未経験から始めた私にとっては大きな成長です。
+            </p>
+
+            <p>
+                もしあなたが「プログラミングは難しそう」「私には無理だ」と思っているのであれば、<strong>諦めないでください</strong>。
+                地道に基礎を積み上げることで、必ずスキルは身につきます。私自身がその証明です。
+                CodeAcademyで、あなたの学習も始めてみませんか？
+            </p>
+        </article>
+
+        <!-- Article Navigation -->
+        <div class="article-navigation">
+            <a href="web-writer-30k.html" class="nav-button prev">
+                <i class="fas fa-arrow-left"></i> 前の記事へ
+            </a>
+            <a href="beginner-writing-jobs.html" class="nav-button next">
+                次の記事へ <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <!-- Footer -->
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="social-links">
+                <a href="https://note.com/shiromiya" target="_blank" rel="noopener noreferrer">
+                    <i class="fas fa-notebook"></i>
+                </a>
+            </div>
+            <p>&copy; 2026 CodeAcademy - ITスクールでプログラミングを学ぶ記録</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="../assets/js/main.js"></script>
+    <script src="../assets/js/header-scroll.js"></script>
+</body>
+</html>

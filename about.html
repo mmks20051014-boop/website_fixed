@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>私について - CodeAcademy ITスクール体験記</title>
+    <meta name="description" content="ITスクールでプログラミングを学習した私の体験談。3ヶ月でプログラミングを使いこなせるようになるまでの学習過程、挫折、成功体験を詳しくご紹介します。">
+    <meta name="keywords" content="CodeAcademy, ITスクール, プログラミング学習, 体験談, 3ヶ月, 初心者">
+    
+    <!-- OGP -->
+    <meta property="og:title" content="私について - CodeAcademy">
+    <meta property="og:description" content="ITスクールでプログラミングを学習した私の体験談。3ヶ月でプログラミングを使いこなせるようになるまでの学習過程">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://codeaffi.example.com/about.html">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@400;600&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    
+    <style>
+        .about-hero {
+            background: var(--gradient-header);
+            color: var(--text-light);
+            padding: 8rem 2rem 4rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .about-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(100, 180, 255, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(100, 180, 255, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        
+        .about-hero h1 {
+            color: var(--text-light);
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .about-hero p {
+            font-size: 1.2rem;
+            color: var(--slate-gray);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .timeline {
+            position: relative;
+            padding: 2rem 0;
+            margin: 3rem 0;
+        }
+        
+        .timeline::before {
+            display: none;
+        }
+        
+        .timeline-item:nth-child(odd),
+        .timeline-item:nth-child(even) {
+            flex-direction: column;
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin: 3rem 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .timeline-item:nth-child(odd) {
+            flex-direction: row;
+        }
+        
+        .timeline-item:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+        
+        .timeline-content {
+            width: 100%;
+            max-width: 600px;
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            margin: 1rem 0 0 0;
+            position: relative;
+            border: 2px solid transparent;
+            text-align: left;
+        }
+        
+        .timeline-date {
+            background: var(--accent-blue);
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 1rem;
+            white-space: nowrap;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            margin-bottom: 1rem;
+            display: inline-block;
+            position: relative;
+        }
+        
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+        
+        .skill-card {
+            background: var(--gradient-card);
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid rgba(100, 180, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .skill-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(100, 180, 255, 0.15);
+        }
+        
+        .skill-icon {
+            font-size: 3rem;
+            color: var(--accent-blue);
+            margin-bottom: 1rem;
+        }
+        
+        .skill-card h3 {
+            color: var(--primary-bg);
+            margin-bottom: 1rem;
+        }
+        
+        .achievement-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+        
+        .achievement-card {
+            background: linear-gradient(135deg, rgba(100, 180, 255, 0.1) 0%, rgba(100, 180, 255, 0.05) 100%);
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid rgba(100, 180, 255, 0.3);
+        }
+        
+        .achievement-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent-blue);
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        
+        .philosophy-section {
+            background: var(--gradient-section);
+            padding: 4rem 2rem;
+            margin: 4rem -2rem;
+            text-align: center;
+        }
+        
+        .philosophy-section h2 {
+            color: var(--primary-bg);
+            margin-bottom: 2rem;
+        }
+        
+        .philosophy-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .philosophy-content p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--slate-gray);
+            margin-bottom: 1.5rem;
+        }
+        
+        .cta-section {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: var(--gradient-hero);
+            color: var(--text-light);
+            border-radius: 20px;
+            margin: 4rem 0;
+        }
+        
+        .cta-section h2 {
+            color: var(--text-light);
+            margin-bottom: 1rem;
+        }
+        
+        .cta-section p {
+            color: var(--slate-gray);
+            margin-bottom: 2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .timeline::before {
+                left: 20px;
+            }
+            
+            .timeline-item {
+                flex-direction: row !important;
+                padding-left: 50px;
+            }
+            
+            .timeline-content {
+                margin: 0;
+            }
+            
+            .timeline-date {
+                font-size: 0.9rem;
+                padding: 0.5rem 1rem;
+                position: relative !important;
+                left: auto !important;
+                transform: none !important;
+                margin: 0 auto 1rem auto !important;
+                display: inline-block !important;
+                top: auto !important;
+            }
+            
+            .philosophy-section {
+                margin: 2rem -1rem;
+                padding: 2rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <div class="logo">
+                <i class="fas fa-graduation-cap"></i> CodeAcademy
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">ホーム</a></li>
+                <li><a href="#about">私について</a></li>
+                <li><a href="blog.html">ブログ</a></li>
+                <li><a href="contact.html">お問い合わせ</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- About Hero Section -->
+    <section class="about-hero">
+        <div class="container">
+            <h1><i class="fas fa-user-circle"></i> 私について</h1>
+            <p>ITスクールで3ヶ月でプログラミングを使いこなせるようになった学習体験</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Profile Section -->
+        <section id="about" class="section">
+            <div class="section-title">
+                <h2><i class="fas fa-heart"></i> プロフィール</h2>
+                <p>ITスクール受講生としての学習体験</p>
+            </div>
+            
+            <div class="about-content">
+                <div class="profile-image">
+                    <div class="profile-avatar">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <h3>CodeAffi</h3>
+                    <p>プログラミングアフィリエイター</p>
+                    <p><i class="fas fa-map-marker-alt"></i> 日本在住</p>
+                    <p><i class="fas fa-chart-line"></i> 月30万円達成</p>
+                </div>
+                
+                <div class="profile-info">
+                    <h3>簡単な自己紹介</h3>
+                    <p>
+                        こんにちは、CodeAcademyと申します。ITスクールでプログラミングを学習した元初心者です。
+                        プログラミングの知識がゼロの状態から始めて、3ヶ月で実践的なスキルを身につけることができました。
+                    </p>
+                    
+                    <h3>ITスクールを選んだきっかけ</h3>
+                    <p>
+                        プログラミングの需要が急増していることに注目し、体系的に学べる環境を探していました。
+                        独学では限界があると感じ、ITスクールでの学習を始めたところ、
+                        思っていた以上に早くスキルを身につけることができました。
+                    </p>
+                    
+                    <h3>現在の活動内容</h3>
+                    <p>
+                        主に学習したスキルを活かして、簡単なWebアプリの開発や、
+                        他の初学者への学習アドバイスを行っています。
+                        これまでの学習で、HTML/CSS、JavaScript、Pythonの基礎をマスターし、
+                        実践的なプロジェクトも作成できるようになりました。
+                    </p>
+                    <p>
+                        また、<a href="https://note.com/codeacademy" target="_blank" rel="noopener noreferrer">NoteでITスクール体験談</a>を発信し、
+                        同じようにプログラミングを学びたい人に役立つ情報を提供しています。
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Timeline Section -->
+        <section class="section">
+            <div class="section-title">
+                <h2><i class="fas fa-route"></i> ITスクール学習までの道のり</h2>
+                <p>プログラミングを学び始めてからの主な出来事</p>
+            </div>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-date" style="position: relative; left: auto; transform: none; margin: 0 auto 1rem auto; display: inline-block;">2025年6月</div>
+                    <div class="timeline-content">
+                        <h3><i class="fas fa-play-circle"></i> ITスクール入学</h3>
+                        <p>プログラミングの需要が急増していることに注目し、ITスクールでの学習を始めることを決意。基礎的なプログラミング知識を学び始める。</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-date" style="position: relative; left: auto; transform: none; margin: 0 auto 1rem auto; display: inline-block;">2025年7月</div>
+                    <div class="timeline-content">
+                        <h3><i class="fas fa-code"></i> 基礎スキル習得</h3>
+                        <p>HTML/CSS、JavaScriptの基礎を学習。初めての簡単なWebページを作成でき、達成感を感じる。</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-date" style="position: relative; left: auto; transform: none; margin: 0 auto 1rem auto; display: inline-block;">2025年10月</div>
+                    <div class="timeline-content">
+                        <h3><i class="fas fa-chart-line"></i> 実践的スキル習得</h3>
+                        <p>Pythonの基礎、Webフレームワークの活用まで学習。実践的なプロジェクトも作成できるようになる。</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-date" style="position: relative; left: auto; transform: none; margin: 0 auto 1rem auto; display: inline-block;">2026年2月</div>
+                    <div class="timeline-content">
+                        <h3><i class="fas fa-trophy"></i> プログラミング習得完了</h3>
+                        <p>3ヶ月の学習でプログラミングの基礎をマスター。実践的なアプリケーションも開発できるようになった。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section class="section">
+            <div class="section-title">
+                <h2><i class="fas fa-tools"></i> 身につけたスキル</h2>
+                <p>ITスクールで学習したプログラミングスキル</p>
+            </div>
+            
+            <div class="skills-grid">
+                <div class="skill-card">
+                    <div class="skill-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h3>Web開発</h3>
+                    <p>HTML/CSS、JavaScriptの基礎を身につけ、簡単なWebサイトやアプリケーションを作成できます。</p>
+                </div>
+                
+                <div class="skill-card">
+                    <div class="skill-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3>Pythonプログラミング</h3>
+                    <p>Pythonの基礎文法をマスターし、簡単なスクリプトやデータ処理プログラムを作成できます。</p>
+                </div>
+                
+                <div class="skill-card">
+                    <div class="skill-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>問題解決能力</h3>
+                    <p>エラーやバグに対して、調査して解決する能力を身につけました。Stack Overflowなども活用できます。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Achievements Section -->
+        <section class="section">
+            <div class="section-title">
+                <h2><i class="fas fa-medal"></i> 学習成果</h2>
+                <p>ITスクールで身につけた成果</p>
+            </div>
+            
+            <div class="achievement-grid">
+                <div class="achievement-card">
+                    <span class="achievement-number">3ヶ月</span>
+                    <h3>学習期間</h3>
+                    <p>ITスクールで3ヶ月間集中的にプログラミングを学習</p>
+                </div>
+                
+                <div class="achievement-card">
+                    <span class="achievement-number">5個</span>
+                    <h3>作成したプロジェクト</h3>
+                    <p>学習過程で作成したWebアプリケーションやツールの数</p>
+                </div>
+                
+                <div class="achievement-card">
+                    <span class="achievement-number">95%</span>
+                    <h3>学習継続率</h3>
+                    <p>ITスクールでの学習を最後まで継続できた割合</p>
+                </div>
+                
+                <div class="achievement-card">
+                    <span class="achievement-number">800</span>
+                    <h3>Noteフォロワー</h3>
+                    <p><a href="https://note.com/codeacademy" target="_blank" rel="noopener noreferrer">Noteで学習体験を発信中</a></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Philosophy Section -->
+        <section class="philosophy-section">
+            <div class="container">
+                <h2><i class="fas fa-lightbulb"></i> 私の考え方</h2>
+                <div class="philosophy-content">
+                    <p>
+                        「特別な才能がなくても、良い環境と努力でプログラミングスキルは身につく」という信念を持っています。
+                        ITスクールの環境で、体系的に学習しながら、少しずつでも成長していくことが大切だと考えています。
+                    </p>
+                    <p>
+                        プログラミングを学び始める前は、「プログラミングは難しそう」でしたが、実際に始めてみると、
+                        段階的に学んでいけば誰でも始められることが分かりました。大切なのは、まず一歩踏み出すこと、
+                        そして継続して学び続けることだと感じています。
+                        最新の<a href="https://note.com/codeacademy" target="_blank" rel="noopener noreferrer">ITスクール体験談はNoteで発信中</a>です。
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-section">
+            <div class="container">
+                <h2><i class="fas fa-rocket"></i> 一緒にプログラミング学習を始めませんか？</h2>
+                <p>
+                    プログラミングの知識ゼロからでも、ITスクールで学習してスキルを身につけることができます。
+                    ITスクール選びやプログラミング学習について、もっと詳しく知りたい方はお気軽にご連絡ください。
+                    最新情報は<a href="https://note.com/codeacademy" target="_blank" rel="noopener noreferrer">Noteで発信しています</a>。
+                </p>
+                <a href="contact.html" class="cta-button">
+                    <i class="fas fa-envelope"></i> お問い合わせはこちら
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="social-links">
+                <a href="https://note.com/codeacademy" target="_blank" rel="noopener noreferrer">
+                    <i class="fas fa-notebook"></i>
+                </a>
+            </div>
+            <p>&copy; 2026 CodeAcademy - ITスクールで3ヶ月でプログラミングを使いこなせるようになるまで</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/header-scroll.js"></script>
+</body>
+</html>

@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>お問い合わせ - CodeAcademy ITスクール体験記</title>
+    <meta name="description" content="ITスクールについてのご相談やプログラミング学習についてのご質問は、お気軽にお問い合わせください。">
+    <meta name="keywords" content="お問い合わせ, ITスクール, プログラミング学習, 相談, CodeAcademy">
+    
+    <!-- OGP -->
+    <meta property="og:title" content="お問い合わせ - CodeAcademy">
+    <meta property="og:description" content="ITスクールについてのご相談やプログラミング学習についてのご質問をお受けしています">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://shiromiya.example.com/contact.html">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@400;600&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    
+    <style>
+        .contact-hero {
+            background: var(--gradient-hero);
+            color: var(--text-light);
+            padding: 8rem 2rem 4rem;
+            text-align: center;
+            position: relative;
+        }
+        
+        .contact-hero h1 {
+            color: var(--text-light);
+            margin-bottom: 1rem;
+        }
+        
+        .contact-hero p {
+            font-size: 1.2rem;
+            color: var(--slate-gray);
+        }
+        
+        .contact-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+            margin: 4rem 0;
+        }
+        
+        .contact-card {
+            background: white;
+            padding: 3rem 2rem;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .contact-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-cta);
+        }
+        
+        .contact-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 60px rgba(100, 180, 255, 0.2);
+            border-color: rgba(100, 180, 255, 0.3);
+        }
+        
+        .contact-icon {
+            font-size: 3rem;
+            color: var(--accent-blue);
+            margin-bottom: 1.5rem;
+        }
+        
+        .contact-card h3 {
+            color: var(--primary-bg);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+        
+        .contact-card p {
+            color: var(--slate-gray);
+            margin-bottom: 2rem;
+            line-height: 1.7;
+        }
+        
+        .contact-form {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            margin: 3rem 0;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .form-group {
+            margin-bottom: 2rem;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.8rem;
+            font-weight: 700;
+            color: var(--primary-bg);
+            font-size: 1.1rem;
+        }
+        
+        .form-label .required {
+            color: #e53e3e;
+            margin-left: 0.3rem;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #f8fafc;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            background: white;
+            box-shadow: 0 0 20px rgba(100, 180, 255, 0.2);
+        }
+        
+        .form-control.error {
+            border-color: #e53e3e;
+            background: #fff5f5;
+        }
+        
+        .form-textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        .form-select {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 1rem;
+            background: #f8fafc;
+            cursor: pointer;
+        }
+        
+        .form-select:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            background: white;
+        }
+        
+        .form-help {
+            font-size: 0.9rem;
+            color: var(--slate-gray);
+            margin-top: 0.5rem;
+            display: block;
+        }
+        
+        .form-error {
+            color: #e53e3e;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+        
+        .form-error.show {
+            display: block;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+        
+        .form-submit {
+            background: var(--gradient-cta);
+            color: white;
+            border: none;
+            padding: 1.2rem 3rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(100, 180, 255, 0.4);
+            display: block;
+            margin: 2rem auto 0;
+        }
+        
+        .form-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(100, 180, 255, 0.6);
+        }
+        
+        .form-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .form-submit.loading {
+            position: relative;
+            color: transparent;
+        }
+        
+        .form-submit.loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            margin: -10px 0 0 -10px;
+            border: 2px solid white;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 0.8s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .success-message {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            margin: 2rem 0;
+            display: none;
+        }
+        
+        .success-message.show {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .success-message i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+        
+        .contact-info {
+            background: var(--gradient-section);
+            padding: 3rem 2rem;
+            border-radius: 20px;
+            text-align: center;
+            margin: 3rem 0;
+        }
+        
+        .contact-info h3 {
+            color: var(--primary-bg);
+            margin-bottom: 1rem;
+        }
+        
+        .contact-info p {
+            color: var(--slate-gray);
+            margin-bottom: 2rem;
+        }
+        
+        .contact-methods {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+        
+        .contact-method {
+            text-align: center;
+        }
+        
+        .contact-method i {
+            font-size: 2rem;
+            color: var(--accent-blue);
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+        
+        .contact-method p {
+            margin: 0;
+            font-weight: 500;
+        }
+        
+        .privacy-note {
+            background: #fff5cd;
+            border: 1px solid #f6e05e;
+            color: #744210;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+            font-size: 0.9rem;
+        }
+        
+        .privacy-note i {
+            margin-right: 0.5rem;
+        }
+        
+        @media (max-width: 768px) {
+            .contact-options {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .contact-form {
+                padding: 2rem 1rem;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            
+            .contact-methods {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+            
+            .contact-card {
+                padding: 2rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <div class="logo">
+                <i class="fas fa-graduation-cap"></i> CodeAcademy
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">ホーム</a></li>
+                <li><a href="about.html">私について</a></li>
+                <li><a href="blog.html">ブログ</a></li>
+                <li><a href="#contact">お問い合わせ</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Contact Hero Section -->
+    <section class="contact-hero">
+        <div class="container">
+            <h1><i class="fas fa-envelope"></i> お問い合わせ</h1>
+            <p>ITスクールについてのご相談やプログラミング学習についてのご質問をお受けしています</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Contact Options -->
+        <section class="section">
+            <div class="contact-options">
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <i class="fas fa-briefcase"></i>
+                    </div>
+                    <h3>仕事のご依頼</h3>
+                    <p>プログラミング学習のご相談を受け付けています。ITスクール選び、学習方法、キャリア相談など、お気軽にご相談ください。</p>
+                    <a href="#work-form" class="cta-button">
+                        <i class="fas fa-arrow-down"></i> 依頼フォームへ
+                    </a>
+                </div>
+                
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <i class="fas fa-question-circle"></i>
+                    </div>
+                    <h3>ご質問・相談</h3>
+                    <p>ITスクールやプログラミング学習についてのご質問、お悩み相談など、お気軽にお聞かせください。</p>
+                    <a href="#question-form" class="cta-button">
+                        <i class="fas fa-arrow-down"></i> 質問フォームへ
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Forms -->
+        <section id="contact" class="section">
+            <!-- Work Request Form -->
+            <div id="work-form" class="contact-form">
+                <h2><i class="fas fa-briefcase"></i> 仕事のご依頼フォーム</h2>
+                <p style="color: var(--slate-gray); margin-bottom: 2rem;">以下のフォームに必要事項をご記入ください。24時間以内にご返信いたします。</p>
+                
+                <form id="workForm" class="contact-form-content">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="workName">お名前<span class="required">*</span></label>
+                            <input type="text" id="workName" name="name" class="form-control" required>
+                            <div class="form-error" id="workNameError">お名前を入力してください</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="workEmail">メールアドレス<span class="required">*</span></label>
+                            <input type="email" id="workEmail" name="email" class="form-control" required>
+                            <div class="form-error" id="workEmailError">有効なメールアドレスを入力してください</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="workType">依頼の種類<span class="required">*</span></label>
+                        <select id="workType" name="workType" class="form-select" required>
+                            <option value="">選択してください</option>
+                            <option value="article">記事作成</option>
+                            <option value="blog">ブログ記事</option>
+                            <option value="web-content">Webコンテンツ</option>
+                            <option value="other">その他</option>
+                        </select>
+                        <div class="form-error" id="workTypeError">依頼の種類を選択してください</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="workSubject">件名<span class="required">*</span></label>
+                        <input type="text" id="workSubject" name="subject" class="form-control" required>
+                        <div class="form-error" id="workSubjectError">件名を入力してください</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="workContent">依頼内容<span class="required">*</span></label>
+                        <textarea id="workContent" name="content" class="form-control form-textarea" required
+                                  placeholder="具体的な依頼内容、希望納期、予算などをご記入ください"></textarea>
+                        <div class="form-error" id="workContentError">依頼内容を入力してください</div>
+                    </div>
+                    
+                    <div class="privacy-note">
+                        <i class="fas fa-shield-alt"></i>
+                        <strong>プライバシーポリシー</strong><br>
+                        お客様の個人情報は、お問い合わせへの対応のみに使用し、第三者に提供することはありません。
+                    </div>
+                    
+                    <button type="submit" class="form-submit" id="workSubmit">
+                        <i class="fas fa-paper-plane"></i> 依頼を送信する
+                    </button>
+                </form>
+                
+                <div class="success-message" id="workSuccess">
+                    <i class="fas fa-check-circle"></i>
+                    <h3>依頼を受け付けました</h3>
+                    <p>お問い合わせありがとうございます。24時間以内にご返信いたします。</p>
+                </div>
+            </div>
+
+            <!-- Question Form -->
+            <div id="question-form" class="contact-form">
+                <h2><i class="fas fa-question-circle"></i> ご質問・相談フォーム</h2>
+                <p style="color: var(--slate-gray); margin-bottom: 2rem;">在宅ワークやWebライティングについて、何でもお聞きください。</p>
+                
+                <form id="questionForm" class="contact-form-content">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="questionName">お名前<span class="required">*</span></label>
+                            <input type="text" id="questionName" name="name" class="form-control" required>
+                            <div class="form-error" id="questionNameError">お名前を入力してください</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="questionEmail">メールアドレス<span class="required">*</span></label>
+                            <input type="email" id="questionEmail" name="email" class="form-control" required>
+                            <div class="form-error" id="questionEmailError">有効なメールアドレスを入力してください</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="questionType">質問の種類<span class="required">*</span></label>
+                        <select id="questionType" name="questionType" class="form-select" required>
+                            <option value="">選択してください</option>
+                            <option value="it-school">ITスクールについて</option>
+                            <option value="programming">プログラミング学習について</option>
+                            <option value="lifestyle">ライフスタイル</option>
+                            <option value="other">その他</option>
+                        </select>
+                        <div class="form-error" id="questionTypeError">質問の種類を選択してください</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="questionSubject">件名<span class="required">*</span></label>
+                        <input type="text" id="questionSubject" name="subject" class="form-control" required>
+                        <div class="form-error" id="questionSubjectError">件名を入力してください</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="questionContent">質問内容<span class="required">*</span></label>
+                        <textarea id="questionContent" name="content" class="form-control form-textarea" required
+                                  placeholder="具体的な質問内容をご記入ください"></textarea>
+                        <div class="form-error" id="questionContentError">質問内容を入力してください</div>
+                    </div>
+                    
+                    <div class="privacy-note">
+                        <i class="fas fa-shield-alt"></i>
+                        <strong>プライバシーポリシー</strong><br>
+                        お客様の個人情報は、お問い合わせへの対応のみに使用し、第三者に提供することはありません。
+                    </div>
+                    
+                    <button type="submit" class="form-submit" id="questionSubmit">
+                        <i class="fas fa-paper-plane"></i> 質問を送信する
+                    </button>
+                </form>
+                
+                <div class="success-message" id="questionSuccess">
+                    <i class="fas fa-check-circle"></i>
+                    <h3>質問を受け付けました</h3>
+                    <p>お問い合わせありがとうございます。できるだけ早くご返信いたします。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Info -->
+        <section class="section">
+            <div class="contact-info">
+                <h3><i class="fas fa-info-circle"></i> お問い合わせについて</h3>
+                <p>通常24時間以内にご返信いたします。土日祝日を除く営業日の対応となります。</p>
+                
+                <div class="contact-methods">
+                    <div class="contact-method">
+                        <i class="fas fa-envelope"></i>
+                        <p>メールでのお問い合わせ</p>
+                    </div>
+                    <div class="contact-method">
+                        <i class="fas fa-clock"></i>
+                        <p>24時間以内に返信</p>
+                    </div>
+                    <div class="contact-method">
+                        <i class="fas fa-calendar-alt"></i>
+                        <p>営業日対応</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="social-links">
+                <a href="https://note.com/shiromiya" target="_blank" rel="noopener noreferrer">
+                    <i class="fas fa-notebook"></i>
+                </a>
+            </div>
+            <p>&copy; 2026 CodeAcademy - ITスクールで3ヶ月でプログラミングを使いこなせるようになるまで</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/header-scroll.js"></script>
+    <script>
+        // Contact form functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Work form handling
+            const workForm = document.getElementById('workForm');
+            const workSubmit = document.getElementById('workSubmit');
+            const workSuccess = document.getElementById('workSuccess');
+
+            // Question form handling
+            const questionForm = document.getElementById('questionForm');
+            const questionSubmit = document.getElementById('questionSubmit');
+            const questionSuccess = document.getElementById('questionSuccess');
+
+            // Form validation and submission
+            function setupForm(form, submitBtn, successMsg) {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    if (validateForm(form)) {
+                        submitForm(form, submitBtn, successMsg);
+                    }
+                });
+            }
+
+            // Form validation
+            function validateForm(form) {
+                let isValid = true;
+                const requiredFields = form.querySelectorAll('[required]');
+                
+                requiredFields.forEach(field => {
+                    const errorElement = document.getElementById(field.id + 'Error');
+                    
+                    if (!field.value.trim()) {
+                        showFieldError(field, errorElement);
+                        isValid = false;
+                    } else if (field.type === 'email' && !isValidEmail(field.value)) {
+                        showFieldError(field, errorElement);
+                        isValid = false;
+                    } else {
+                        hideFieldError(field, errorElement);
+                    }
+                });
+                
+                return isValid;
+            }
+
+            // Show field error
+            function showFieldError(field, errorElement) {
+                field.classList.add('error');
+                if (errorElement) {
+                    errorElement.classList.add('show');
+                }
+            }
+
+            // Hide field error
+            function hideFieldError(field, errorElement) {
+                field.classList.remove('error');
+                if (errorElement) {
+                    errorElement.classList.remove('show');
+                }
+            }
+
+            // Email validation
+            function isValidEmail(email) {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return emailRegex.test(email);
+            }
+
+            // Form submission
+            function submitForm(form, submitBtn, successMsg) {
+                // Show loading state
+                submitBtn.disabled = true;
+                submitBtn.classList.add('loading');
+                
+                // Simulate form submission
+                setTimeout(() => {
+                    // Hide form and show success message
+                    form.style.display = 'none';
+                    successMsg.classList.add('show');
+                    
+                    // Scroll to success message
+                    successMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    
+                    console.log('フォーム送信完了:', form.id);
+                }, 2000);
+            }
+
+            // Real-time validation
+            function setupRealTimeValidation(form) {
+                const inputs = form.querySelectorAll('input, select, textarea');
+                inputs.forEach(input => {
+                    input.addEventListener('blur', function() {
+                        const errorElement = document.getElementById(this.id + 'Error');
+                        if (this.hasAttribute('required') && !this.value.trim()) {
+                            showFieldError(this, errorElement);
+                        } else if (this.type === 'email' && this.value && !isValidEmail(this.value)) {
+                            showFieldError(this, errorElement);
+                        } else {
+                            hideFieldError(this, errorElement);
+                        }
+                    });
+                    
+                    input.addEventListener('input', function() {
+                        const errorElement = document.getElementById(this.id + 'Error');
+                        if (this.classList.contains('error')) {
+                            hideFieldError(this, errorElement);
+                        }
+                    });
+                });
+            }
+
+            // Setup forms
+            setupForm(workForm, workSubmit, workSuccess);
+            setupForm(questionForm, questionSubmit, questionSuccess);
+            
+            // Setup real-time validation
+            setupRealTimeValidation(workForm);
+            setupRealTimeValidation(questionForm);
+
+            // Auto-select form based on URL parameter
+            const urlParams = new URLSearchParams(window.location.search);
+            const formType = urlParams.get('type');
+            
+            if (formType === 'work') {
+                document.getElementById('work-form').scrollIntoView({ behavior: 'smooth' });
+            } else if (formType === 'question') {
+                document.getElementById('question-form').scrollIntoView({ behavior: 'smooth' });
+            }
+
+            console.log('お問い合わせフォーム初期化完了');
+        });
+    </script>
+</body>
+</html>
