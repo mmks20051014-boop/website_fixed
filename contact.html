@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" style="scroll-behavior: smooth;">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -672,7 +672,204 @@
                 padding: 8rem 1.5rem 4rem;
             }
         }
-    </style>
+
+        /* ---------- Breadcrumb ---------- */
+        .breadcrumb-nav {
+            background: rgba(10, 10, 10, 0.6);
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 0.75rem 2rem;
+            margin-top: 72px;
+        }
+
+        .breadcrumb-list {
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            font-size: 0.85rem;
+        }
+
+        .breadcrumb-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            color: var(--text-muted);
+        }
+
+        .breadcrumb-list li a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        .breadcrumb-list li a:hover {
+            color: var(--accent-cyan);
+            text-shadow: var(--shadow-glow);
+        }
+
+        .breadcrumb-list .separator {
+            color: var(--text-muted);
+            font-size: 0.75rem;
+        }
+
+        .breadcrumb-list .current {
+            background: var(--gradient-text);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 600;
+        }
+    
+        /* ===== Hamburger Menu ===== */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            gap: 5px;
+            width: 36px;
+            height: 36px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+            z-index: 1100;
+            aria-label: "メニューを開く";
+        }
+        .hamburger span {
+            display: block;
+            width: 100%;
+            height: 2px;
+            background: var(--text-primary, #e2e8f0);
+            border-radius: 2px;
+            transition: transform 0.35s cubic-bezier(0.4,0,0.2,1),
+                        opacity   0.25s ease,
+                        width     0.25s ease;
+            transform-origin: center;
+        }
+        .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+        .hamburger.open span:nth-child(2) { opacity: 0; width: 0; }
+        .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+        /* モバイル用オーバーレイ */
+        .nav-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .nav-overlay.active { opacity: 1; }
+
+        @media (max-width: 768px) {
+            .hamburger { display: flex; }
+            .nav-overlay { display: block; pointer-events: none; }
+            .nav-overlay.active { pointer-events: auto; }
+
+            nav {
+                position: relative;
+            }
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: min(280px, 80vw);
+                height: 100vh;
+                background: var(--bg-secondary, #0f172a);
+                border-left: 1px solid var(--border-subtle, rgba(255,255,255,0.08));
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 80px 2rem 2rem;
+                gap: 0;
+                z-index: 1050;
+                transition: right 0.35s cubic-bezier(0.4,0,0.2,1);
+                box-shadow: -8px 0 32px rgba(0,0,0,0.4);
+            }
+            .nav-links.open { right: 0; }
+            .nav-links li {
+                width: 100%;
+                border-bottom: 1px solid var(--border-subtle, rgba(255,255,255,0.06));
+            }
+            .nav-links li:last-child { border-bottom: none; }
+            .nav-links li a {
+                display: block;
+                padding: 1rem 0.5rem;
+                font-size: 1rem;
+                width: 100%;
+            }
+        }
+        /* ===== /Hamburger Menu ===== */
+
+        /* ===== Footer Enhanced ===== */
+        footer {
+            background: var(--bg-secondary, #0f172a);
+            border-top: 1px solid var(--border-subtle, rgba(255,255,255,0.08));
+            padding: 2.5rem 2rem 1.5rem;
+            margin-top: auto;
+        }
+        .footer-content { max-width: 1200px; margin: 0 auto; }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .footer-logo {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--accent-cyan, #22d3ee);
+            margin-bottom: 0.4rem;
+        }
+        .footer-tagline {
+            font-size: 0.8rem;
+            color: var(--text-muted, #64748b);
+        }
+        .footer-nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+        .footer-nav a {
+            color: var(--text-secondary, #94a3b8);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .footer-nav a:hover { color: var(--accent-cyan, #22d3ee); }
+        .footer-copy {
+            font-size: 0.85rem;
+            color: var(--text-muted, #64748b);
+            margin-bottom: 0.4rem;
+        }
+        .footer-desc {
+            font-size: 0.78rem;
+            color: var(--text-muted, #64748b);
+            line-height: 1.6;
+        }
+        @media (max-width: 768px) {
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+                text-align: center;
+            }
+            .footer-nav ul { align-items: center; }
+            .footer-nav a { justify-content: center; }
+        }
+        /* ===== /Footer Enhanced ===== */
+
+        </style>
 
     <!-- ===== 構造化データ (JSON-LD) ===== -->
     <script type="application/ld+json">
@@ -736,51 +933,71 @@
     <header>
         <nav>
             <div class="logo">
-                <i class="fas fa-graduation-cap"></i> CodeRoute 90
+                <i class="fas fa-graduation-cap" aria-hidden="true"></i> CodeRoute 90
             </div>
-            <ul class="nav-links">
+            <ul class="nav-links" id="navLinks">
                 <li><a href="index.html">ホーム</a></li>
                 <li><a href="about.html">about me</a></li>
                 <li><a href="blog.html">ブログ</a></li>
                 <li><a href="contact.html" style="color: var(--accent-cyan);">お問い合わせ</a></li>
             </ul>
+            <button class="hamburger" id="hamburgerBtn" aria-label="メニューを開く" aria-expanded="false" aria-controls="navLinks">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
         </nav>
     </header>
+    <div class="nav-overlay" id="navOverlay" aria-hidden="true"></div>
+
+
+    <!-- ===== Breadcrumb ===== -->
+    <nav class="breadcrumb-nav" aria-label="パンくずリスト">
+        <ol class="breadcrumb-list">
+            <li>
+                <a href="index.html">
+                    <i class="fas fa-home" aria-hidden="true"></i> ホーム
+                </a>
+            </li>
+            <li class="separator"><i class="fas fa-chevron-right" aria-hidden="true"></i></li>
+            <li class="current" aria-current="page">お問い合わせ</li>
+        </ol>
+    </nav>
 
     <!-- Contact Hero Section -->
     <section class="contact-hero">
         <div class="hero-badge">
-            <i class="fas fa-envelope"></i> CONTACT
+            <i class="fas fa-envelope" aria-hidden="true"></i> CONTACT
         </div>
         <h1>お問い合わせ</h1>
         <p>ITスクールについてのご相談や<br>プログラミング学習についてのご質問をお受けしています</p>
     </section>
 
     <!-- Main Content -->
-    <main>
+    <main role="main">
         <!-- Contact Options -->
         <section class="section">
             <div class="contact-options">
                 <div class="contact-card">
                     <div class="contact-icon">
-                        <i class="fas fa-briefcase"></i>
+                        <i class="fas fa-briefcase" aria-hidden="true"></i>
                     </div>
                     <h3>仕事のご依頼</h3>
                     <p>Webサイト制作から簡単なWebアプリまで、保守性の高いコードで構築します。最短<strong style="color:var(--accent-cyan)">1週間</strong>で納品可能です。</p>
                     <p>プログラミング学習のご相談も受け付けています。ITスクール選び、学習方法、キャリア相談など、お気軽にどうぞ。</p>
                     <a href="#work-form" class="cta-button">
-                        <i class="fas fa-arrow-down"></i>&nbsp; 依頼フォームへ
+                        <i class="fas fa-arrow-down" aria-hidden="true"></i>&nbsp; 依頼フォームへ
                     </a>
                 </div>
                 
                 <div class="contact-card">
                     <div class="contact-icon">
-                        <i class="fas fa-comments"></i>
+                        <i class="fas fa-comments" aria-hidden="true"></i>
                     </div>
                     <h3>ご質問・相談</h3>
                     <p>「3ヶ月でどうやって転職までこぎ着けたのか？」——私の実体験に基づき、最短ルートでエンジニアを目指すための学習順序や、スクール選びの本音にお答えします。</p>
                     <a href="#question-form" class="cta-button" style="background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);">
-                        <i class="fas fa-arrow-down"></i>&nbsp; 質問フォームへ
+                        <i class="fas fa-arrow-down" aria-hidden="true"></i>&nbsp; 質問フォームへ
                     </a>
                 </div>
             </div>
@@ -800,13 +1017,13 @@
                         <div class="form-group">
                             <label class="form-label" for="workName">お名前<span class="required">*</span></label>
                             <input type="text" id="workName" name="name" class="form-control" placeholder="山田 太郎" required>
-                            <div class="form-error" id="workNameError"><i class="fas fa-exclamation-circle"></i> お名前を入力してください</div>
+                            <div class="form-error" id="workNameError"><i class="fas fa-exclamation-circle" aria-hidden="true"></i> お名前を入力してください</div>
                         </div>
                         
                         <div class="form-group">
                             <label class="form-label" for="workEmail">メールアドレス<span class="required">*</span></label>
                             <input type="email" id="workEmail" name="email" class="form-control" placeholder="example@email.com" required>
-                            <div class="form-error" id="workEmailError"><i class="fas fa-exclamation-circle"></i> 有効なメールアドレスを入力してください</div>
+                            <div class="form-error" id="workEmailError"><i class="fas fa-exclamation-circle" aria-hidden="true"></i> 有効なメールアドレスを入力してください</div>
                         </div>
                     </div>
                     
@@ -819,34 +1036,34 @@
                             <option value="web-content">Webコンテンツ</option>
                             <option value="other">その他</option>
                         </select>
-                        <div class="form-error" id="workTypeError"><i class="fas fa-exclamation-circle"></i> 依頼の種類を選択してください</div>
+                        <div class="form-error" id="workTypeError"><i class="fas fa-exclamation-circle" aria-hidden="true"></i> 依頼の種類を選択してください</div>
                     </div>
                     
                     <div class="form-group">
                         <label class="form-label" for="workSubject">件名<span class="required">*</span></label>
                         <input type="text" id="workSubject" name="subject" class="form-control" placeholder="件名を入力してください" required>
-                        <div class="form-error" id="workSubjectError"><i class="fas fa-exclamation-circle"></i> 件名を入力してください</div>
+                        <div class="form-error" id="workSubjectError"><i class="fas fa-exclamation-circle" aria-hidden="true"></i> 件名を入力してください</div>
                     </div>
                     
                     <div class="form-group">
                         <label class="form-label" for="workContent">依頼内容<span class="required">*</span></label>
                         <textarea id="workContent" name="content" class="form-control form-textarea" required
                                   placeholder="具体的な依頼内容、希望納期、予算などをご記入ください"></textarea>
-                        <div class="form-error" id="workContentError"><i class="fas fa-exclamation-circle"></i> 依頼内容を入力してください</div>
+                        <div class="form-error" id="workContentError"><i class="fas fa-exclamation-circle" aria-hidden="true"></i> 依頼内容を入力してください</div>
                     </div>
                     
                     <div class="privacy-note">
-                        <i class="fas fa-shield-alt"></i>
+                        <i class="fas fa-shield-alt" aria-hidden="true"></i>
                         <span><strong>プライバシーポリシー：</strong>お客様の個人情報は、お問い合わせへの対応のみに使用し、第三者に提供することはありません。</span>
                     </div>
                     
                     <button type="submit" class="form-submit" id="workSubmit">
-                        <i class="fas fa-paper-plane"></i>&nbsp; 依頼を送信する
+                        <i class="fas fa-paper-plane" aria-hidden="true"></i>&nbsp; 依頼を送信する
                     </button>
                 </form>
                 
                 <div class="success-message" id="workSuccess">
-                    <i class="fas fa-check-circle"></i>
+                    <i class="fas fa-check-circle" aria-hidden="true"></i>
                     <h3>依頼を受け付けました</h3>
                     <p>お問い合わせありがとうございます。24時間以内にご返信いたします。</p>
                 </div>
@@ -867,13 +1084,13 @@
                         <div class="form-group">
                             <label class="form-label" for="questionName">お名前<span class="required">*</span></label>
                             <input type="text" id="questionName" name="name" class="form-control" placeholder="山田 太郎" required>
-                            <div class="form-error" id="questionNameError"><i class="fas fa-exclamation-circle"></i> お名前を入力してください</div>
+                            <div class="form-error" id="questionNameError"><i class="fas fa-exclamation-circle" aria-hidden="true"></i> お名前を入力してください</div>
                         </div>
                         
                         <div class="form-group">
                             <label class="form-label" for="questionEmail">メールアドレス<span class="required">*</span></label>
                             <input type="email" id="questionEmail" name="email" class="form-control" placeholder="example@email.com" required>
-                            <div class="form-error" id="questionEmailError"><i class="fas fa-exclamation-circle"></i> 有効なメールアドレスを入力してください</div>
+                            <div class="form-error" id="questionEmailError"><i class="fas fa-exclamation-circle" aria-hidden="true"></i> 有効なメールアドレスを入力してください</div>
                         </div>
                     </div>
                     
@@ -886,34 +1103,34 @@
                             <option value="lifestyle">ライフスタイル</option>
                             <option value="other">その他</option>
                         </select>
-                        <div class="form-error" id="questionTypeError"><i class="fas fa-exclamation-circle"></i> 質問の種類を選択してください</div>
+                        <div class="form-error" id="questionTypeError"><i class="fas fa-exclamation-circle" aria-hidden="true"></i> 質問の種類を選択してください</div>
                     </div>
                     
                     <div class="form-group">
                         <label class="form-label" for="questionSubject">件名<span class="required">*</span></label>
                         <input type="text" id="questionSubject" name="subject" class="form-control" placeholder="件名を入力してください" required>
-                        <div class="form-error" id="questionSubjectError"><i class="fas fa-exclamation-circle"></i> 件名を入力してください</div>
+                        <div class="form-error" id="questionSubjectError"><i class="fas fa-exclamation-circle" aria-hidden="true"></i> 件名を入力してください</div>
                     </div>
                     
                     <div class="form-group">
                         <label class="form-label" for="questionContent">質問内容<span class="required">*</span></label>
                         <textarea id="questionContent" name="content" class="form-control form-textarea" required
                                   placeholder="具体的な質問内容をご記入ください"></textarea>
-                        <div class="form-error" id="questionContentError"><i class="fas fa-exclamation-circle"></i> 質問内容を入力してください</div>
+                        <div class="form-error" id="questionContentError"><i class="fas fa-exclamation-circle" aria-hidden="true"></i> 質問内容を入力してください</div>
                     </div>
                     
                     <div class="privacy-note">
-                        <i class="fas fa-shield-alt"></i>
+                        <i class="fas fa-shield-alt" aria-hidden="true"></i>
                         <span><strong>プライバシーポリシー：</strong>お客様の個人情報は、お問い合わせへの対応のみに使用し、第三者に提供することはありません。</span>
                     </div>
                     
                     <button type="submit" class="form-submit" id="questionSubmit" style="background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);">
-                        <i class="fas fa-paper-plane"></i>&nbsp; 質問を送信する
+                        <i class="fas fa-paper-plane" aria-hidden="true"></i>&nbsp; 質問を送信する
                     </button>
                 </form>
                 
                 <div class="success-message" id="questionSuccess">
-                    <i class="fas fa-check-circle"></i>
+                    <i class="fas fa-check-circle" aria-hidden="true"></i>
                     <h3>質問を受け付けました</h3>
                     <p>お問い合わせありがとうございます。できるだけ早くご返信いたします。</p>
                 </div>
@@ -929,19 +1146,19 @@
                 <div class="contact-methods">
                     <div class="contact-method">
                         <div class="contact-method-icon">
-                            <i class="fas fa-envelope"></i>
+                            <i class="fas fa-envelope" aria-hidden="true"></i>
                         </div>
                         <p>メールで対応</p>
                     </div>
                     <div class="contact-method">
                         <div class="contact-method-icon">
-                            <i class="fas fa-clock"></i>
+                            <i class="fas fa-clock" aria-hidden="true"></i>
                         </div>
                         <p>24時間以内に返信</p>
                     </div>
                     <div class="contact-method">
                         <div class="contact-method-icon">
-                            <i class="fas fa-calendar-alt"></i>
+                            <i class="fas fa-calendar-alt" aria-hidden="true"></i>
                         </div>
                         <p>営業日対応</p>
                     </div>
@@ -951,15 +1168,15 @@
     </main>
 
     <!-- Footer -->
-    <footer>
+    <footer role="contentinfo">
         <div class="footer-content">
             <p>&copy; 2026 CodeRoute 90 - 最短距離で「未経験」を脱却する攻略ログ</p>
         </div>
     </footer>
 
     <!-- JavaScript -->
-    <script src="assets/js/main.js"></script>
-    <script src="assets/js/header-scroll.js"></script>
+    <script src="assets/js/main.js" defer></script>
+    <script src="assets/js/header-scroll.js" defer></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const workForm      = document.getElementById('workForm');
@@ -1062,16 +1279,22 @@
             setupRealTime(workForm);
             setupRealTime(questionForm);
 
-            /* ---- Smooth scroll for CTA buttons ---- */
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function(e) {
-                    const target = document.querySelector(this.getAttribute('href'));
-                    if (target) {
-                        e.preventDefault();
-                        const headerH = document.querySelector('header')?.offsetHeight || 80;
-                        const top = target.getBoundingClientRect().top + window.pageYOffset - headerH - 24;
-                        window.scrollTo({ top, behavior: 'smooth' });
-                    }
+            /* ---- Smooth Scroll（ヘッダーオフセット対応・改善版）---- */
+            document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
+                anchor.addEventListener('click', function (e) {
+                    var href = this.getAttribute('href');
+                    if (!href || href === '#') return;
+                    var target = document.querySelector(href);
+                    if (!target) return;
+                    e.preventDefault();
+                    var header = document.querySelector('header');
+                    var headerH = header ? header.offsetHeight : 0;
+                    var top =
+                        target.getBoundingClientRect().top +
+                        window.pageYOffset -
+                        headerH -
+                        24;
+                    window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
                 });
             });
 
@@ -1084,5 +1307,75 @@
             }
         });
     </script>
+
+    <!-- ===== Nav: Hamburger + Active highlight ===== -->
+    <script>
+    (function () {
+        'use strict';
+
+        /* ---- ① Hamburger Menu ---- */
+        var btn     = document.getElementById('hamburgerBtn');
+        var navList = document.getElementById('navLinks');
+        var overlay = document.getElementById('navOverlay');
+
+        function openMenu() {
+            navList.classList.add('open');
+            overlay.classList.add('active');
+            btn.classList.add('open');
+            btn.setAttribute('aria-expanded', 'true');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeMenu() {
+            navList.classList.remove('open');
+            overlay.classList.remove('active');
+            btn.classList.remove('open');
+            btn.setAttribute('aria-expanded', 'false');
+            document.body.style.overflow = '';
+        }
+
+        if (btn) {
+            btn.addEventListener('click', function () {
+                navList.classList.contains('open') ? closeMenu() : openMenu();
+            });
+        }
+        if (overlay) {
+            overlay.addEventListener('click', closeMenu);
+        }
+        // Escキーで閉じる
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') closeMenu();
+        });
+        // ナビリンク クリックで閉じる（スマホ内遷移）
+        if (navList) {
+            navList.querySelectorAll('a').forEach(function (a) {
+                a.addEventListener('click', closeMenu);
+            });
+        }
+
+        /* ---- ② Active Nav Highlight ---- */
+        var currentPath = window.location.pathname.split('/').pop() || 'index.html';
+        if (currentPath === '') currentPath = 'index.html';
+        if (navList) {
+            navList.querySelectorAll('a').forEach(function (a) {
+                var href = a.getAttribute('href');
+                if (!href) return;
+                // ページ内アンカーは除外
+                if (href.startsWith('#')) return;
+                var linkFile = href.split('/').pop().split('?')[0].split('#')[0];
+                var isCurrent = (linkFile === currentPath) ||
+                    (currentPath === 'index.html' && (linkFile === '' || linkFile === 'index.html'));
+                if (isCurrent) {
+                    // 既存インラインスタイルを保持しつつクラス付与
+                    a.classList.add('nav-active');
+                    // インラインスタイルが未設定の場合のみ色を付与
+                    if (!a.style.color) {
+                        a.style.color = 'var(--accent-cyan, #22d3ee)';
+                    }
+                }
+            });
+        }
+    })();
+    </script>
+    <!-- ===== /Nav: Hamburger + Active highlight ===== -->
 </body>
 </html>

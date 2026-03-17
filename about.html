@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" style="scroll-behavior: smooth;">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -742,7 +742,152 @@
                 padding: 3rem 1.5rem;
             }
         }
-    </style>
+    
+        /* ===== Hamburger Menu ===== */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            gap: 5px;
+            width: 36px;
+            height: 36px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+            z-index: 1100;
+            aria-label: "メニューを開く";
+        }
+        .hamburger span {
+            display: block;
+            width: 100%;
+            height: 2px;
+            background: var(--text-primary, #e2e8f0);
+            border-radius: 2px;
+            transition: transform 0.35s cubic-bezier(0.4,0,0.2,1),
+                        opacity   0.25s ease,
+                        width     0.25s ease;
+            transform-origin: center;
+        }
+        .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+        .hamburger.open span:nth-child(2) { opacity: 0; width: 0; }
+        .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+        /* モバイル用オーバーレイ */
+        .nav-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .nav-overlay.active { opacity: 1; }
+
+        @media (max-width: 768px) {
+            .hamburger { display: flex; }
+            .nav-overlay { display: block; pointer-events: none; }
+            .nav-overlay.active { pointer-events: auto; }
+
+            nav {
+                position: relative;
+            }
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: min(280px, 80vw);
+                height: 100vh;
+                background: var(--bg-secondary, #0f172a);
+                border-left: 1px solid var(--border-subtle, rgba(255,255,255,0.08));
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 80px 2rem 2rem;
+                gap: 0;
+                z-index: 1050;
+                transition: right 0.35s cubic-bezier(0.4,0,0.2,1);
+                box-shadow: -8px 0 32px rgba(0,0,0,0.4);
+            }
+            .nav-links.open { right: 0; }
+            .nav-links li {
+                width: 100%;
+                border-bottom: 1px solid var(--border-subtle, rgba(255,255,255,0.06));
+            }
+            .nav-links li:last-child { border-bottom: none; }
+            .nav-links li a {
+                display: block;
+                padding: 1rem 0.5rem;
+                font-size: 1rem;
+                width: 100%;
+            }
+        }
+        /* ===== /Hamburger Menu ===== */
+
+        /* ===== Footer Enhanced ===== */
+        footer {
+            background: var(--bg-secondary, #0f172a);
+            border-top: 1px solid var(--border-subtle, rgba(255,255,255,0.08));
+            padding: 2.5rem 2rem 1.5rem;
+            margin-top: auto;
+        }
+        .footer-content { max-width: 1200px; margin: 0 auto; }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .footer-logo {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--accent-cyan, #22d3ee);
+            margin-bottom: 0.4rem;
+        }
+        .footer-tagline {
+            font-size: 0.8rem;
+            color: var(--text-muted, #64748b);
+        }
+        .footer-nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+        .footer-nav a {
+            color: var(--text-secondary, #94a3b8);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .footer-nav a:hover { color: var(--accent-cyan, #22d3ee); }
+        .footer-copy {
+            font-size: 0.85rem;
+            color: var(--text-muted, #64748b);
+            margin-bottom: 0.4rem;
+        }
+        .footer-desc {
+            font-size: 0.78rem;
+            color: var(--text-muted, #64748b);
+            line-height: 1.6;
+        }
+        @media (max-width: 768px) {
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+                text-align: center;
+            }
+            .footer-nav ul { align-items: center; }
+            .footer-nav a { justify-content: center; }
+        }
+        /* ===== /Footer Enhanced ===== */
+
+        </style>
 
     <!-- ===== 構造化データ (JSON-LD) ===== -->
     <script type="application/ld+json">
@@ -813,26 +958,33 @@
     <header>
         <nav>
             <div class="logo">
-                <i class="fas fa-graduation-cap"></i> CodeRoute 90
+                <i class="fas fa-graduation-cap" aria-hidden="true"></i> CodeRoute 90
             </div>
-            <ul class="nav-links">
+            <ul class="nav-links" id="navLinks">
                 <li><a href="index.html">ホーム</a></li>
                 <li><a href="about.html" style="color: var(--accent-cyan);">about me</a></li>
                 <li><a href="blog.html">ブログ</a></li>
                 <li><a href="contact.html">お問い合わせ</a></li>
             </ul>
+            <button class="hamburger" id="hamburgerBtn" aria-label="メニューを開く" aria-expanded="false" aria-controls="navLinks">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
         </nav>
     </header>
+    <div class="nav-overlay" id="navOverlay" aria-hidden="true"></div>
+
 
     <!-- ===== Breadcrumb ===== -->
     <nav class="breadcrumb-nav" aria-label="パンくずリスト">
         <ol class="breadcrumb-list">
             <li>
                 <a href="index.html">
-                    <i class="fas fa-home"></i> ホーム
+                    <i class="fas fa-home" aria-hidden="true"></i> ホーム
                 </a>
             </li>
-            <li class="separator"><i class="fas fa-chevron-right"></i></li>
+            <li class="separator"><i class="fas fa-chevron-right" aria-hidden="true"></i></li>
             <li class="current" aria-current="page">About me</li>
         </ol>
     </nav>
@@ -840,7 +992,7 @@
     <!-- ===== About Hero ===== -->
     <section class="about-hero">
         <div class="hero-badge">
-            <i class="fas fa-code"></i>
+            <i class="fas fa-code" aria-hidden="true"></i>
             <span>// about me</span>
         </div>
         <h1>about me</h1>
@@ -852,12 +1004,12 @@
     </section>
 
     <!-- ===== Main ===== -->
-    <main>
+    <main role="main">
 
         <!-- ── Profile ── -->
         <section id="about" class="section">
             <div class="section-title">
-                <h2><i class="fas fa-heart"></i> プロフィール</h2>
+                <h2><i class="fas fa-heart" aria-hidden="true"></i> プロフィール</h2>
                 <p>スタート地点を、正直に書きます</p>
             </div>
 
@@ -866,26 +1018,26 @@
                 <aside>
                     <div class="profile-card">
                         <div class="profile-avatar">
-                            <i class="fas fa-laptop-code"></i>
+                            <i class="fas fa-laptop-code" aria-hidden="true"></i>
                         </div>
                         <p class="profile-name">CodeRoute 90</p>
                         <p class="profile-tagline">元・文系営業職 → フリーランスエンジニア</p>
                         <div class="profile-divider"></div>
                         <div class="profile-tags">
                             <div class="profile-tag">
-                                <i class="fas fa-calendar-alt"></i>
+                                <i class="fas fa-calendar-alt" aria-hidden="true"></i>
                                 <span>40歳からプログラミング開始</span>
                             </div>
                             <div class="profile-tag">
-                                <i class="fas fa-briefcase"></i>
+                                <i class="fas fa-briefcase" aria-hidden="true"></i>
                                 <span>文系営業職（前職7年）</span>
                             </div>
                             <div class="profile-tag">
-                                <i class="fas fa-file-alt"></i>
+                                <i class="fas fa-file-alt" aria-hidden="true"></i>
                                 <span>書類落ち20社 → IT内定獲得</span>
                             </div>
                             <div class="profile-tag">
-                                <i class="fas fa-code"></i>
+                                <i class="fas fa-code" aria-hidden="true"></i>
                                 <span>Web開発 / JavaScript / Python</span>
                             </div>
                         </div>
@@ -896,7 +1048,7 @@
                 <div class="profile-info-block">
                     <div class="info-card">
                         <div class="info-card-header">
-                            <div class="info-card-icon"><i class="fas fa-user"></i></div>
+                            <div class="info-card-icon"><i class="fas fa-user" aria-hidden="true"></i></div>
                             <h3>スタート地点</h3>
                         </div>
                         <p>
@@ -912,7 +1064,7 @@
 
                     <div class="info-card">
                         <div class="info-card-header">
-                            <div class="info-card-icon"><i class="fas fa-fire-alt"></i></div>
+                            <div class="info-card-icon"><i class="fas fa-fire-alt" aria-hidden="true"></i></div>
                             <h3>なぜスクールに課金したのか</h3>
                         </div>
                         <p>
@@ -930,7 +1082,7 @@
 
                     <div class="info-card">
                         <div class="info-card-header">
-                            <div class="info-card-icon"><i class="fas fa-chart-line"></i></div>
+                            <div class="info-card-icon"><i class="fas fa-chart-line" aria-hidden="true"></i></div>
                             <h3>転職活動と、現在地</h3>
                         </div>
                         <p>
@@ -953,7 +1105,7 @@
         <!-- ── Timeline ── -->
         <section class="section">
             <div class="section-title">
-                <h2><i class="fas fa-route"></i> 90日間の実録タイムライン</h2>
+                <h2><i class="fas fa-route" aria-hidden="true"></i> 90日間の実録タイムライン</h2>
                 <p>美化せず、省略せず、起きたことをそのまま書きます</p>
             </div>
 
@@ -962,9 +1114,9 @@
                 <div class="timeline-item">
                     <div class="timeline-content">
                         <span class="timeline-date-badge">
-                            <i class="fas fa-calendar-alt"></i> 2025年5月
+                            <i class="fas fa-calendar-alt" aria-hidden="true"></i> 2025年5月
                         </span>
-                        <h3><i class="fas fa-times-circle"></i> 独学、3日で終わる</h3>
+                        <h3><i class="fas fa-times-circle" aria-hidden="true"></i> 独学、3日で終わる</h3>
                         <p>
                             Progateを開始。最初のHTML/CSSは問題なく進んだが、
                             開発環境の構築でエラーが連発。
@@ -978,9 +1130,9 @@
                 <div class="timeline-item">
                     <div class="timeline-content">
                         <span class="timeline-date-badge">
-                            <i class="fas fa-calendar-alt"></i> 2025年6月
+                            <i class="fas fa-calendar-alt" aria-hidden="true"></i> 2025年6月
                         </span>
-                        <h3><i class="fas fa-door-open"></i> ITスクール入学</h3>
+                        <h3><i class="fas fa-door-open" aria-hidden="true"></i> ITスクール入学</h3>
                         <p>
                             独学に見切りをつけ、ITスクールへの入学を決意。
                             当時のスキルはブラウザ検索のみ。
@@ -993,9 +1145,9 @@
                 <div class="timeline-item">
                     <div class="timeline-content">
                         <span class="timeline-date-badge">
-                            <i class="fas fa-calendar-alt"></i> 2025年7〜8月
+                            <i class="fas fa-calendar-alt" aria-hidden="true"></i> 2025年7〜8月
                         </span>
-                        <h3><i class="fas fa-skull"></i> JavaScriptの壁</h3>
+                        <h3><i class="fas fa-skull" aria-hidden="true"></i> JavaScriptの壁</h3>
                         <p>
                             HTML/CSSを習得し、JavaScriptに入った途端に壁が来た。
                             非同期処理（Promise・async/await）が全く頭に入らず、
@@ -1009,9 +1161,9 @@
                 <div class="timeline-item">
                     <div class="timeline-content">
                         <span class="timeline-date-badge">
-                            <i class="fas fa-calendar-alt"></i> 2025年9月
+                            <i class="fas fa-calendar-alt" aria-hidden="true"></i> 2025年9月
                         </span>
-                        <h3><i class="fas fa-flag-checkered"></i> スクール修了・転職活動開始</h3>
+                        <h3><i class="fas fa-flag-checkered" aria-hidden="true"></i> スクール修了・転職活動開始</h3>
                         <p>
                             90日間のカリキュラムを修了。
                             翌日から転職活動を開始した。
@@ -1024,9 +1176,9 @@
                 <div class="timeline-item">
                     <div class="timeline-content">
                         <span class="timeline-date-badge">
-                            <i class="fas fa-calendar-alt"></i> 2026年2月
+                            <i class="fas fa-calendar-alt" aria-hidden="true"></i> 2026年2月
                         </span>
-                        <h3><i class="fas fa-trophy"></i> IT企業内定 → フリーランス転向</h3>
+                        <h3><i class="fas fa-trophy" aria-hidden="true"></i> IT企業内定 → フリーランス転向</h3>
                         <p>
                             書類落ち20社、面接落ち5社。
                             それを経て、未経験エンジニアとしてIT企業への内定を獲得。
@@ -1043,14 +1195,14 @@
         <!-- ── Skills ── -->
         <section class="section">
             <div class="section-title">
-                <h2><i class="fas fa-tools"></i> 90日で身についたスキル</h2>
+                <h2><i class="fas fa-tools" aria-hidden="true"></i> 90日で身についたスキル</h2>
                 <p>「習得した」ではなく「使えるようになった」もののみ記載します</p>
             </div>
 
             <div class="skills-grid">
                 <div class="skill-card">
                     <div class="skill-icon-wrapper">
-                        <i class="fas fa-code"></i>
+                        <i class="fas fa-code" aria-hidden="true"></i>
                     </div>
                     <h3>Web開発（HTML / CSS / JavaScript）</h3>
                     <p>
@@ -1062,7 +1214,7 @@
 
                 <div class="skill-card">
                     <div class="skill-icon-wrapper">
-                        <i class="fab fa-python"></i>
+                        <i class="fab fa-python" aria-hidden="true"></i>
                     </div>
                     <h3>Pythonプログラミング</h3>
                     <p>
@@ -1074,7 +1226,7 @@
 
                 <div class="skill-card">
                     <div class="skill-icon-wrapper">
-                        <i class="fas fa-handshake"></i>
+                        <i class="fas fa-handshake" aria-hidden="true"></i>
                     </div>
                     <h3>営業力 × エンジニアリング</h3>
                     <p>
@@ -1089,7 +1241,7 @@
         <!-- ── Achievements ── -->
         <section class="section">
             <div class="section-title">
-                <h2><i class="fas fa-medal"></i> 数字で見るリアル</h2>
+                <h2><i class="fas fa-medal" aria-hidden="true"></i> 数字で見るリアル</h2>
                 <p>感想ではなく、事実だけ並べます</p>
             </div>
 
@@ -1122,7 +1274,7 @@
 
         <!-- ── Philosophy ── -->
         <section class="section philosophy-section">
-            <h2><i class="fas fa-lightbulb"></i> このサイトを作った理由</h2>
+            <h2><i class="fas fa-lightbulb" aria-hidden="true"></i> このサイトを作った理由</h2>
             <div class="philosophy-content">
                 <div class="quote-block">
                     「才能の問題ではなかった。どのルートを通るかの問題だった。」
@@ -1150,28 +1302,131 @@
 
         <!-- ── CTA ── -->
         <section class="cta-section">
-            <h2><i class="fas fa-map-signs"></i> スクール選びで迷っているなら、まずここを読んでほしい</h2>
+            <h2><i class="fas fa-map-signs" aria-hidden="true"></i> スクール選びで迷っているなら、まずここを読んでほしい</h2>
             <p>
                 私は書類落ちを20回経験しました。それでも「スクールへの投資は正しかった」と確信しています。
                 問題はスクールに通うかどうかではなく、<strong>どのスクールを選ぶか</strong>です。
                 私が実際に比較検討した内容を、一本の記事にまとめています。
             </p>
             <a href="blog.html" class="cta-button">
-                <i class="fas fa-search"></i> ITスクール比較記事を読む
+                <i class="fas fa-search" aria-hidden="true"></i> ITスクール比較記事を読む
             </a>
         </section>
 
     </main>
 
     <!-- ===== Footer ===== -->
-    <footer>
+    <footer role="contentinfo">
         <div class="footer-content">
             <p>&copy; 2026 CodeRoute 90 - 最短距離で「未経験」を脱却する攻略ログ</p>
         </div>
     </footer>
 
     <!-- JavaScript -->
-    <script src="assets/js/main.js"></script>
-    <script src="assets/js/header-scroll.js"></script>
+    <script src="assets/js/main.js" defer></script>
+    <script src="assets/js/header-scroll.js" defer></script>
+
+
+    <!-- ===== Nav: Hamburger + Active highlight ===== -->
+    <script>
+    (function () {
+        'use strict';
+
+        /* ---- ① Hamburger Menu ---- */
+        var btn     = document.getElementById('hamburgerBtn');
+        var navList = document.getElementById('navLinks');
+        var overlay = document.getElementById('navOverlay');
+
+        function openMenu() {
+            navList.classList.add('open');
+            overlay.classList.add('active');
+            btn.classList.add('open');
+            btn.setAttribute('aria-expanded', 'true');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeMenu() {
+            navList.classList.remove('open');
+            overlay.classList.remove('active');
+            btn.classList.remove('open');
+            btn.setAttribute('aria-expanded', 'false');
+            document.body.style.overflow = '';
+        }
+
+        if (btn) {
+            btn.addEventListener('click', function () {
+                navList.classList.contains('open') ? closeMenu() : openMenu();
+            });
+        }
+        if (overlay) {
+            overlay.addEventListener('click', closeMenu);
+        }
+        // Escキーで閉じる
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') closeMenu();
+        });
+        // ナビリンク クリックで閉じる（スマホ内遷移）
+        if (navList) {
+            navList.querySelectorAll('a').forEach(function (a) {
+                a.addEventListener('click', closeMenu);
+            });
+        }
+
+        /* ---- ② Active Nav Highlight ---- */
+        var currentPath = window.location.pathname.split('/').pop() || 'index.html';
+        if (currentPath === '') currentPath = 'index.html';
+        if (navList) {
+            navList.querySelectorAll('a').forEach(function (a) {
+                var href = a.getAttribute('href');
+                if (!href) return;
+                // ページ内アンカーは除外
+                if (href.startsWith('#')) return;
+                var linkFile = href.split('/').pop().split('?')[0].split('#')[0];
+                var isCurrent = (linkFile === currentPath) ||
+                    (currentPath === 'index.html' && (linkFile === '' || linkFile === 'index.html'));
+                if (isCurrent) {
+                    // 既存インラインスタイルを保持しつつクラス付与
+                    a.classList.add('nav-active');
+                    // インラインスタイルが未設定の場合のみ色を付与
+                    if (!a.style.color) {
+                        a.style.color = 'var(--accent-cyan, #22d3ee)';
+                    }
+                }
+            });
+        }
+    })();
+    </script>
+    <!-- ===== /Nav: Hamburger + Active highlight ===== -->
+
+    <!-- ===== Smooth Scroll ===== -->
+    <script>
+    (function () {
+        'use strict';
+
+        // ① CSS レベルのスムーススクロール（最低限の保険）
+        document.documentElement.style.scrollBehavior = 'smooth';
+
+        // ② JS レベル：ヘッダー高さを考慮した精密スクロール
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
+                anchor.addEventListener('click', function (e) {
+                    var href = this.getAttribute('href');
+                    if (!href || href === '#') return;
+                    var target = document.querySelector(href);
+                    if (!target) return;
+                    e.preventDefault();
+                    var header = document.querySelector('header');
+                    var headerH = header ? header.offsetHeight : 0;
+                    var OFFSET = 16; // ヘッダー下の余白
+                    var top =
+                        target.getBoundingClientRect().top +
+                        window.pageYOffset -
+                        headerH -
+                        OFFSET;
+                    window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+                });
+            });
+        });
+    })();
+    </script>
 </body>
 </html>
