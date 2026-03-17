@@ -1404,10 +1404,38 @@
         document.addEventListener('keydown', function (e) {
             if (e.key === 'Escape') closeMenu();
         });
-        // ナビリンク クリックで閉じる（スマホ内遷移）
+        /* ---- ナビリンク クリック処理（メニューを閉じる＋ジャンプ） ---- */
         if (navList) {
             navList.querySelectorAll('a').forEach(function (a) {
-                a.addEventListener('click', closeMenu);
+                a.addEventListener('click', function (e) {
+                    var href = this.getAttribute('href');
+
+                    /* ページ内アンカー（#home, #about, #blog, #contact など）の場合 */
+                    if (href && href.charAt(0) === '#' && href.length > 1) {
+                        var target = document.querySelector(href);
+                        if (target) {
+                            e.preventDefault();   /* ブラウザデフォルトのジャンプを止める */
+                            closeMenu();          /* メニューを閉じて overflow:hidden を解除 */
+                            /* overflow 解除が反映されてからスクロール */
+                            setTimeout(function () {
+                                var header  = document.querySelector('header');
+                                var headerH = header ? header.offsetHeight : 0;
+                                var OFFSET  = 16;
+                                var top =
+                                    target.getBoundingClientRect().top +
+                                    window.pageYOffset -
+                                    headerH -
+                                    OFFSET;
+                                window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+                            }, 50);
+                        }
+                        return;
+                    }
+
+                    /* 外部ページリンク（index.html, about.html, blog.html, contact.html など）の場合 */
+                    /* → closeMenu でメニューを閉じ、e.preventDefault() を呼ばないのでページ遷移が発生する */
+                    closeMenu();
+                });
             });
         }
 
@@ -1448,6 +1476,8 @@
         // ② JS レベル：ヘッダー高さを考慮した精密スクロール
         document.addEventListener('DOMContentLoaded', function () {
             document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
+                /* #navLinks 内のリンクはハンバーガースクリプトで制御済み → スキップ */
+                if (anchor.closest('#navLinks')) return;
                 anchor.addEventListener('click', function (e) {
                     var href = this.getAttribute('href');
                     if (!href || href === '#') return;
