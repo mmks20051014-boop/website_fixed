@@ -756,7 +756,6 @@
             cursor: pointer;
             padding: 4px;
             z-index: 1100;
-            aria-label: "メニューを開く";
         }
         .hamburger span {
             display: block;
@@ -823,6 +822,22 @@
             }
         }
         /* ===== /Hamburger Menu ===== */
+        /* ===== Active Nav Link ===== */
+        .nav-links a.nav-active {
+            color: var(--accent-cyan, #22d3ee) !important;
+            font-weight: 600;
+        }
+        .nav-links a.nav-active::after {
+            content: '';
+            display: block;
+            height: 2px;
+            width: 100%;
+            background: var(--accent-cyan, #22d3ee);
+            border-radius: 1px;
+            margin-top: 2px;
+        }
+        /* ===== /Active Nav Link ===== */
+
 
         /* ===== Footer Enhanced ===== */
         footer {
@@ -962,7 +977,7 @@
             </div>
             <ul class="nav-links" id="navLinks">
                 <li><a href="index.html">ホーム</a></li>
-                <li><a href="about.html" style="color: var(--accent-cyan);">about me</a></li>
+                <li><a href="about.html">about me</a></li>
                 <li><a href="blog.html">ブログ</a></li>
                 <li><a href="contact.html">お問い合わせ</a></li>
             </ul>
@@ -1318,8 +1333,33 @@
     <!-- ===== Footer ===== -->
     <footer role="contentinfo">
         <div class="footer-content">
-            <p>&copy; 2026 CodeRoute 90 - 最短距離で「未経験」を脱却する攻略ログ</p>
-        </div>
+            <div class="footer-grid">
+                <!-- Brand -->
+                <div>
+                    <p class="footer-logo">
+                        <i class="fas fa-graduation-cap" aria-hidden="true"></i> CodeRoute 90
+                    </p>
+                    <p class="footer-tagline">最短距離で「未経験」を脱却する攻略ログ</p>
+                </div>
+                <!-- Navigation -->
+                <nav class="footer-nav" aria-label="フッターナビゲーション">
+                    <ul>
+                        <li><a href="index.html"><i class="fas fa-home" aria-hidden="true"></i> ホーム</a></li>
+                        <li><a href="about.html"><i class="fas fa-user" aria-hidden="true"></i> about me</a></li>
+                        <li><a href="blog.html"><i class="fas fa-blog" aria-hidden="true"></i> ブログ</a></li>
+                        <li><a href="contact.html"><i class="fas fa-envelope" aria-hidden="true"></i> お問い合わせ</a></li>
+                    </ul>
+                </nav>
+                <!-- Copy -->
+                <div>
+                    <p class="footer-copy">&copy; 2026 CodeRoute 90</p>
+                    <p class="footer-desc">
+                        40歳・文系から90日でエンジニア転職した運営者が、<br>
+                        再現可能な最短ルートを事実ベースで公開するメディアです。
+                    </p>
+                </div>
+            </div><!-- /.footer-grid -->
+        </div><!-- /.footer-content -->
     </footer>
 
     <!-- JavaScript -->

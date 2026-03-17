@@ -738,7 +738,6 @@
             cursor: pointer;
             padding: 4px;
             z-index: 1100;
-            aria-label: "メニューを開く";
         }
         .hamburger span {
             display: block;
@@ -805,6 +804,22 @@
             }
         }
         /* ===== /Hamburger Menu ===== */
+        /* ===== Active Nav Link ===== */
+        .nav-links a.nav-active {
+            color: var(--accent-cyan, #22d3ee) !important;
+            font-weight: 600;
+        }
+        .nav-links a.nav-active::after {
+            content: '';
+            display: block;
+            height: 2px;
+            width: 100%;
+            background: var(--accent-cyan, #22d3ee);
+            border-radius: 1px;
+            margin-top: 2px;
+        }
+        /* ===== /Active Nav Link ===== */
+
 
         /* ===== Footer Enhanced ===== */
         footer {
@@ -939,7 +954,7 @@
                 <li><a href="index.html">ホーム</a></li>
                 <li><a href="about.html">about me</a></li>
                 <li><a href="blog.html">ブログ</a></li>
-                <li><a href="contact.html" style="color: var(--accent-cyan);">お問い合わせ</a></li>
+                <li><a href="contact.html">お問い合わせ</a></li>
             </ul>
             <button class="hamburger" id="hamburgerBtn" aria-label="メニューを開く" aria-expanded="false" aria-controls="navLinks">
                 <span></span>
@@ -1016,13 +1031,13 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label class="form-label" for="workName">お名前<span class="required">*</span></label>
-                            <input type="text" id="workName" name="name" class="form-control" placeholder="山田 太郎" required>
+                            <input type="text" id="workName" name="name" class="form-control" placeholder="山田 太郎" required aria-required="true">
                             <div class="form-error" id="workNameError"><i class="fas fa-exclamation-circle" aria-hidden="true"></i> お名前を入力してください</div>
                         </div>
                         
                         <div class="form-group">
                             <label class="form-label" for="workEmail">メールアドレス<span class="required">*</span></label>
-                            <input type="email" id="workEmail" name="email" class="form-control" placeholder="example@email.com" required>
+                            <input type="email" id="workEmail" name="email" class="form-control" placeholder="example@email.com" required aria-required="true">
                             <div class="form-error" id="workEmailError"><i class="fas fa-exclamation-circle" aria-hidden="true"></i> 有効なメールアドレスを入力してください</div>
                         </div>
                     </div>
@@ -1041,14 +1056,14 @@
                     
                     <div class="form-group">
                         <label class="form-label" for="workSubject">件名<span class="required">*</span></label>
-                        <input type="text" id="workSubject" name="subject" class="form-control" placeholder="件名を入力してください" required>
+                        <input type="text" id="workSubject" name="subject" class="form-control" placeholder="件名を入力してください" required aria-required="true">
                         <div class="form-error" id="workSubjectError"><i class="fas fa-exclamation-circle" aria-hidden="true"></i> 件名を入力してください</div>
                     </div>
                     
                     <div class="form-group">
                         <label class="form-label" for="workContent">依頼内容<span class="required">*</span></label>
                         <textarea id="workContent" name="content" class="form-control form-textarea" required
-                                  placeholder="具体的な依頼内容、希望納期、予算などをご記入ください"></textarea>
+                                  placeholder="具体的な依頼内容、希望納期、予算などをご記入ください" aria-required="true"></textarea>
                         <div class="form-error" id="workContentError"><i class="fas fa-exclamation-circle" aria-hidden="true"></i> 依頼内容を入力してください</div>
                     </div>
                     
@@ -1083,13 +1098,13 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label class="form-label" for="questionName">お名前<span class="required">*</span></label>
-                            <input type="text" id="questionName" name="name" class="form-control" placeholder="山田 太郎" required>
+                            <input type="text" id="questionName" name="name" class="form-control" placeholder="山田 太郎" required aria-required="true">
                             <div class="form-error" id="questionNameError"><i class="fas fa-exclamation-circle" aria-hidden="true"></i> お名前を入力してください</div>
                         </div>
                         
                         <div class="form-group">
                             <label class="form-label" for="questionEmail">メールアドレス<span class="required">*</span></label>
-                            <input type="email" id="questionEmail" name="email" class="form-control" placeholder="example@email.com" required>
+                            <input type="email" id="questionEmail" name="email" class="form-control" placeholder="example@email.com" required aria-required="true">
                             <div class="form-error" id="questionEmailError"><i class="fas fa-exclamation-circle" aria-hidden="true"></i> 有効なメールアドレスを入力してください</div>
                         </div>
                     </div>
@@ -1108,14 +1123,14 @@
                     
                     <div class="form-group">
                         <label class="form-label" for="questionSubject">件名<span class="required">*</span></label>
-                        <input type="text" id="questionSubject" name="subject" class="form-control" placeholder="件名を入力してください" required>
+                        <input type="text" id="questionSubject" name="subject" class="form-control" placeholder="件名を入力してください" required aria-required="true">
                         <div class="form-error" id="questionSubjectError"><i class="fas fa-exclamation-circle" aria-hidden="true"></i> 件名を入力してください</div>
                     </div>
                     
                     <div class="form-group">
                         <label class="form-label" for="questionContent">質問内容<span class="required">*</span></label>
                         <textarea id="questionContent" name="content" class="form-control form-textarea" required
-                                  placeholder="具体的な質問内容をご記入ください"></textarea>
+                                  placeholder="具体的な質問内容をご記入ください" aria-required="true"></textarea>
                         <div class="form-error" id="questionContentError"><i class="fas fa-exclamation-circle" aria-hidden="true"></i> 質問内容を入力してください</div>
                     </div>
                     
@@ -1170,8 +1185,33 @@
     <!-- Footer -->
     <footer role="contentinfo">
         <div class="footer-content">
-            <p>&copy; 2026 CodeRoute 90 - 最短距離で「未経験」を脱却する攻略ログ</p>
-        </div>
+            <div class="footer-grid">
+                <!-- Brand -->
+                <div>
+                    <p class="footer-logo">
+                        <i class="fas fa-graduation-cap" aria-hidden="true"></i> CodeRoute 90
+                    </p>
+                    <p class="footer-tagline">最短距離で「未経験」を脱却する攻略ログ</p>
+                </div>
+                <!-- Navigation -->
+                <nav class="footer-nav" aria-label="フッターナビゲーション">
+                    <ul>
+                        <li><a href="index.html"><i class="fas fa-home" aria-hidden="true"></i> ホーム</a></li>
+                        <li><a href="about.html"><i class="fas fa-user" aria-hidden="true"></i> about me</a></li>
+                        <li><a href="blog.html"><i class="fas fa-blog" aria-hidden="true"></i> ブログ</a></li>
+                        <li><a href="contact.html"><i class="fas fa-envelope" aria-hidden="true"></i> お問い合わせ</a></li>
+                    </ul>
+                </nav>
+                <!-- Copy -->
+                <div>
+                    <p class="footer-copy">&copy; 2026 CodeRoute 90</p>
+                    <p class="footer-desc">
+                        40歳・文系から90日でエンジニア転職した運営者が、<br>
+                        再現可能な最短ルートを事実ベースで公開するメディアです。
+                    </p>
+                </div>
+            </div><!-- /.footer-grid -->
+        </div><!-- /.footer-content -->
     </footer>
 
     <!-- JavaScript -->
