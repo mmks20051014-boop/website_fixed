@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>記事詳細 - CodeRoute 90</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* ===== Reading Progress Bar ===== */
+        #reading-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 3px;
+            background: var(--gradient-primary);
+            z-index: 9999;
+            transition: width 0.1s linear;
+            box-shadow: 0 0 10px rgba(0, 212, 255, 0.6);
+        }
+
+        /* ===== Post Page Layout ===== */
+        .post-page {
+            padding-top: 80px;
+            min-height: 100vh;
+            background: var(--gradient-dark);
+        }
+
+        /* ===== Post Hero / Header area ===== */
+        .post-hero {
+            position: relative;
+            padding: 5rem 2rem 4rem;
+            overflow: hidden;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .post-hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at 20% 50%, rgba(0, 212, 255, 0.08) 0%, transparent 60%),
+                radial-gradient(circle at 80% 30%, rgba(139, 92, 246, 0.08) 0%, transparent 60%),
+                radial-gradient(circle at 50% 80%, rgba(236, 72, 153, 0.04) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .post-hero-inner {
+            max-width: 860px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ===== Breadcrumb ===== */
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+
+        .breadcrumb a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--accent-cyan);
+            text-shadow: none;
+        }
+
+        .breadcrumb span {
+            color: var(--accent-cyan);
+            font-size: 0.8rem;
+        }
+
+        .breadcrumb .current {
+            color: var(--text-secondary);
+            max-width: 300px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* ===== Category Tag (in hero) ===== */
+        .post-category {
+            display: inline-block;
+            background: rgba(0, 212, 255, 0.1);
+            color: var(--accent-cyan);
+            padding: 0.35rem 1rem;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            border: 1px solid rgba(0, 212, 255, 0.25);
+            margin-bottom: 1.5rem;
+        }
+
+        /* ===== Post Title in Hero ===== */
+        #post-title {
+            font-size: clamp(1.8rem, 4vw, 2.8rem);
+            font-weight: 700;
+            line-height: 1.25;
+            letter-spacing: -0.03em;
+            background: var(--gradient-text);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1.5rem;
+        }
+
+        #post-title.loading-text {
+            background: none;
+            -webkit-text-fill-color: var(--text-muted);
+            color: var(--text-muted);
+        }
+
+        /* ===== Post Meta info ===== */
+        .post-meta {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.2rem;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .post-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .post-meta-item svg {
+            width: 15px;
+            height: 15px;
+            opacity: 0.7;
+        }
+
+        .post-meta-divider {
+            width: 1px;
+            height: 14px;
+            background: var(--border-subtle);
+        }
+
+        /* ===== Main Content Wrapper ===== */
+        .post-layout {
+            max-width: 1160px;
+            margin: 0 auto;
+            padding: 3.5rem 2rem 6rem;
+            display: grid;
+            grid-template-columns: 1fr 280px;
+            gap: 3.5rem;
+            align-items: start;
+        }
+
+        /* ===== Article Body ===== */
+        .post-article {
+            min-width: 0;
+        }
+
+        /* ===== Article Content Styles ===== */
+        .post-content {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            line-height: 1.85;
+            font-family: var(--font-secondary), var(--font-primary);
+        }
+
+        .post-content h1,
+        .post-content h2,
+        .post-content h3,
+        .post-content h4 {
+            background: var(--gradient-text);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            line-height: 1.3;
+        }
+
+        .post-content h2 {
+            font-size: 1.55rem;
+            padding-bottom: 0.6rem;
+            border-bottom: 1px solid var(--border-subtle);
+            position: relative;
+        }
+
+        .post-content h2::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 60px;
+            height: 2px;
+            background: var(--gradient-primary);
+            border-radius: 2px;
+        }
+
+        .post-content h3 {
+            font-size: 1.2rem;
+        }
+
+        .post-content p {
+            font-size: 1.05rem;
+            color: var(--text-secondary);
+            line-height: 1.85;
+            margin-bottom: 1.4rem;
+        }
+
+        .post-content a {
+            color: var(--accent-cyan);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            text-decoration-color: rgba(0, 212, 255, 0.3);
+            transition: all 0.2s ease;
+        }
+
+        .post-content a:hover {
+            color: var(--accent-purple);
+            text-decoration-color: var(--accent-purple);
+            text-shadow: 0 0 8px rgba(139, 92, 246, 0.4);
+        }
+
+        .post-content img {
+            max-width: 100%;
+            height: auto;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-subtle);
+            margin: 1.5rem 0;
+            box-shadow: var(--shadow-card);
+        }
+
+        .post-content ul,
+        .post-content ol {
+            padding-left: 1.5rem;
+            margin-bottom: 1.4rem;
+        }
+
+        .post-content li {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 0.5rem;
+        }
+
+        .post-content ul li::marker {
+            color: var(--accent-cyan);
+        }
+
+        .post-content ol li::marker {
+            color: var(--accent-purple);
+            font-weight: 600;
+        }
+
+        .post-content blockquote {
+            border-left: 3px solid var(--accent-cyan);
+            background: rgba(0, 212, 255, 0.04);
+            padding: 1.2rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            font-style: italic;
+            color: var(--text-secondary);
+        }
+
+        .post-content blockquote::before {
+            content: '"';
+            font-size: 3rem;
+            color: rgba(0, 212, 255, 0.2);
+            line-height: 0;
+            vertical-align: -0.6rem;
+            margin-right: 0.3rem;
+            font-family: Georgia, serif;
+        }
+
+        .post-content code {
+            background: rgba(0, 212, 255, 0.08);
+            color: var(--accent-cyan);
+            padding: 0.2em 0.5em;
+            border-radius: 4px;
+            font-family: var(--font-mono);
+            font-size: 0.9em;
+            border: 1px solid rgba(0, 212, 255, 0.15);
+        }
+
+        .post-content pre {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            position: relative;
+        }
+
+        .post-content pre code {
+            background: none;
+            color: #e2e8f0;
+            padding: 0;
+            border: none;
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+
+        .post-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.95rem;
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+        }
+
+        .post-content th {
+            background: rgba(0, 212, 255, 0.08);
+            color: var(--accent-cyan);
+            padding: 0.8rem 1rem;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 1px solid var(--border-glow);
+        }
+
+        .post-content td {
+            padding: 0.8rem 1rem;
+            border-bottom: 1px solid var(--border-subtle);
+            color: var(--text-secondary);
+        }
+
+        .post-content tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .post-content hr {
+            border: none;
+            height: 1px;
+            background: var(--border-subtle);
+            margin: 2.5rem 0;
+        }
+
+        /* ===== Post Footer (tags / share) ===== */
+        .post-footer {
+            margin-top: 3.5rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .post-footer-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            margin-bottom: 2rem;
+        }
+
+        .post-footer-tags .tag {
+            background: rgba(139, 92, 246, 0.08);
+            color: var(--accent-purple);
+            padding: 0.35rem 1rem;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            transition: all 0.2s ease;
+        }
+
+        .post-footer-tags .tag:hover {
+            background: rgba(139, 92, 246, 0.15);
+            border-color: var(--accent-purple);
+        }
+
+        /* Share buttons */
+        .share-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .share-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .share-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.5rem 1.2rem;
+            border-radius: 999px;
+            font-size: 0.82rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .share-btn-x {
+            background: rgba(255, 255, 255, 0.06);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-subtle);
+        }
+
+        .share-btn-x:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+            transform: translateY(-2px);
+            text-shadow: none;
+        }
+
+        .share-btn-copy {
+            background: rgba(0, 212, 255, 0.08);
+            color: var(--accent-cyan);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+        }
+
+        .share-btn-copy:hover {
+            background: rgba(0, 212, 255, 0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.2);
+            text-shadow: none;
+        }
+
+        /* ===== Back to Blog Button ===== */
+        .back-to-blog {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 2.5rem;
+            padding: 0.8rem 2rem;
+            background: rgba(255, 255, 255, 0.04);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .back-to-blog:hover {
+            background: rgba(0, 212, 255, 0.08);
+            border-color: var(--border-glow);
+            color: var(--accent-cyan);
+            transform: translateX(-4px);
+            text-shadow: none;
+            box-shadow: var(--shadow-glow);
+        }
+
+        .back-to-blog svg {
+            transition: transform 0.3s ease;
+        }
+
+        .back-to-blog:hover svg {
+            transform: translateX(-3px);
+        }
+
+        /* ===== Sidebar ===== */
+        .post-sidebar {
+            position: sticky;
+            top: 100px;
+        }
+
+        .sidebar-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: border-color 0.3s ease;
+        }
+
+        .sidebar-card:hover {
+            border-color: var(--border-glow);
+        }
+
+        .sidebar-card-title {
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--accent-cyan);
+            margin-bottom: 1rem;
+            padding-bottom: 0.6rem;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        /* Table of Contents */
+        #toc-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        #toc-list li {
+            margin-bottom: 0;
+        }
+
+        #toc-list a {
+            display: block;
+            padding: 0.45rem 0.75rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            border-radius: var(--radius-sm);
+            transition: all 0.2s ease;
+            border-left: 2px solid transparent;
+            line-height: 1.4;
+        }
+
+        #toc-list a:hover,
+        #toc-list a.active {
+            color: var(--accent-cyan);
+            background: rgba(0, 212, 255, 0.05);
+            border-left-color: var(--accent-cyan);
+            text-shadow: none;
+        }
+
+        #toc-list li.toc-h3 a {
+            padding-left: 1.5rem;
+            font-size: 0.8rem;
+        }
+
+        .toc-empty {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        /* Profile card in sidebar */
+        .sidebar-profile {
+            text-align: center;
+        }
+
+        .sidebar-avatar {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background: var(--gradient-cta);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 0.8rem;
+            font-size: 1.8rem;
+        }
+
+        .sidebar-profile-name {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.4rem;
+        }
+
+        .sidebar-profile-bio {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* ===== Loading / Error states ===== */
+        .loading-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 5rem 2rem;
+            gap: 1rem;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border-subtle);
+            border-top-color: var(--accent-cyan);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-state p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .error-state {
+            text-align: center;
+            padding: 5rem 2rem;
+        }
+
+        .error-state .error-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .error-state h2 {
+            font-size: 1.4rem;
+            margin-bottom: 0.8rem;
+            background: none;
+            -webkit-text-fill-color: var(--text-secondary);
+            color: var(--text-secondary);
+        }
+
+        .error-state p {
+            color: var(--text-muted);
+        }
+
+        /* ===== Footer ===== */
+        footer {
+            background: rgba(10, 10, 10, 0.9);
+            color: var(--text-secondary);
+            padding: 4rem 2rem 3rem;
+            text-align: center;
+            border-top: 1px solid var(--border-subtle);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 3rem;
+            text-align: left;
+            margin-bottom: 3rem;
+        }
+
+        .footer-brand .logo {
+            display: inline-block;
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-brand p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        .footer-nav h4 {
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--accent-cyan);
+            margin-bottom: 1rem;
+            background: none;
+            -webkit-text-fill-color: var(--accent-cyan);
+        }
+
+        .footer-nav ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-nav li {
+            margin-bottom: 0.6rem;
+        }
+
+        .footer-nav a {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            transition: color 0.2s ease;
+        }
+
+        .footer-nav a:hover {
+            color: var(--accent-cyan);
+            text-shadow: none;
+        }
+
+        .footer-bottom {
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-subtle);
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .social-links a {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 0.6rem;
+            border-radius: var(--radius-md);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-subtle);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 42px;
+            height: 42px;
+        }
+
+        .social-links a:hover {
+            color: var(--accent-cyan);
+            background: rgba(0, 212, 255, 0.1);
+            border-color: var(--accent-cyan);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-glow);
+            text-shadow: none;
+        }
+
+        /* ===== Responsive ===== */
+        @media (max-width: 900px) {
+            .post-layout {
+                grid-template-columns: 1fr;
+                padding: 2.5rem 1.5rem 4rem;
+            }
+
+            .post-sidebar {
+                position: static;
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 1rem;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 2rem;
+            }
+
+            .footer-brand {
+                grid-column: 1 / -1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .post-hero {
+                padding: 4rem 1.5rem 3rem;
+            }
+
+            #post-title {
+                font-size: 1.7rem;
+            }
+
+            .post-content {
+                font-size: 1rem;
+            }
+
+            .post-sidebar {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .share-section {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        /* ===== Animations ===== */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-in {
+            animation: fadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) both;
+        }
+
+        .animate-in-delay-1 { animation-delay: 0.1s; }
+        .animate-in-delay-2 { animation-delay: 0.2s; }
+        .animate-in-delay-3 { animation-delay: 0.3s; }
+
+        /* ===== Copy button for code blocks ===== */
+        .code-wrapper {
+            position: relative;
+        }
+
+        .code-copy-btn {
+            position: absolute;
+            top: 0.6rem;
+            right: 0.6rem;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-muted);
+            padding: 0.3rem 0.7rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .code-copy-btn:hover {
+            background: rgba(0, 212, 255, 0.1);
+            border-color: var(--accent-cyan);
+            color: var(--accent-cyan);
+        }
+
+        .code-copy-btn.copied {
+            background: rgba(0, 212, 255, 0.15);
+            border-color: var(--accent-cyan);
+            color: var(--accent-cyan);
+        }
+
+        /* Glow line accent */
+        .glow-line {
+            height: 1px;
+            background: var(--gradient-primary);
+            opacity: 0.3;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Reading Progress Bar -->
+    <div id="reading-progress"></div>
+
+    <!-- ===== Header ===== -->
+    <header>
+        <nav>
+            <a href="index.html" class="logo">🎓 CodeRoute 90</a>
+            <ul class="nav-links">
+                <li><a href="index.html">ホーム</a></li>
+                <li><a href="about.html">CodeRoute 90について</a></li>
+                <li><a href="profile.html">about me</a></li>
+                <li><a href="blog.html">ブログ</a></li>
+                <li><a href="contact.html">お問い合わせ</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- ===== Post Page ===== -->
+    <div class="post-page">
+
+        <!-- Post Hero -->
+        <div class="post-hero">
+            <div class="post-hero-inner">
+                <!-- Breadcrumb -->
+                <nav class="breadcrumb animate-in">
+                    <a href="index.html">🏠 ホーム</a>
+                    <span>›</span>
+                    <a href="blog.html">ブログ</a>
+                    <span>›</span>
+                    <span class="current" id="breadcrumb-title">記事を読み込み中...</span>
+                </nav>
+
+                <!-- Category badge -->
+                <div id="post-category-badge" class="post-category animate-in animate-in-delay-1" style="display:none;">
+                    記事
+                </div>
+
+                <!-- Title -->
+                <h1 id="post-title" class="loading-text animate-in animate-in-delay-1">読み込み中...</h1>
+
+                <!-- Meta -->
+                <div class="post-meta animate-in animate-in-delay-2" id="post-meta-bar">
+                    <div class="post-meta-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                            <line x1="16" y1="2" x2="16" y2="6"/>
+                            <line x1="8" y1="2" x2="8" y2="6"/>
+                            <line x1="3" y1="10" x2="21" y2="10"/>
+                        </svg>
+                        <span id="post-date">--</span>
+                    </div>
+                    <div class="post-meta-divider"></div>
+                    <div class="post-meta-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                            <circle cx="12" cy="12" r="3"/>
+                        </svg>
+                        <span id="read-time">-- 分で読めます</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="glow-line"></div>
+
+        <!-- ===== Post Body ===== -->
+        <div class="post-layout">
+
+            <!-- Main Article -->
+            <article class="post-article animate-in animate-in-delay-2">
+
+                <!-- Loading / Error states -->
+                <div id="loading-state" class="loading-state">
+                    <div class="loading-spinner"></div>
+                    <p>記事を読み込んでいます...</p>
+                </div>
+
+                <div id="error-state" class="error-state" style="display:none;">
+                    <div class="error-icon">😔</div>
+                    <h2>記事が見つかりません</h2>
+                    <p>お探しの記事は存在しないか、削除された可能性があります。</p>
+                    <a href="blog.html" class="back-to-blog" style="display:inline-flex; margin: 1.5rem auto 0;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="15 18 9 12 15 6"/>
+                        </svg>
+                        記事一覧に戻る
+                    </a>
+                </div>
+
+                <!-- Article Content (hidden until loaded) -->
+                <div id="article-content-wrapper" style="display:none;">
+                    <div id="post-content" class="post-content"></div>
+
+                    <!-- Post Footer -->
+                    <div class="post-footer">
+                        <div class="post-footer-tags" id="post-tags"></div>
+
+                        <div class="share-section">
+                            <span class="share-label">シェアする：</span>
+                            <a id="share-x" href="#" target="_blank" rel="noopener" class="share-btn share-btn-x">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                                </svg>
+                                X でシェア
+                            </a>
+                            <button id="copy-link-btn" class="share-btn share-btn-copy">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                                    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+                                </svg>
+                                URLをコピー
+                            </button>
+                        </div>
+
+                        <a href="blog.html" class="back-to-blog">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="15 18 9 12 15 6"/>
+                            </svg>
+                            記事一覧に戻る
+                        </a>
+                    </div>
+                </div>
+
+            </article>
+
+            <!-- Sidebar -->
+            <aside class="post-sidebar animate-in animate-in-delay-3">
+
+                <!-- Table of Contents -->
+                <div class="sidebar-card" id="toc-card">
+                    <div class="sidebar-card-title">📋 目次</div>
+                    <ul id="toc-list">
+                        <li class="toc-empty">読み込み中...</li>
+                    </ul>
+                </div>
+
+                <!-- Profile Card -->
+                <div class="sidebar-card">
+                    <div class="sidebar-card-title">✍️ 著者</div>
+                    <div class="sidebar-profile">
+                        <div class="sidebar-avatar">🎓</div>
+                        <div class="sidebar-profile-name">CodeRoute 90</div>
+                        <div class="sidebar-profile-bio">40歳・文系営業職から90日でエンジニア転職。最短ルートを事実ベースで公開するメディア。</div>
+                    </div>
+                </div>
+
+                <!-- Back to blog -->
+                <div class="sidebar-card" style="text-align:center;">
+                    <div class="sidebar-card-title">🔗 ナビゲーション</div>
+                    <a href="blog.html" class="cta-button" style="display:inline-block; font-size:0.9rem; padding:0.75rem 1.5rem;">
+                        記事一覧を見る
+                    </a>
+                </div>
+
+            </aside>
+        </div>
+    </div>
+
+    <!-- ===== Footer ===== -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="index.html" class="logo">🎓 CodeRoute 90</a>
+                    <p>40歳・文系から90日でエンジニア転職した運営者が、<br>再現可能な最短ルートを事実ベースで公開するメディアです。</p>
+                </div>
+                <div class="footer-nav">
+                    <h4>メニュー</h4>
+                    <ul>
+                        <li><a href="index.html">🏠 ホーム</a></li>
+                        <li><a href="about.html">🙋 about me</a></li>
+                        <li><a href="blog.html">📝 ブログ</a></li>
+                        <li><a href="contact.html">✉️ お問い合わせ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-nav">
+                    <h4>SNS</h4>
+                    <div class="social-links" style="justify-content:flex-start; margin-bottom:0;">
+                        <a href="#" title="X (Twitter)" aria-label="X">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 CodeRoute 90 — 最短距離で「未経験」を脱却する攻略ログ</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ===== Scripts ===== -->
+    <script src="header-scroll.js"></script>
+
+    <script>
+        // ===== Reading Progress Bar =====
+        function updateReadingProgress() {
+            const el = document.getElementById('reading-progress');
+            if (!el) return;
+            const scrollTop = window.scrollY || document.documentElement.scrollTop;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+            el.style.width = Math.min(progress, 100) + '%';
+        }
+        window.addEventListener('scroll', updateReadingProgress, { passive: true });
+
+        // ===== Estimated read time =====
+        function estimateReadTime(text) {
+            const words = text.trim().split(/\s+/).length;
+            const minutes = Math.max(1, Math.round(words / 400));
+            return minutes;
+        }
+
+        // ===== Build Table of Contents =====
+        function buildTOC(contentEl) {
+            const tocList = document.getElementById('toc-list');
+            if (!tocList) return;
+            const headings = contentEl.querySelectorAll('h2, h3');
+            if (headings.length === 0) {
+                tocList.innerHTML = '<li class="toc-empty">目次なし</li>';
+                return;
+            }
+            tocList.innerHTML = '';
+            headings.forEach((h, i) => {
+                if (!h.id) h.id = 'heading-' + i;
+                const li = document.createElement('li');
+                li.className = h.tagName === 'H3' ? 'toc-h3' : 'toc-h2';
+                const a = document.createElement('a');
+                a.href = '#' + h.id;
+                a.textContent = h.textContent;
+                a.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    h.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                });
+                li.appendChild(a);
+                tocList.appendChild(li);
+            });
+
+            // Active TOC item on scroll
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    const id = entry.target.id;
+                    const link = tocList.querySelector(`a[href="#${id}"]`);
+                    if (link) {
+                        if (entry.isIntersecting) {
+                            tocList.querySelectorAll('a').forEach(a => a.classList.remove('active'));
+                            link.classList.add('active');
+                        }
+                    }
+                });
+            }, { rootMargin: '-80px 0px -60% 0px' });
+
+            headings.forEach(h => observer.observe(h));
+        }
+
+        // ===== Add copy buttons to code blocks =====
+        function addCodeCopyButtons(contentEl) {
+            const pres = contentEl.querySelectorAll('pre');
+            pres.forEach(pre => {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'code-wrapper';
+                pre.parentNode.insertBefore(wrapper, pre);
+                wrapper.appendChild(pre);
+
+                const btn = document.createElement('button');
+                btn.className = 'code-copy-btn';
+                btn.textContent = 'コピー';
+                btn.addEventListener('click', () => {
+                    const code = pre.querySelector('code');
+                    const text = code ? code.textContent : pre.textContent;
+                    navigator.clipboard.writeText(text).then(() => {
+                        btn.textContent = '✓ コピー済み';
+                        btn.classList.add('copied');
+                        setTimeout(() => {
+                            btn.textContent = 'コピー';
+                            btn.classList.remove('copied');
+                        }, 2000);
+                    });
+                });
+                wrapper.appendChild(btn);
+            });
+        }
+
+        // ===== Main: Fetch & Render Post =====
+        async function fetchPost() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const postId = urlParams.get('id');
+            const API_URL = "https://coderoute90-api.coderoute90.workers.dev";
+
+            const loadingState = document.getElementById('loading-state');
+            const errorState   = document.getElementById('error-state');
+            const contentWrapper = document.getElementById('article-content-wrapper');
+            const titleEl      = document.getElementById('post-title');
+
+            if (!postId) {
+                loadingState.style.display = 'none';
+                errorState.style.display   = 'block';
+                titleEl.textContent = '記事が見つかりません';
+                titleEl.classList.remove('loading-text');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/${postId}`);
+
+                let post;
+                if (response.ok) {
+                    post = await response.json();
+                } else {
+                    // Fallback: fetch list and find by id
+                    const listRes = await fetch(API_URL);
+                    const data = await listRes.json();
+                    post = data.contents && data.contents.find(item => item.id === postId);
+                }
+
+                if (post) {
+                    // --- Update title ---
+                    titleEl.textContent = post.title;
+                    titleEl.classList.remove('loading-text');
+                    document.title = `${post.title} - CodeRoute 90`;
+
+                    // --- Breadcrumb ---
+                    const bcTitle = document.getElementById('breadcrumb-title');
+                    if (bcTitle) {
+                        bcTitle.textContent = post.title.length > 30
+                            ? post.title.slice(0, 30) + '...'
+                            : post.title;
+                    }
+
+                    // --- Date ---
+                    const dateEl = document.getElementById('post-date');
+                    if (dateEl && post.publishedAt) {
+                        const d = new Date(post.publishedAt);
+                        dateEl.textContent = d.toLocaleDateString('ja-JP', {
+                            year: 'numeric', month: 'long', day: 'numeric'
+                        });
+                    }
+
+                    // --- Category badge ---
+                    if (post.category) {
+                        const badge = document.getElementById('post-category-badge');
+                        badge.textContent = post.category.name || post.category;
+                        badge.style.display = 'inline-block';
+                    }
+
+                    // --- Tags ---
+                    if (post.tags && post.tags.length > 0) {
+                        const tagsEl = document.getElementById('post-tags');
+                        post.tags.forEach(tag => {
+                            const span = document.createElement('span');
+                            span.className = 'tag';
+                            span.textContent = '#' + (tag.name || tag);
+                            tagsEl.appendChild(span);
+                        });
+                    }
+
+                    // --- Content ---
+                    const contentEl = document.getElementById('post-content');
+                    contentEl.innerHTML = post.content;
+
+                    // --- Read time ---
+                    const readTimeEl = document.getElementById('read-time');
+                    if (readTimeEl) {
+                        const mins = estimateReadTime(contentEl.textContent);
+                        readTimeEl.textContent = `約 ${mins} 分で読めます`;
+                    }
+
+                    // --- TOC ---
+                    buildTOC(contentEl);
+
+                    // --- Code copy buttons ---
+                    addCodeCopyButtons(contentEl);
+
+                    // --- Share buttons ---
+                    const shareX = document.getElementById('share-x');
+                    if (shareX) {
+                        const tweet = encodeURIComponent(`${post.title} | CodeRoute 90\n${window.location.href}`);
+                        shareX.href = `https://x.com/intent/tweet?text=${tweet}`;
+                    }
+
+                    const copyBtn = document.getElementById('copy-link-btn');
+                    if (copyBtn) {
+                        copyBtn.addEventListener('click', () => {
+                            navigator.clipboard.writeText(window.location.href).then(() => {
+                                copyBtn.textContent = '✓ コピー済み！';
+                                copyBtn.classList.add('copied');
+                                setTimeout(() => {
+                                    copyBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> URLをコピー`;
+                                    copyBtn.classList.remove('copied');
+                                }, 2500);
+                            });
+                        });
+                    }
+
+                    // Show content
+                    loadingState.style.display = 'none';
+                    contentWrapper.style.display = 'block';
+
+                } else {
+                    throw new Error('Post not found');
+                }
+            } catch (error) {
+                console.error('Error fetching post:', error);
+                loadingState.style.display = 'none';
+                errorState.style.display   = 'block';
+                titleEl.textContent = '読み込みエラー';
+                titleEl.classList.remove('loading-text');
+            }
+        }
+
+        fetchPost();
+    </script>
+
+</body>
+</html>
