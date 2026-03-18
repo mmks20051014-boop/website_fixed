@@ -188,6 +188,73 @@
         }
         /* ===== /Active Nav Link ===== */
 
+        /* ===== ローディングスピナー ===== */
+        .loading-spinner {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--slate-gray, #94a3b8);
+            grid-column: 1 / -1;
+        }
+        .loading-spinner i {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: block;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0%   { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        /* ===== /ローディングスピナー ===== */
+
+        /* ===== ホーム記事カード追加スタイル ===== */
+        .article-excerpt {
+            color: var(--slate-gray, #94a3b8);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+        .article-tags {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+        .tag {
+            background: rgba(100, 180, 255, 0.1);
+            color: var(--accent-blue, #64b4ff);
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        .read-more {
+            display: inline-flex;
+            align-items: center;
+            color: var(--accent-blue, #64b4ff);
+            font-weight: 500;
+            margin-top: 1rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        .read-more:hover {
+            color: #3a7ec4;
+            transform: translateX(5px);
+        }
+        .read-more i {
+            margin-left: 0.5rem;
+            transition: transform 0.3s ease;
+        }
+        .read-more:hover i {
+            transform: translateX(3px);
+        }
+        .home-articles-error {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: var(--slate-gray, #94a3b8);
+            grid-column: 1 / -1;
+        }
+        /* ===== /ホーム記事カード追加スタイル ===== */
 
         /* ===== Footer Enhanced ===== */
         footer {
@@ -355,49 +422,14 @@
                 <p>学習設計・スクール活用・制作ログを中心に更新しています</p>
             </div>
 
-            <div class="articles-grid">
-                <a href="articles/work-home-3months.html" class="article-card-link">
-                    <article class="article-card">
-                        <h3>【体験談】ITスクールに通って3ヶ月でプログラミングを使いこなせるようになった話</h3>
-                        <p>
-                            ITスクールに通い始めて3ヶ月が経ち、思っていた以上にプログラミングスキルが身についた。
-                            最初は何も分からなかったけど、今では自分で簡単なアプリが作れるようになった。
-                        </p>
-                        <div class="article-meta">
-                            <span class="category-tag">ITスクール体験</span>
-                            <span><i class="far fa-calendar" aria-hidden="true"></i> 2026年3月</span>
-                        </div>
-                    </article>
-                </a>
-
-                <a href="articles/beginner-writing-jobs.html" class="article-card-link">
-                    <article class="article-card">
-                        <h3>プログラミング初心者におすすめのITスクール5選</h3>
-                        <p>
-                            プログラミングを学びたい初心者に最適なITスクールを厳選しました。
-                            料金体系、カリキュラム、サポート体制などを比較しています。
-                        </p>
-                        <div class="article-meta">
-                            <span class="category-tag">ITスクール比較</span>
-                            <span><i class="far fa-calendar" aria-hidden="true"></i> 2026年3月</span>
-                        </div>
-                    </article>
-                </a>
-
-                <a href="articles/character-rate.html" class="article-card-link">
-                    <article class="article-card">
-                        <h3>未経験からITスクールで3ヶ月でプログラミングスキルを身につけるまで</h3>
-                        <p>
-                            プログラミングの知識ゼロから始めて、ついに実践的なスキルを身につけることができました。
-                            学習の過程で大切だったこと、失敗談も含めて公開します。
-                        </p>
-                        <div class="article-meta">
-                            <span class="category-tag">学習体験</span>
-                            <span><i class="far fa-calendar" aria-hidden="true"></i> 2026年2月</span>
-                        </div>
-                    </article>
-                </a>
+            <!-- ===== [動的] 最新記事グリッド ===== -->
+            <div class="articles-grid" id="homeArticlesGrid">
+                <div class="loading-spinner">
+                    <i class="fas fa-spinner" aria-hidden="true"></i>
+                    <p>記事を読み込んでいます...</p>
+                </div>
             </div>
+            <!-- ===== /[動的] 最新記事グリッド ===== -->
 
             <div class="text-center mt-4">
                 <a href="blog.html" class="cta-button">
@@ -604,5 +636,108 @@
     })();
     </script>
     <!-- ===== /Smooth Scroll ===== -->
+
+    <!-- ===== ホーム: 最新記事フェッチ ===== -->
+    <script>
+    document.addEventListener('DOMContentLoaded', async function () {
+
+        const homeArticlesGrid = document.getElementById('homeArticlesGrid');
+
+        // blog.html と共通の API エンドポイント
+        const API_URL = 'https://coderoute90-api.coderoute90.workers.dev';
+
+        // ---- XSS 対策ヘルパー ----
+        function escapeHtml(str) {
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        // ---- 記事カード HTML を生成（index.html のデザインに合わせた形式） ----
+        function buildHomeArticleCard(post) {
+            const dateStr = post.createdAt
+                ? new Date(post.createdAt).toLocaleDateString('ja-JP')
+                : '';
+            const rawText = post.content
+                ? post.content.replace(/<[^>]*>?/gm, '')
+                : '';
+            const excerpt = rawText.length > 100
+                ? rawText.substring(0, 100) + '...'
+                : rawText || '記事の詳細は「続きを読む」からご確認ください。';
+
+            // アイキャッチがあれば表示、なければアイコン
+            const eyecatchHtml = post.eyecatch
+                ? `<img src="${post.eyecatch.url}" alt="${escapeHtml(post.title)}"
+                        style="width:100%;height:160px;object-fit:cover;border-radius:8px 8px 0 0;display:block;">`
+                : '';
+
+            return `
+                <a href="post.html?id=${encodeURIComponent(post.id)}" class="article-card-link">
+                    <article class="article-card" style="padding: ${eyecatchHtml ? '0' : ''};">
+                        ${eyecatchHtml}
+                        <div style="${eyecatchHtml ? 'padding: 1.5rem;' : ''}">
+                            <h3>${escapeHtml(post.title)}</h3>
+                            <p>${escapeHtml(excerpt)}</p>
+                            <div class="article-meta">
+                                <span class="category-tag">体験談</span>
+                                <span><i class="far fa-calendar" aria-hidden="true"></i> ${dateStr}</span>
+                            </div>
+                        </div>
+                    </article>
+                </a>`;
+        }
+
+        try {
+            // 最新3件を取得
+            const response = await fetch(`${API_URL}?limit=3&orders=-publishedAt`, {
+                method:  'GET',
+                mode:    'cors',
+                headers: { 'Accept': 'application/json' }
+            });
+
+            if (!response.ok) {
+                throw new Error(`サーバーエラー: ${response.status} ${response.statusText}`);
+            }
+
+            const data = await response.json();
+
+            if (!data || !Array.isArray(data.contents)) {
+                throw new Error('APIレスポンスの形式が想定と異なります（contents 配列が見つかりません）');
+            }
+
+            homeArticlesGrid.innerHTML = '';
+
+            if (data.contents.length === 0) {
+                homeArticlesGrid.innerHTML = `
+                    <div class="home-articles-error">
+                        <i class="fas fa-inbox" style="font-size:2rem;margin-bottom:1rem;display:block;" aria-hidden="true"></i>
+                        <p>記事がまだありません。</p>
+                    </div>`;
+            } else {
+                data.contents.forEach(function (post) {
+                    homeArticlesGrid.innerHTML += buildHomeArticleCard(post);
+                });
+            }
+
+        } catch (error) {
+            console.error('[CodeRoute90] ホーム記事取得エラー:', error);
+            homeArticlesGrid.innerHTML = `
+                <div class="home-articles-error">
+                    <i class="fas fa-exclamation-triangle"
+                       style="font-size:2rem;margin-bottom:1rem;display:block;color:#ff6b6b;"
+                       aria-hidden="true"></i>
+                    <p>記事の読み込みに失敗しました。</p>
+                    <p style="font-size:0.78rem;color:#999;margin-top:0.5rem;word-break:break-all;">
+                        詳細: ${escapeHtml(error.message)}
+                    </p>
+                </div>`;
+        }
+    });
+    </script>
+    <!-- ===== /ホーム: 最新記事フェッチ ===== -->
+
 </body>
 </html>

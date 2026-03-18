@@ -907,11 +907,12 @@
 
         try {
             // ---- [FIX 2] fetch に CORS モード・Accept ヘッダを明示 ----
-            const response = await fetch(API_URL, {
-                method:  'GET',
-                mode:    'cors',
-                headers: { 'Accept': 'application/json' }
-            });
+            const response = await fetch(`${API_URL}?limit=100&orders=-publishedAt`, {
+  method:  'GET',
+  mode:    'cors',
+  headers: { 'Accept': 'application/json' }
+});
+
 
             // ---- [FIX 3] HTTP エラーを明示的に検出 ----
             if (!response.ok) {
