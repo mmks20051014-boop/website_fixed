@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>about me - CodeRoute 90 | 40歳・文系営業職がITスクール通い、転職した記録</title>
-    <meta name="description" content="40歳・文系の営業職。独学3日で挫折した未経験から、90日のITスクールでエンジニア転職→フリーランスへ。40代 文系 未経験 エンジニア転職 90日／営業職 プログラミング 挫折 回避のリアルを数字で公開。">
-    <meta name="keywords" content="CodeRoute 90, 40代 文系 未経験 エンジニア転職 90日, 営業職 プログラミング 挫折 回避, 40歳 未経験転職, ITスクール 体験談, 学習ロードマップ, 独学 挫折, メンター サポート, JavaScript 学習, Python 学習, フリーランス エンジニア">
+    <meta name="description" content="40歳・文系の営業職。独学3日で挫折した未経験から、90日のITスクールでエンジニア転職。40代 文系 未経験 エンジニア転職 90日／営業職 プログラミング 挫折 回避のリアルを数字で公開。">
+    <meta name="keywords" content="CodeRoute 90, 40代 文系 未経験 エンジニア転職 90日, 営業職 プログラミング 挫折 回避, 40歳 未経験転職, ITスクール 体験談, 学習ロードマップ, 独学 挫折, メンター サポート, JavaScript 学習, Python 学習, エンジニア">
 
     <!-- OGP -->
     <meta property="og:title" content="about me - CodeRoute 90 | 40歳・文系営業職がITスクールで転職した記録">
-    <meta property="og:description" content="40歳・文系の営業職が独学3日で挫折。それでも90日のITスクールで未経験からエンジニア転職→フリーランスへ。遠回りしない学習ルートを数字で公開。">
+    <meta property="og:description" content="40歳・文系の営業職が独学3日で挫折。それでも90日のITスクールで未経験からエンジニア転職。遠回りしない学習ルートを数字で公開。">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://programming.coderoute90.workers.dev/about.html">
     <meta property="og:image"       content="https://programming.coderoute90.workers.dev/assets/images/ogp.png">
@@ -20,7 +20,7 @@
     <!-- Twitter Card -->
     <meta name="twitter:card"        content="summary_large_image">
     <meta name="twitter:title"       content="about me - CodeRoute 90 | 40歳・文系営業職がITスクールで転職した記録">
-    <meta name="twitter:description" content="40歳・文系の営業職が独学3日で挫折。それでも90日のITスクールで未経験からエンジニア転職→フリーランスへ。遠回りしない学習ルートを公開。">
+    <meta name="twitter:description" content="40歳・文系の営業職が独学3日で挫折。それでも90日のITスクールで未経験からエンジニア転職。遠回りしない学習ルートを公開。">
     <meta name="twitter:image"       content="https://programming.coderoute90.workers.dev/assets/images/ogp.png">
     <!-- canonical -->
     <link rel="canonical" href="https://programming.coderoute90.workers.dev/about.html">
@@ -745,21 +745,23 @@
     
         /* ===== Hamburger Menu ===== */
         .hamburger {
-            display: none;
+            display: none;   /* デスクトップでは非表示 */
             flex-direction: column;
             justify-content: center;
+            align-items: center;
             gap: 5px;
-            width: 36px;
-            height: 36px;
+            width: 40px;
+            height: 40px;
             background: none;
             border: none;
             cursor: pointer;
             padding: 4px;
-            z-index: 1100;
+            z-index: 10001;
+            flex-shrink: 0;
         }
         .hamburger span {
             display: block;
-            width: 100%;
+            width: 22px;
             height: 2px;
             background: var(--text-primary, #e2e8f0);
             border-radius: 2px;
@@ -773,36 +775,61 @@
         .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
         /* モバイル用オーバーレイ */
-        .nav-overlay { display: none !important; }
+        .nav-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.55);
+            z-index: 9998;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .nav-overlay.active { opacity: 1; }
 
         @media (max-width: 768px) {
-            .hamburger { display: none !important; }
-            .nav-overlay { display: none !important; }
+            /* モバイル: ハンバーガーを表示 */
+            .hamburger { display: flex !important; }
+            .nav-overlay { display: block; }
 
             nav {
                 position: relative;
             }
+            /* モバイル: メニューは右からスライドするドロワー */
             .nav-links {
                 display: flex !important;
-                position: static !important;
-                top: auto !important;
-                right: auto !important;
-                width: auto !important;
-                height: auto !important;
-                background: transparent !important;
-                border-left: none !important;
-                flex-direction: row !important;
-                align-items: center !important;
-                padding: 0 !important;
-                gap: 0.75rem !important;
-                z-index: auto !important;
-                transition: none !important;
-                box-shadow: none !important;
-                overflow: visible !important;
+                position: fixed !important;
+                top: 0 !important;
+                right: -100% !important;
+                width: 75vw !important;
+                max-width: 300px !important;
+                height: 100dvh !important;
+                height: 100vh !important;
+                background: var(--bg-card, #1e293b) !important;
+                border-left: 1px solid rgba(255,255,255,0.08) !important;
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                padding: 5rem 1.5rem 2rem !important;
+                gap: 0 !important;
+                z-index: 9999 !important;
+                transition: right 0.35s cubic-bezier(0.4,0,0.2,1) !important;
+                box-shadow: -4px 0 24px rgba(0,0,0,0.4) !important;
+                overflow-y: auto !important;
+                -webkit-overflow-scrolling: touch !important;
             }
-            .nav-links.open { right: auto !important; }
-            .nav-links li { width: auto; border-bottom: none !important; }
-            .nav-links li a { display: inline-block; padding: 0.4rem 0.6rem; font-size: 0.95rem; width: auto; }
+            .nav-links.open { right: 0 !important; }
+            .nav-links li {
+                width: 100% !important;
+                border-bottom: 1px solid rgba(255,255,255,0.06) !important;
+            }
+            .nav-links li:last-child { border-bottom: none !important; }
+            .nav-links li a {
+                display: block !important;
+                padding: 1rem 0.5rem !important;
+                font-size: 1rem !important;
+                width: 100% !important;
+                color: var(--text-primary, #e2e8f0) !important;
+            }
         }
         /* ===== /Hamburger Menu ===== */
         /* ===== Active Nav Link ===== */
@@ -901,8 +928,8 @@
       "mainEntity": {
         "@type": "Person",
         "name": "CodeRoute 90 運営者",
-        "description": "40歳・文系営業職。独学3日で挫折したが、90日のITスクールでエンジニア転職を達成し、現在フリーランスとして稼働中。",
-        "knowsAbout": ["ITスクール", "プログラミング学習", "エンジニア転職", "フリーランス", "40代転職"]
+        "description": "40歳・文系営業職。独学3日で挫折したが、90日のITスクールでエンジニア転職を達成。",
+        "knowsAbout": ["ITスクール", "プログラミング学習", "エンジニア転職", "40代転職"]
       }
     }
     </script>
@@ -964,8 +991,14 @@
                 <li><a href="blog.html">ブログ</a></li>
                 <li><a href="contact.html">お問い合わせ</a></li>
             </ul>
+            <button class="hamburger" id="hamburgerBtn" aria-label="メニューを開く" aria-expanded="false" aria-controls="navLinks">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
         </nav>
     </header>
+    <div class="nav-overlay" id="navOverlay" aria-hidden="true"></div>
 
 
     <!-- ===== Breadcrumb ===== -->
@@ -990,7 +1023,7 @@
         <h1>about me</h1>
         <p class="hero-sub">
             40歳・文系営業職。PCスキルなし。独学は3日で挫折。0からのITスクール挑戦だった。<br>
-            それでも90日で技能習得、転職を達成し、現在フリーランスとして稼働しています。<br>
+            それでも90日で技能習得、転職を達成し、現在エンジニアとして稼働しています。<br>
             才能の話ではなく、ルートの話をします。
         </p>
     </section>
@@ -1030,7 +1063,7 @@
                             </div>
                             <div class="profile-tag">
                                 <i class="fas fa-code" aria-hidden="true"></i>
-                                <span>IT内定獲得 → フリーランスエンジニア</span>
+                                <span>IT内定獲得 → エンジニア</span>
                             </div>
                         </div>
                     </div>
@@ -1079,9 +1112,7 @@
                         </div>
                         <p>
                             リクルートを経てIT企業への内定を獲得し、
-                            未経験エンジニアとしてキャリアをスタート。
-                            その後、個人のWeb制作案件で安定した収入が得られるようになり、
-                            現在はフリーランスとして稼働しています。<br><br>
+                            エンジニアとしてキャリアをスタート。
                             知識ゼロからスタートして90日。
                             40歳の文系管理職が90日でITエンジニアになった。
                         </p>
@@ -1214,7 +1245,7 @@
                     </div>
                     <h3>営業力 × エンジニアリング</h3>
                     <p>
-                        前職7年間の文系営業経験は、フリーランスとして案件を獲得する場面で直接役立っている。
+                        前職7年間の文系営業経験は、案件を獲得する場面で直接役立っている。
                         技術力だけでなく、提案力・コミュニケーション力が
                         エンジニアとしての差別化になっている。
                     </p>
@@ -1367,5 +1398,67 @@
         });
     })();
     </script>
+    <!-- ===== Hamburger Menu Script ===== -->
+    <script>
+    (function () {
+        'use strict';
+        document.addEventListener('DOMContentLoaded', function () {
+            var btn     = document.getElementById('hamburgerBtn');
+            var nav     = document.getElementById('navLinks');
+            var overlay = document.getElementById('navOverlay');
+            if (!btn || !nav) return;
+
+            function openMenu() {
+                btn.classList.add('open');
+                nav.classList.add('open');
+                btn.setAttribute('aria-expanded', 'true');
+                btn.setAttribute('aria-label', 'メニューを閉じる');
+                if (overlay) { overlay.style.display = 'block'; setTimeout(function(){ overlay.classList.add('active'); }, 10); }
+                /* スクロールロック */
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeMenu() {
+                btn.classList.remove('open');
+                nav.classList.remove('open');
+                btn.setAttribute('aria-expanded', 'false');
+                btn.setAttribute('aria-label', 'メニューを開く');
+                if (overlay) { overlay.classList.remove('active'); setTimeout(function(){ overlay.style.display = 'none'; }, 300); }
+                /* スクロールロック解除 */
+                document.body.style.overflow = '';
+            }
+
+            btn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                if (nav.classList.contains('open')) { closeMenu(); } else { openMenu(); }
+            });
+
+            /* オーバーレイクリックで閉じる */
+            if (overlay) {
+                overlay.addEventListener('click', closeMenu);
+            }
+
+            /* メニューリンククリックで閉じる */
+            nav.querySelectorAll('a').forEach(function (link) {
+                link.addEventListener('click', function () {
+                    closeMenu();
+                });
+            });
+
+            /* ESCキーで閉じる */
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape' && nav.classList.contains('open')) { closeMenu(); }
+            });
+
+            /* リサイズ時にメニューをリセット */
+            window.addEventListener('resize', function () {
+                if (window.innerWidth > 768 && nav.classList.contains('open')) {
+                    closeMenu();
+                }
+            });
+        });
+    })();
+    </script>
+    <!-- ===== /Hamburger Menu Script ===== -->
 </body>
 </html>
