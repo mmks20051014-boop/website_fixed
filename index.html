@@ -105,7 +105,7 @@
             border: none;
             cursor: pointer;
             padding: 4px;
-            z-index: 1100;
+            z-index: 10000;
         }
         .hamburger span {
             display: block;
@@ -128,7 +128,7 @@
             position: fixed;
             inset: 0;
             background: rgba(0,0,0,0.5);
-            z-index: 1000;
+            z-index: 9998;
             opacity: 0;
             transition: opacity 0.3s ease;
         }
@@ -143,6 +143,9 @@
                 position: relative;
             }
             .nav-links {
+                /* ===== FIX: style.css 側で display:none の場合でも強制表示 ===== */
+                display: flex !important;
+
                 position: fixed;
                 top: 0;
                 right: -100%;
@@ -154,7 +157,7 @@
                 align-items: flex-start;
                 padding: 80px 2rem 2rem;
                 gap: 0;
-                z-index: 1050;
+                z-index: 9999;
                 transition: right 0.35s cubic-bezier(0.4,0,0.2,1);
                 box-shadow: -8px 0 32px rgba(0,0,0,0.4);
 
@@ -566,12 +569,12 @@
         }
 
         if (btn) {
+            // ===== FIX: 他スクリプト(main.js等)のハンバーガー処理と競合しても勝てるように、captureで先に受けて止める =====
             btn.addEventListener('click', function (e) {
-                // ===== FIX: 他スクリプトとの競合（クリック伝播）で意図せず閉じるのを抑止 =====
                 e.preventDefault();
-                e.stopPropagation();
+                e.stopImmediatePropagation();
                 isOpen() ? closeMenu() : openMenu();
-            }, { passive: false });
+            }, { passive: false, capture: true });
         }
         if (overlay) {
             overlay.addEventListener('click', function () {
