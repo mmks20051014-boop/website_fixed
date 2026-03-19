@@ -157,6 +157,11 @@
                 z-index: 1050;
                 transition: right 0.35s cubic-bezier(0.4,0,0.2,1);
                 box-shadow: -8px 0 32px rgba(0,0,0,0.4);
+
+                /* ===== FIX: モバイルでメニュー自体をスクロール可能にする ===== */
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+                overscroll-behavior: contain;
             }
             .nav-links.open { right: 0; }
             .nav-links li {
@@ -172,6 +177,7 @@
             }
         }
         /* ===== /Hamburger Menu ===== */
+
         /* ===== Active Nav Link ===== */
         .nav-links a.nav-active {
             color: var(--accent-cyan, #22d3ee) !important;
@@ -515,33 +521,75 @@
         var navList = document.getElementById('navLinks');
         var overlay = document.getElementById('navOverlay');
 
+        // ===== FIX: iOS Safari 等でも確実に背景スクロールを止める（position:fixed方式） =====
+        var lockedScrollY = 0;
+        function lockBodyScroll() {
+            lockedScrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
+            document.body.style.position = 'fixed';
+            document.body.style.top = (-lockedScrollY) + 'px';
+            document.body.style.left = '0';
+            document.body.style.right = '0';
+            document.body.style.width = '100%';
+        }
+        function unlockBodyScroll() {
+            // 先にスタイルを戻してから scrollTo
+            document.body.style.position = '';
+            document.body.style.top = '';
+            document.body.style.left = '';
+            document.body.style.right = '';
+            document.body.style.width = '';
+            window.scrollTo(0, lockedScrollY);
+        }
+
+        function isOpen() {
+            return navList && navList.classList.contains('open');
+        }
+
         function openMenu() {
+            if (!navList || !overlay || !btn) return;
             navList.classList.add('open');
             overlay.classList.add('active');
             btn.classList.add('open');
             btn.setAttribute('aria-expanded', 'true');
-            document.body.style.overflow = 'hidden';
+            overlay.setAttribute('aria-hidden', 'false');
+            lockBodyScroll();
         }
 
         function closeMenu() {
+            if (!navList || !overlay || !btn) return;
             navList.classList.remove('open');
             overlay.classList.remove('active');
             btn.classList.remove('open');
             btn.setAttribute('aria-expanded', 'false');
-            document.body.style.overflow = '';
+            overlay.setAttribute('aria-hidden', 'true');
+            unlockBodyScroll();
         }
 
         if (btn) {
-            btn.addEventListener('click', function () {
-                navList.classList.contains('open') ? closeMenu() : openMenu();
-            });
+            btn.addEventListener('click', function (e) {
+                // ===== FIX: 他スクリプトとの競合（クリック伝播）で意図せず閉じるのを抑止 =====
+                e.preventDefault();
+                e.stopPropagation();
+                isOpen() ? closeMenu() : openMenu();
+            }, { passive: false });
         }
         if (overlay) {
-            overlay.addEventListener('click', closeMenu);
+            overlay.addEventListener('click', function () {
+                if (isOpen()) closeMenu();
+            });
         }
+
         /* Escキーで閉じる */
         document.addEventListener('keydown', function (e) {
-            if (e.key === 'Escape') closeMenu();
+            if (e.key === 'Escape' && isOpen()) closeMenu();
+        });
+
+        // ===== FIX: 画面回転/リサイズで状態が残り続ける問題を防止 =====
+        window.addEventListener('resize', function () {
+            // PC幅に戻ったら、強制的に閉じる（body固定が残る事故を防ぐ）
+            if (window.innerWidth > 768 && isOpen()) {
+                closeMenu();
+            }
         });
 
         /* ---- ② ナビリンク クリック処理（メニューを閉じる＋ジャンプ） ---- */
@@ -554,9 +602,9 @@
                     if (href && href.charAt(0) === '#' && href.length > 1) {
                         var target = document.querySelector(href);
                         if (target) {
-                            e.preventDefault();   /* ブラウザデフォルトのジャンプを止める */
-                            closeMenu();          /* メニューを閉じて overflow:hidden を解除 */
-                            /* overflow 解除が反映されてからスクロール */
+                            e.preventDefault();
+                            closeMenu();
+                            // body固定解除が反映された後にスクロール
                             setTimeout(function () {
                                 var header  = document.querySelector('header');
                                 var headerH = header ? header.offsetHeight : 0;
@@ -567,15 +615,13 @@
                                     headerH -
                                     OFFSET;
                                 window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
-                            }, 50); /* 50ms 待機：CSSトランジションが開始する前にスクロール開始 */
+                            }, 50);
                         }
-                        return; /* ここで処理終了 */
+                        return;
                     }
 
                     /* 外部ページリンク（about.html, blog.html など）の場合 */
-                    /* → デフォルト動作（ページ遷移）をそのまま通す */
                     closeMenu();
-                    /* e.preventDefault() を呼ばないのでページ遷移が発生する */
                 });
             });
         }
@@ -587,7 +633,7 @@
             navList.querySelectorAll('a').forEach(function (a) {
                 var href = a.getAttribute('href');
                 if (!href) return;
-                if (href.startsWith('#')) return; /* ページ内アンカーは除外 */
+                if (href.startsWith('#')) return;
                 var linkFile = href.split('/').pop().split('?')[0].split('#')[0];
                 var isCurrent = (linkFile === currentPath) ||
                     (currentPath === 'index.html' && (linkFile === '' || linkFile === 'index.html'));
@@ -625,7 +671,7 @@
                     var headerH = header ? header.offsetHeight : 0;
                     var OFFSET  = 16;
                     var top =
-                        target.getBoundingClientRect().top +    
+                        target.getBoundingClientRect().top +
                         window.pageYOffset -
                         headerH -
                         OFFSET;
