@@ -532,61 +532,38 @@
         var navList = document.getElementById('navLinks');
         var overlay = document.getElementById('navOverlay');
 
-        // ===== FIX: overflow:hidden 方式でスクロールをロック（iOS Safari 互換） =====
-        function lockBodyScroll() {
+        function openMenu() {
+            if (!navList) return;
+            navList.classList.add('open');
+            if (overlay) overlay.classList.add('active');
+            if (btn) btn.classList.add('open');
+            if (btn) btn.setAttribute('aria-expanded', 'true');
             document.body.style.overflow = 'hidden';
         }
-        function unlockBodyScroll() {
+        function closeMenu() {
+            if (!navList) return;
+            navList.classList.remove('open');
+            if (overlay) overlay.classList.remove('active');
+            if (btn) btn.classList.remove('open');
+            if (btn) btn.setAttribute('aria-expanded', 'false');
             document.body.style.overflow = '';
         }
 
-        function isOpen() {
-            return navList && navList.classList.contains('open');
-        }
-
-        function openMenu() {
-            if (!navList || !overlay || !btn) return;
-            navList.classList.add('open');
-            overlay.classList.add('active');
-            btn.classList.add('open');
-            btn.setAttribute('aria-expanded', 'true');
-            overlay.setAttribute('aria-hidden', 'false');
-            lockBodyScroll();
-        }
-
-        function closeMenu() {
-            if (!navList || !overlay || !btn) return;
-            navList.classList.remove('open');
-            overlay.classList.remove('active');
-            btn.classList.remove('open');
-            btn.setAttribute('aria-expanded', 'false');
-            overlay.setAttribute('aria-hidden', 'true');
-            unlockBodyScroll();
-        }
-
-        if (btn) {
-            // ===== FIX: 他スクリプト(main.js等)のハンバーガー処理と競合しても勝てるように、captureで先に受けて止める =====
+        if (btn && navList) {
             btn.addEventListener('click', function (e) {
-                e.preventDefault();
-                e.stopImmediatePropagation();
-                isOpen() ? closeMenu() : openMenu();
-            }, { passive: false, capture: true });
-        }
-        if (overlay) {
-            overlay.addEventListener('click', function () {
-                if (isOpen()) closeMenu();
+                e.stopPropagation();
+                navList.classList.contains('open') ? closeMenu() : openMenu();
             });
         }
-
-        /* Escキーで閉じる */
+        if (overlay) {
+            overlay.addEventListener('click', function (e) {
+                e.stopPropagation();
+                closeMenu();
+            });
+        }
+        // Escキーで閉じる
         document.addEventListener('keydown', function (e) {
-            if (e.key === 'Escape' && isOpen()) closeMenu();
-        });
-
-        // ===== FIX: 画面回転/リサイズで状態が残り続ける問題を防止 =====
-        window.addEventListener('resize', function () {
-            // PC幅に戻ったら、強制的に閉じる（body固定が残る事故を防ぐ）
-            if (window.innerWidth > 768 && isOpen()) {
+            if (e.key === 'Escape' && navList && navList.classList.contains('open')) {
                 closeMenu();
             }
         });
