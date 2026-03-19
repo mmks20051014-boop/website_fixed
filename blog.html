@@ -849,11 +849,17 @@
 
         // ---- ヘルパー: 記事カードの HTML を生成 ----
         function buildArticleCard(post) {
+            // [FIX] post自体やtitleが存在しない場合のガード
+            if (!post || typeof post !== 'object') {
+                console.error('[CodeRoute90] buildArticleCard: postが不正な値です', post);
+                return '';
+            }
+            const postTitle = post.title || '(タイトルなし)';
             const dateStr = post.createdAt
                 ? new Date(post.createdAt).toLocaleDateString('ja-JP')
                 : '';
             const eyecatchHtml = post.eyecatch
-                ? `<img src="${post.eyecatch.url}" alt="${escapeHtml(post.title)}" style="width:100%;height:100%;object-fit:cover;border-radius:8px;">`
+                ? `<img src="${post.eyecatch.url}" alt="${escapeHtml(postTitle)}" style="width:100%;height:100%;object-fit:cover;border-radius:8px;">`
                 : '<i class="fas fa-code"></i>';
             const rawText = post.content
                 ? post.content.replace(/<[^>]*>?/gm, '')
@@ -869,7 +875,7 @@
                             <p class="meta">
                                 <span class="date"><i class="far fa-calendar-alt"></i> ${dateStr}</span>
                             </p>
-                            <h3>${escapeHtml(post.title)}</h3>
+                            <h3>${escapeHtml(postTitle)}</h3>
                         </div>
                         <div class="article-image">${eyecatchHtml}</div>
                     </div>

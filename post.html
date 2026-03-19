@@ -4,49 +4,284 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>記事詳細 - CodeRoute 90</title>
+    <meta name="description" content="CodeRoute 90 - 40歳・文系から90日でエンジニア転職した運営者が、最短ルートを事実ベースで公開するメディア。">
+
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+JP:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Site CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
 
     <style>
-        /* ===== Reading Progress Bar ===== */
+        /* ============================================================
+           CSS Variables Fallback
+           (style.css が定義するものを補完。style.css ロード済みなら上書き不要)
+        ============================================================ */
+        :root {
+            --bg-primary:       #0a0a0f;
+            --bg-secondary:     #0f172a;
+            --bg-card:          rgba(15, 23, 42, 0.8);
+            --bg-card-hover:    rgba(20, 30, 55, 0.95);
+
+            --accent-cyan:      #00d4ff;
+            --accent-purple:    #8b5cf6;
+            --accent-pink:      #ec4899;
+
+            --text-primary:     #e2e8f0;
+            --text-secondary:   #94a3b8;
+            --text-muted:       #64748b;
+
+            --border-subtle:    rgba(255, 255, 255, 0.06);
+            --border-glow:      rgba(0, 212, 255, 0.3);
+
+            --gradient-primary: linear-gradient(135deg, #00d4ff 0%, #8b5cf6 50%, #ec4899 100%);
+            --gradient-text:    linear-gradient(135deg, #00d4ff 0%, #8b5cf6 60%, #ec4899 100%);
+            --gradient-dark:    linear-gradient(180deg, #0a0a0f 0%, #0d1117 100%);
+            --gradient-hero:    linear-gradient(135deg, #0a0a1a 0%, #0f172a 50%, #0a1a1a 100%);
+            --gradient-cta:     linear-gradient(135deg, #00d4ff, #8b5cf6);
+
+            --shadow-glow:      0 0 20px rgba(0, 212, 255, 0.3);
+            --shadow-card:      0 4px 24px rgba(0, 0, 0, 0.4);
+
+            --radius-sm:  6px;
+            --radius-md:  12px;
+            --radius-lg:  20px;
+
+            --font-primary:   'Inter', sans-serif;
+            --font-secondary: 'Noto Sans JP', sans-serif;
+            --font-mono:      'JetBrains Mono', monospace;
+        }
+
+        /* ============================================================
+           Base Reset / Body
+        ============================================================ */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: var(--font-secondary), var(--font-primary);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a { color: inherit; text-decoration: none; }
+        img { max-width: 100%; height: auto; display: block; }
+
+        /* ============================================================
+           Reading Progress Bar
+        ============================================================ */
         #reading-progress {
             position: fixed;
-            top: 0;
-            left: 0;
+            top: 0; left: 0;
             width: 0%;
             height: 3px;
             background: var(--gradient-primary);
             z-index: 9999;
             transition: width 0.1s linear;
-            box-shadow: 0 0 10px rgba(0, 212, 255, 0.6);
+            box-shadow: 0 0 12px rgba(0, 212, 255, 0.7);
         }
 
-        /* ===== Post Page Layout ===== */
+        /* ============================================================
+           Header / Navigation
+        ============================================================ */
+        header {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 1000;
+            background: rgba(10, 10, 15, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-subtle);
+            height: 68px;
+            transition: background 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        header.scrolled {
+            background: rgba(10, 10, 15, 0.97);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        header nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-family: var(--font-primary);
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            background: var(--gradient-text);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            white-space: nowrap;
+        }
+
+        .logo i { -webkit-text-fill-color: var(--accent-cyan); }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            padding: 0.5rem 0.9rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.88rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            transition: color 0.25s ease, background 0.25s ease;
+            text-decoration: none;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.nav-active {
+            color: var(--accent-cyan);
+            background: rgba(0, 212, 255, 0.07);
+        }
+
+        /* Hamburger */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            gap: 5px;
+            width: 36px; height: 36px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+            z-index: 1100;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 100%;
+            height: 2px;
+            background: var(--text-primary);
+            border-radius: 2px;
+            transition: transform 0.35s cubic-bezier(0.4,0,0.2,1),
+                        opacity   0.25s ease,
+                        width     0.25s ease;
+            transform-origin: center;
+        }
+
+        .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+        .hamburger.open span:nth-child(2) { opacity: 0; width: 0; }
+        .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+        /* Overlay */
+        .nav-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.55);
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .nav-overlay.active { opacity: 1; }
+
+        @media (max-width: 768px) {
+            .hamburger { display: flex; }
+            .nav-overlay { display: block; pointer-events: none; }
+            .nav-overlay.active { pointer-events: auto; }
+
+            .nav-links {
+                position: fixed;
+                top: 0; right: -100%;
+                width: min(280px, 80vw);
+                height: 100vh;
+                background: #0d1117;
+                border-left: 1px solid var(--border-subtle);
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 80px 1.5rem 2rem;
+                gap: 0;
+                z-index: 1050;
+                transition: right 0.35s cubic-bezier(0.4,0,0.2,1);
+                box-shadow: -8px 0 32px rgba(0,0,0,0.5);
+            }
+
+            .nav-links.open { right: 0; }
+
+            .nav-links li { width: 100%; border-bottom: 1px solid var(--border-subtle); }
+            .nav-links li:last-child { border-bottom: none; }
+            .nav-links a { display: block; padding: 1rem 0.5rem; font-size: 1rem; width: 100%; }
+        }
+
+        /* ============================================================
+           Post Page Wrapper
+        ============================================================ */
         .post-page {
-            padding-top: 80px;
+            padding-top: 68px;
             min-height: 100vh;
-            background: var(--gradient-dark);
+            background: var(--bg-primary);
         }
 
-        /* ===== Post Hero / Header area ===== */
+        /* ============================================================
+           Post Hero
+        ============================================================ */
         .post-hero {
             position: relative;
-            padding: 5rem 2rem 4rem;
+            padding: 5rem 2rem 4.5rem;
             overflow: hidden;
             border-bottom: 1px solid var(--border-subtle);
+            background:
+                radial-gradient(ellipse 80% 60% at 10% 40%, rgba(0, 212, 255, 0.07) 0%, transparent 60%),
+                radial-gradient(ellipse 70% 50% at 85% 20%, rgba(139, 92, 246, 0.08) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 40% at 50% 90%, rgba(236, 72, 153, 0.04) 0%, transparent 60%),
+                linear-gradient(180deg, #0d1117 0%, #080c14 100%);
+        }
+
+        /* animated glow orbs */
+        .post-hero::before,
+        .post-hero::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            pointer-events: none;
+            animation: heroOrb 8s ease-in-out infinite alternate;
         }
 
         .post-hero::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background:
-                radial-gradient(circle at 20% 50%, rgba(0, 212, 255, 0.08) 0%, transparent 60%),
-                radial-gradient(circle at 80% 30%, rgba(139, 92, 246, 0.08) 0%, transparent 60%),
-                radial-gradient(circle at 50% 80%, rgba(236, 72, 153, 0.04) 0%, transparent 60%);
-            pointer-events: none;
+            width: 400px; height: 400px;
+            top: -100px; left: -80px;
+            background: radial-gradient(circle, rgba(0, 212, 255, 0.12), transparent 70%);
+            animation-delay: 0s;
+        }
+
+        .post-hero::after {
+            width: 350px; height: 350px;
+            bottom: -80px; right: -60px;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.12), transparent 70%);
+            animation-delay: -4s;
+        }
+
+        @keyframes heroOrb {
+            0%   { transform: translate(0, 0) scale(1); opacity: 0.6; }
+            100% { transform: translate(30px, 20px) scale(1.1); opacity: 1; }
         }
 
         .post-hero-inner {
@@ -56,56 +291,62 @@
             z-index: 1;
         }
 
-        /* ===== Breadcrumb ===== */
-        .breadcrumb {
+        /* Breadcrumb */
+        .post-breadcrumb {
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             color: var(--text-muted);
             margin-bottom: 2rem;
+            flex-wrap: wrap;
         }
 
-        .breadcrumb a {
+        .post-breadcrumb a {
             color: var(--text-muted);
             text-decoration: none;
-            transition: color 0.3s ease;
+            transition: color 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
         }
 
-        .breadcrumb a:hover {
-            color: var(--accent-cyan);
-            text-shadow: none;
+        .post-breadcrumb a:hover { color: var(--accent-cyan); }
+
+        .post-breadcrumb .sep {
+            color: var(--text-muted);
+            opacity: 0.5;
+            font-size: 0.75rem;
         }
 
-        .breadcrumb span {
-            color: var(--accent-cyan);
-            font-size: 0.8rem;
-        }
-
-        .breadcrumb .current {
-            color: var(--text-secondary);
-            max-width: 300px;
+        .post-breadcrumb .current {
+            background: var(--gradient-text);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 600;
+            max-width: 320px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
         }
 
-        /* ===== Category Tag (in hero) ===== */
-        .post-category {
-            display: inline-block;
+        /* Category badge */
+        .post-category-badge {
+            display: none;
             background: rgba(0, 212, 255, 0.1);
             color: var(--accent-cyan);
-            padding: 0.35rem 1rem;
-            border-radius: 999px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
             border: 1px solid rgba(0, 212, 255, 0.25);
-            margin-bottom: 1.5rem;
+            padding: 0.3rem 1rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 1.4rem;
         }
 
-        /* ===== Post Title in Hero ===== */
+        /* Post title */
         #post-title {
             font-size: clamp(1.8rem, 4vw, 2.8rem);
             font-weight: 700;
@@ -115,7 +356,7 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.75rem;
         }
 
         #post-title.loading-text {
@@ -124,27 +365,23 @@
             color: var(--text-muted);
         }
 
-        /* ===== Post Meta info ===== */
-        .post-meta {
+        /* Post meta bar */
+        .post-meta-bar {
             display: flex;
             align-items: center;
             flex-wrap: wrap;
-            gap: 1.2rem;
-            font-size: 0.9rem;
+            gap: 1rem;
+            font-size: 0.85rem;
             color: var(--text-muted);
         }
 
         .post-meta-item {
             display: flex;
             align-items: center;
-            gap: 0.4rem;
+            gap: 0.45rem;
         }
 
-        .post-meta-item svg {
-            width: 15px;
-            height: 15px;
-            opacity: 0.7;
-        }
+        .post-meta-item svg { width: 14px; height: 14px; opacity: 0.6; flex-shrink: 0; }
 
         .post-meta-divider {
             width: 1px;
@@ -152,28 +389,97 @@
             background: var(--border-subtle);
         }
 
-        /* ===== Main Content Wrapper ===== */
+        /* Glow separator */
+        .glow-line {
+            height: 1px;
+            background: var(--gradient-primary);
+            opacity: 0.25;
+        }
+
+        /* ============================================================
+           Main Layout
+        ============================================================ */
         .post-layout {
-            max-width: 1160px;
+            max-width: 1180px;
             margin: 0 auto;
             padding: 3.5rem 2rem 6rem;
             display: grid;
-            grid-template-columns: 1fr 280px;
+            grid-template-columns: 1fr 288px;
             gap: 3.5rem;
             align-items: start;
         }
 
-        /* ===== Article Body ===== */
-        .post-article {
-            min-width: 0;
+        /* ============================================================
+           Article
+        ============================================================ */
+        .post-article { min-width: 0; }
+
+        /* Loading / Error */
+        .loading-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 5rem 2rem;
+            gap: 1.2rem;
+            color: var(--text-muted);
         }
 
-        /* ===== Article Content Styles ===== */
+        .loading-spinner {
+            width: 44px; height: 44px;
+            border: 3px solid var(--border-subtle);
+            border-top-color: var(--accent-cyan);
+            border-radius: 50%;
+            animation: spin 0.85s linear infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .loading-state p { font-size: 0.92rem; letter-spacing: 0.02em; }
+
+        .error-state {
+            text-align: center;
+            padding: 5rem 2rem;
+        }
+
+        .error-icon { font-size: 3.5rem; margin-bottom: 1.2rem; opacity: 0.5; }
+
+        .error-state h2 {
+            font-size: 1.4rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.75rem;
+        }
+
+        .error-state p { color: var(--text-muted); font-size: 0.95rem; }
+
+        .error-state .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1.75rem;
+            padding: 0.65rem 1.5rem;
+            border-radius: 999px;
+            background: rgba(0, 212, 255, 0.08);
+            color: var(--accent-cyan);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            font-size: 0.88rem;
+            font-weight: 500;
+            transition: all 0.25s ease;
+        }
+
+        .error-state .back-btn:hover {
+            background: rgba(0, 212, 255, 0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 212, 255, 0.2);
+        }
+
+        /* ============================================================
+           Article Content (Rich Text from CMS)
+        ============================================================ */
         .post-content {
             color: var(--text-secondary);
             font-size: 1.05rem;
             line-height: 1.85;
-            font-family: var(--font-secondary), var(--font-primary);
         }
 
         .post-content h1,
@@ -184,14 +490,14 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            margin-top: 2.5rem;
-            margin-bottom: 1rem;
             font-weight: 700;
             line-height: 1.3;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
         }
 
         .post-content h2 {
-            font-size: 1.55rem;
+            font-size: 1.5rem;
             padding-bottom: 0.6rem;
             border-bottom: 1px solid var(--border-subtle);
             position: relative;
@@ -200,23 +506,18 @@
         .post-content h2::after {
             content: '';
             position: absolute;
-            bottom: -1px;
-            left: 0;
-            width: 60px;
-            height: 2px;
+            bottom: -1px; left: 0;
+            width: 56px; height: 2px;
             background: var(--gradient-primary);
             border-radius: 2px;
         }
 
-        .post-content h3 {
-            font-size: 1.2rem;
-        }
+        .post-content h3 { font-size: 1.2rem; }
+        .post-content h4 { font-size: 1.05rem; }
 
         .post-content p {
-            font-size: 1.05rem;
-            color: var(--text-secondary);
-            line-height: 1.85;
             margin-bottom: 1.4rem;
+            color: var(--text-secondary);
         }
 
         .post-content a {
@@ -230,20 +531,16 @@
         .post-content a:hover {
             color: var(--accent-purple);
             text-decoration-color: var(--accent-purple);
-            text-shadow: 0 0 8px rgba(139, 92, 246, 0.4);
         }
 
         .post-content img {
-            max-width: 100%;
-            height: auto;
             border-radius: var(--radius-md);
             border: 1px solid var(--border-subtle);
-            margin: 1.5rem 0;
+            margin: 1.75rem 0;
             box-shadow: var(--shadow-card);
         }
 
-        .post-content ul,
-        .post-content ol {
+        .post-content ul, .post-content ol {
             padding-left: 1.5rem;
             margin-bottom: 1.4rem;
         }
@@ -254,33 +551,17 @@
             margin-bottom: 0.5rem;
         }
 
-        .post-content ul li::marker {
-            color: var(--accent-cyan);
-        }
-
-        .post-content ol li::marker {
-            color: var(--accent-purple);
-            font-weight: 600;
-        }
+        .post-content ul li::marker { color: var(--accent-cyan); }
+        .post-content ol li::marker { color: var(--accent-purple); font-weight: 600; }
 
         .post-content blockquote {
             border-left: 3px solid var(--accent-cyan);
             background: rgba(0, 212, 255, 0.04);
             padding: 1.2rem 1.5rem;
-            margin: 1.5rem 0;
+            margin: 1.75rem 0;
             border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
             font-style: italic;
             color: var(--text-secondary);
-        }
-
-        .post-content blockquote::before {
-            content: '"';
-            font-size: 3rem;
-            color: rgba(0, 212, 255, 0.2);
-            line-height: 0;
-            vertical-align: -0.6rem;
-            margin-right: 0.3rem;
-            font-family: Georgia, serif;
         }
 
         .post-content code {
@@ -289,17 +570,17 @@
             padding: 0.2em 0.5em;
             border-radius: 4px;
             font-family: var(--font-mono);
-            font-size: 0.9em;
+            font-size: 0.88em;
             border: 1px solid rgba(0, 212, 255, 0.15);
         }
 
         .post-content pre {
-            background: rgba(0, 0, 0, 0.4);
+            background: rgba(0, 0, 0, 0.45);
             border: 1px solid var(--border-subtle);
             border-radius: var(--radius-md);
             padding: 1.5rem;
             overflow-x: auto;
-            margin: 1.5rem 0;
+            margin: 1.75rem 0;
             position: relative;
         }
 
@@ -308,21 +589,21 @@
             color: #e2e8f0;
             padding: 0;
             border: none;
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             line-height: 1.7;
         }
 
         .post-content table {
             width: 100%;
             border-collapse: collapse;
-            margin: 1.5rem 0;
-            font-size: 0.95rem;
+            margin: 1.75rem 0;
+            font-size: 0.93rem;
             border-radius: var(--radius-sm);
             overflow: hidden;
         }
 
         .post-content th {
-            background: rgba(0, 212, 255, 0.08);
+            background: rgba(0, 212, 255, 0.07);
             color: var(--accent-cyan);
             padding: 0.8rem 1rem;
             text-align: left;
@@ -336,9 +617,7 @@
             color: var(--text-secondary);
         }
 
-        .post-content tr:hover td {
-            background: rgba(255, 255, 255, 0.02);
-        }
+        .post-content tr:hover td { background: rgba(255,255,255,0.02); }
 
         .post-content hr {
             border: none;
@@ -347,46 +626,72 @@
             margin: 2.5rem 0;
         }
 
-        /* ===== Post Footer (tags / share) ===== */
+        /* Code copy button */
+        .code-wrapper { position: relative; }
+
+        .code-copy-btn {
+            position: absolute;
+            top: 0.6rem; right: 0.6rem;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-muted);
+            padding: 0.3rem 0.75rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.73rem;
+            font-family: var(--font-primary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .code-copy-btn:hover, .code-copy-btn.copied {
+            background: rgba(0, 212, 255, 0.1);
+            border-color: var(--accent-cyan);
+            color: var(--accent-cyan);
+        }
+
+        /* ============================================================
+           Post Footer
+        ============================================================ */
         .post-footer {
             margin-top: 3.5rem;
             padding-top: 2rem;
             border-top: 1px solid var(--border-subtle);
         }
 
-        .post-footer-tags {
+        .post-tags {
             display: flex;
             flex-wrap: wrap;
-            gap: 0.6rem;
+            gap: 0.5rem;
             margin-bottom: 2rem;
         }
 
-        .post-footer-tags .tag {
+        .post-tags .tag {
             background: rgba(139, 92, 246, 0.08);
             color: var(--accent-purple);
-            padding: 0.35rem 1rem;
+            padding: 0.3rem 0.95rem;
             border-radius: 999px;
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             font-weight: 500;
             border: 1px solid rgba(139, 92, 246, 0.2);
             transition: all 0.2s ease;
         }
 
-        .post-footer-tags .tag:hover {
+        .post-tags .tag:hover {
             background: rgba(139, 92, 246, 0.15);
             border-color: var(--accent-purple);
         }
 
-        /* Share buttons */
+        /* Share section */
         .share-section {
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: 0.75rem;
             flex-wrap: wrap;
+            margin-bottom: 2rem;
         }
 
         .share-label {
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             color: var(--text-muted);
             font-weight: 500;
         }
@@ -397,127 +702,114 @@
             gap: 0.4rem;
             padding: 0.5rem 1.2rem;
             border-radius: 999px;
-            font-size: 0.82rem;
+            font-size: 0.8rem;
             font-weight: 500;
             text-decoration: none;
             transition: all 0.25s ease;
             cursor: pointer;
             border: none;
+            font-family: var(--font-primary);
         }
 
         .share-btn-x {
-            background: rgba(255, 255, 255, 0.06);
+            background: rgba(255,255,255,0.05);
             color: var(--text-secondary);
             border: 1px solid var(--border-subtle);
         }
 
         .share-btn-x:hover {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255,255,255,0.1);
             color: var(--text-primary);
             transform: translateY(-2px);
-            text-shadow: none;
         }
 
         .share-btn-copy {
-            background: rgba(0, 212, 255, 0.08);
+            background: rgba(0, 212, 255, 0.07);
             color: var(--accent-cyan);
             border: 1px solid rgba(0, 212, 255, 0.2);
         }
 
         .share-btn-copy:hover {
-            background: rgba(0, 212, 255, 0.15);
+            background: rgba(0, 212, 255, 0.14);
             transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.2);
-            text-shadow: none;
+            box-shadow: 0 4px 16px rgba(0, 212, 255, 0.18);
         }
 
-        /* ===== Back to Blog Button ===== */
+        /* Back to blog button */
         .back-to-blog {
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            margin-top: 2.5rem;
-            padding: 0.8rem 2rem;
-            background: rgba(255, 255, 255, 0.04);
+            padding: 0.75rem 1.75rem;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.04);
             color: var(--text-secondary);
             border: 1px solid var(--border-subtle);
-            border-radius: var(--radius-md);
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             font-weight: 500;
-            text-decoration: none;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.25s ease;
         }
 
         .back-to-blog:hover {
             background: rgba(0, 212, 255, 0.08);
-            border-color: var(--border-glow);
             color: var(--accent-cyan);
+            border-color: rgba(0, 212, 255, 0.3);
             transform: translateX(-4px);
-            text-shadow: none;
-            box-shadow: var(--shadow-glow);
         }
 
-        .back-to-blog svg {
-            transition: transform 0.3s ease;
-        }
-
-        .back-to-blog:hover svg {
-            transform: translateX(-3px);
-        }
-
-        /* ===== Sidebar ===== */
+        /* ============================================================
+           Sidebar
+        ============================================================ */
         .post-sidebar {
             position: sticky;
-            top: 100px;
+            top: 88px;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
         }
 
         .sidebar-card {
-            background: var(--bg-card);
+            background: rgba(15, 23, 42, 0.7);
             border: 1px solid var(--border-subtle);
-            border-radius: var(--radius-lg);
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            border-radius: var(--radius-md);
+            padding: 1.4rem 1.3rem;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             transition: border-color 0.3s ease;
         }
 
-        .sidebar-card:hover {
-            border-color: var(--border-glow);
-        }
+        .sidebar-card:hover { border-color: rgba(0, 212, 255, 0.15); }
 
         .sidebar-card-title {
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             font-weight: 700;
             letter-spacing: 0.1em;
             text-transform: uppercase;
-            color: var(--accent-cyan);
+            background: var(--gradient-text);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             margin-bottom: 1rem;
-            padding-bottom: 0.6rem;
+            padding-bottom: 0.7rem;
             border-bottom: 1px solid var(--border-subtle);
         }
 
-        /* Table of Contents */
+        /* TOC */
         #toc-list {
             list-style: none;
             padding: 0;
             margin: 0;
         }
 
-        #toc-list li {
-            margin-bottom: 0;
-        }
-
         #toc-list a {
             display: block;
-            padding: 0.45rem 0.75rem;
-            font-size: 0.85rem;
+            padding: 0.42rem 0.7rem;
+            font-size: 0.83rem;
             color: var(--text-muted);
-            text-decoration: none;
             border-radius: var(--radius-sm);
-            transition: all 0.2s ease;
             border-left: 2px solid transparent;
-            line-height: 1.4;
+            line-height: 1.45;
+            transition: all 0.2s ease;
         }
 
         #toc-list a:hover,
@@ -525,114 +817,72 @@
             color: var(--accent-cyan);
             background: rgba(0, 212, 255, 0.05);
             border-left-color: var(--accent-cyan);
-            text-shadow: none;
         }
 
-        #toc-list li.toc-h3 a {
-            padding-left: 1.5rem;
-            font-size: 0.8rem;
-        }
+        #toc-list .toc-h3 a { padding-left: 1.5rem; font-size: 0.78rem; }
+        .toc-empty { font-size: 0.82rem; color: var(--text-muted); font-style: italic; padding: 0.4rem 0.7rem; }
 
-        .toc-empty {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            font-style: italic;
-        }
-
-        /* Profile card in sidebar */
-        .sidebar-profile {
-            text-align: center;
-        }
-
+        /* Profile card */
         .sidebar-avatar {
-            width: 72px;
-            height: 72px;
+            width: 64px; height: 64px;
             border-radius: 50%;
             background: var(--gradient-cta);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 0.8rem;
-            font-size: 1.8rem;
+            margin: 0 auto 0.75rem;
+            font-size: 1.6rem;
         }
 
+        .sidebar-profile { text-align: center; }
+
         .sidebar-profile-name {
-            font-size: 0.95rem;
+            font-size: 0.92rem;
             font-weight: 600;
             color: var(--text-primary);
             margin-bottom: 0.4rem;
         }
 
         .sidebar-profile-bio {
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             color: var(--text-muted);
-            line-height: 1.5;
+            line-height: 1.55;
         }
 
-        /* ===== Loading / Error states ===== */
-        .loading-state {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 5rem 2rem;
-            gap: 1rem;
-        }
-
-        .loading-spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid var(--border-subtle);
-            border-top-color: var(--accent-cyan);
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .loading-state p {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-        }
-
-        .error-state {
+        /* Nav CTA button */
+        .sidebar-cta {
+            display: block;
+            width: 100%;
             text-align: center;
-            padding: 5rem 2rem;
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-md);
+            background: var(--gradient-primary);
+            color: #fff;
+            font-size: 0.88rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            box-shadow: 0 4px 16px rgba(0, 212, 255, 0.2);
         }
 
-        .error-state .error-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            opacity: 0.5;
+        .sidebar-cta:hover {
+            opacity: 0.88;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 22px rgba(0, 212, 255, 0.28);
         }
 
-        .error-state h2 {
-            font-size: 1.4rem;
-            margin-bottom: 0.8rem;
-            background: none;
-            -webkit-text-fill-color: var(--text-secondary);
-            color: var(--text-secondary);
-        }
-
-        .error-state p {
-            color: var(--text-muted);
-        }
-
-        /* ===== Footer ===== */
+        /* ============================================================
+           Footer
+        ============================================================ */
         footer {
-            background: rgba(10, 10, 10, 0.9);
+            background: rgba(8, 8, 14, 0.95);
             color: var(--text-secondary);
-            padding: 4rem 2rem 3rem;
-            text-align: center;
+            padding: 4rem 2rem 2.5rem;
             border-top: 1px solid var(--border-subtle);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
         }
 
-        .footer-content {
-            max-width: 1200px;
+        .footer-inner {
+            max-width: 1180px;
             margin: 0 auto;
         }
 
@@ -640,92 +890,93 @@
             display: grid;
             grid-template-columns: 2fr 1fr 1fr;
             gap: 3rem;
-            text-align: left;
             margin-bottom: 3rem;
         }
 
         .footer-brand .logo {
+            margin-bottom: 0.9rem;
             display: inline-block;
-            margin-bottom: 0.8rem;
         }
 
         .footer-brand p {
-            font-size: 0.9rem;
+            font-size: 0.86rem;
             color: var(--text-muted);
-            line-height: 1.6;
+            line-height: 1.65;
         }
 
-        .footer-nav h4 {
-            font-size: 0.8rem;
+        .footer-col-title {
+            font-size: 0.75rem;
             font-weight: 700;
             letter-spacing: 0.1em;
             text-transform: uppercase;
             color: var(--accent-cyan);
             margin-bottom: 1rem;
-            background: none;
-            -webkit-text-fill-color: var(--accent-cyan);
         }
 
-        .footer-nav ul {
-            list-style: none;
-            padding: 0;
-        }
+        .footer-nav-list { list-style: none; }
 
-        .footer-nav li {
-            margin-bottom: 0.6rem;
-        }
+        .footer-nav-list li { margin-bottom: 0.55rem; }
 
-        .footer-nav a {
+        .footer-nav-list a {
             color: var(--text-muted);
-            font-size: 0.9rem;
+            font-size: 0.86rem;
             transition: color 0.2s ease;
         }
 
-        .footer-nav a:hover {
+        .footer-nav-list a:hover { color: var(--accent-cyan); }
+
+        .footer-social {
+            display: flex;
+            gap: 0.7rem;
+            margin-top: 0.5rem;
+        }
+
+        .footer-social a {
+            width: 38px; height: 38px;
+            border-radius: var(--radius-sm);
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--border-subtle);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            font-size: 1rem;
+            transition: all 0.25s ease;
+        }
+
+        .footer-social a:hover {
             color: var(--accent-cyan);
-            text-shadow: none;
+            background: rgba(0,212,255,0.08);
+            border-color: rgba(0,212,255,0.3);
+            transform: translateY(-2px);
         }
 
         .footer-bottom {
             padding-top: 2rem;
             border-top: 1px solid var(--border-subtle);
-            font-size: 0.85rem;
+            text-align: center;
+            font-size: 0.82rem;
             color: var(--text-muted);
         }
 
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
+        /* ============================================================
+           Animations
+        ============================================================ */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(18px); }
+            to   { opacity: 1; transform: translateY(0); }
         }
 
-        .social-links a {
-            color: var(--text-secondary);
-            font-size: 1.2rem;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            padding: 0.6rem;
-            border-radius: var(--radius-md);
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--border-subtle);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 42px;
-            height: 42px;
-        }
+        .animate-in { animation: fadeInUp 0.5s cubic-bezier(0.4,0,0.2,1) both; }
+        .anim-d1 { animation-delay: 0.08s; }
+        .anim-d2 { animation-delay: 0.16s; }
+        .anim-d3 { animation-delay: 0.24s; }
+        .anim-d4 { animation-delay: 0.32s; }
 
-        .social-links a:hover {
-            color: var(--accent-cyan);
-            background: rgba(0, 212, 255, 0.1);
-            border-color: var(--accent-cyan);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-glow);
-            text-shadow: none;
-        }
-
-        /* ===== Responsive ===== */
-        @media (max-width: 900px) {
+        /* ============================================================
+           Responsive
+        ============================================================ */
+        @media (max-width: 960px) {
             .post-layout {
                 grid-template-columns: 1fr;
                 padding: 2.5rem 1.5rem 4rem;
@@ -738,250 +989,196 @@
                 gap: 1rem;
             }
 
-            .footer-grid {
-                grid-template-columns: 1fr 1fr;
-                gap: 2rem;
-            }
-
-            .footer-brand {
-                grid-column: 1 / -1;
-            }
+            .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+            .footer-brand { grid-column: 1 / -1; }
         }
 
-        @media (max-width: 768px) {
-            .post-hero {
-                padding: 4rem 1.5rem 3rem;
-            }
+        @media (max-width: 640px) {
+            .post-hero { padding: 4rem 1.25rem 3rem; }
 
-            #post-title {
-                font-size: 1.7rem;
-            }
+            #post-title { font-size: 1.65rem; }
 
-            .post-content {
-                font-size: 1rem;
-            }
+            .post-sidebar { grid-template-columns: 1fr; }
 
-            .post-sidebar {
-                grid-template-columns: 1fr;
-            }
+            .share-section { flex-direction: column; align-items: flex-start; }
 
-            .footer-grid {
-                grid-template-columns: 1fr;
-            }
+            .footer-grid { grid-template-columns: 1fr; }
 
-            .share-section {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-        }
+            header nav { padding: 0 1.25rem; }
 
-        /* ===== Animations ===== */
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
-
-        .animate-in {
-            animation: fadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) both;
-        }
-
-        .animate-in-delay-1 { animation-delay: 0.1s; }
-        .animate-in-delay-2 { animation-delay: 0.2s; }
-        .animate-in-delay-3 { animation-delay: 0.3s; }
-
-        /* ===== Copy button for code blocks ===== */
-        .code-wrapper {
-            position: relative;
-        }
-
-        .code-copy-btn {
-            position: absolute;
-            top: 0.6rem;
-            right: 0.6rem;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid var(--border-subtle);
-            color: var(--text-muted);
-            padding: 0.3rem 0.7rem;
-            border-radius: var(--radius-sm);
-            font-size: 0.75rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .code-copy-btn:hover {
-            background: rgba(0, 212, 255, 0.1);
-            border-color: var(--accent-cyan);
-            color: var(--accent-cyan);
-        }
-
-        .code-copy-btn.copied {
-            background: rgba(0, 212, 255, 0.15);
-            border-color: var(--accent-cyan);
-            color: var(--accent-cyan);
-        }
-
-        /* Glow line accent */
-        .glow-line {
-            height: 1px;
-            background: var(--gradient-primary);
-            opacity: 0.3;
-            margin: 0;
+            .post-layout { padding: 2rem 1.25rem 3rem; }
         }
     </style>
 </head>
 <body>
 
     <!-- Reading Progress Bar -->
-    <div id="reading-progress"></div>
+    <div id="reading-progress" role="progressbar" aria-label="読了進捗"></div>
 
     <!-- ===== Header ===== -->
-    <header>
+    <header id="site-header">
         <nav>
-            <a href="index.html" class="logo">🎓 CodeRoute 90</a>
-            <ul class="nav-links">
+            <a href="index.html" class="logo">
+                <i class="fas fa-graduation-cap" aria-hidden="true"></i> CodeRoute 90
+            </a>
+            <ul class="nav-links" id="navLinks">
                 <li><a href="index.html">ホーム</a></li>
                 <li><a href="about.html">CodeRoute 90について</a></li>
                 <li><a href="profile.html">about me</a></li>
                 <li><a href="blog.html">ブログ</a></li>
                 <li><a href="contact.html">お問い合わせ</a></li>
             </ul>
+            <button class="hamburger" id="hamburgerBtn"
+                    aria-label="メニューを開く"
+                    aria-expanded="false"
+                    aria-controls="navLinks">
+                <span></span><span></span><span></span>
+            </button>
         </nav>
     </header>
+    <div class="nav-overlay" id="navOverlay" aria-hidden="true"></div>
 
     <!-- ===== Post Page ===== -->
     <div class="post-page">
 
         <!-- Post Hero -->
-        <div class="post-hero">
+        <section class="post-hero">
             <div class="post-hero-inner">
+
                 <!-- Breadcrumb -->
-                <nav class="breadcrumb animate-in">
-                    <a href="index.html">🏠 ホーム</a>
-                    <span>›</span>
-                    <a href="blog.html">ブログ</a>
-                    <span>›</span>
+                <nav class="post-breadcrumb animate-in" aria-label="パンくずリスト">
+                    <a href="index.html"><i class="fas fa-home" aria-hidden="true"></i> ホーム</a>
+                    <span class="sep"><i class="fas fa-chevron-right" aria-hidden="true"></i></span>
+                    <a href="blog.html"><i class="fas fa-blog" aria-hidden="true"></i> ブログ</a>
+                    <span class="sep"><i class="fas fa-chevron-right" aria-hidden="true"></i></span>
                     <span class="current" id="breadcrumb-title">記事を読み込み中...</span>
                 </nav>
 
                 <!-- Category badge -->
-                <div id="post-category-badge" class="post-category animate-in animate-in-delay-1" style="display:none;">
-                    記事
-                </div>
+                <div id="post-category-badge" class="post-category-badge animate-in anim-d1"></div>
 
                 <!-- Title -->
-                <h1 id="post-title" class="loading-text animate-in animate-in-delay-1">読み込み中...</h1>
+                <h1 id="post-title" class="loading-text animate-in anim-d1">
+                    読み込み中...
+                </h1>
 
                 <!-- Meta -->
-                <div class="post-meta animate-in animate-in-delay-2" id="post-meta-bar">
+                <div class="post-meta-bar animate-in anim-d2">
                     <div class="post-meta-item">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
                             <line x1="16" y1="2" x2="16" y2="6"/>
-                            <line x1="8" y1="2" x2="8" y2="6"/>
-                            <line x1="3" y1="10" x2="21" y2="10"/>
+                            <line x1="8"  y1="2" x2="8"  y2="6"/>
+                            <line x1="3"  y1="10" x2="21" y2="10"/>
                         </svg>
                         <span id="post-date">--</span>
                     </div>
                     <div class="post-meta-divider"></div>
                     <div class="post-meta-item">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                            <circle cx="12" cy="12" r="3"/>
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12 6 12 12 16 14"/>
                         </svg>
                         <span id="read-time">-- 分で読めます</span>
                     </div>
                 </div>
+
             </div>
-        </div>
+        </section>
 
         <div class="glow-line"></div>
 
-        <!-- ===== Post Body ===== -->
+        <!-- ===== Article Body ===== -->
         <div class="post-layout">
 
             <!-- Main Article -->
-            <article class="post-article animate-in animate-in-delay-2">
+            <article class="post-article animate-in anim-d2">
 
-                <!-- Loading / Error states -->
+                <!-- Loading state -->
                 <div id="loading-state" class="loading-state">
                     <div class="loading-spinner"></div>
                     <p>記事を読み込んでいます...</p>
                 </div>
 
+                <!-- Error state -->
                 <div id="error-state" class="error-state" style="display:none;">
                     <div class="error-icon">😔</div>
                     <h2>記事が見つかりません</h2>
                     <p>お探しの記事は存在しないか、削除された可能性があります。</p>
-                    <a href="blog.html" class="back-to-blog" style="display:inline-flex; margin: 1.5rem auto 0;">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="15 18 9 12 15 6"/>
-                        </svg>
+                    <a href="blog.html" class="back-btn">
+                        <i class="fas fa-arrow-left" aria-hidden="true"></i>
                         記事一覧に戻る
                     </a>
                 </div>
 
-                <!-- Article Content (hidden until loaded) -->
+                <!-- Article content (hidden until loaded) -->
                 <div id="article-content-wrapper" style="display:none;">
+
                     <div id="post-content" class="post-content"></div>
+    
+    <div class="my-ad-container">
+        </div>
+
+    <div class="post-footer">
 
                     <!-- Post Footer -->
                     <div class="post-footer">
-                        <div class="post-footer-tags" id="post-tags"></div>
 
+                        <!-- Tags -->
+                        <div class="post-tags" id="post-tags"></div>
+
+                        <!-- Share -->
                         <div class="share-section">
-                            <span class="share-label">シェアする：</span>
-                            <a id="share-x" href="#" target="_blank" rel="noopener" class="share-btn share-btn-x">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                            <span class="share-label"><i class="fas fa-share-alt" aria-hidden="true"></i> シェアする：</span>
+                            <a id="share-x" href="#" target="_blank" rel="noopener noreferrer" class="share-btn share-btn-x">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                                     <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
                                 </svg>
                                 X でシェア
                             </a>
-                            <button id="copy-link-btn" class="share-btn share-btn-copy">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
-                                    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
-                                </svg>
+                            <button id="copy-link-btn" class="share-btn share-btn-copy" type="button">
+                                <i class="fas fa-link" aria-hidden="true"></i>
                                 URLをコピー
                             </button>
                         </div>
 
+                        <!-- Back link -->
                         <a href="blog.html" class="back-to-blog">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="15 18 9 12 15 6"/>
-                            </svg>
+                            <i class="fas fa-arrow-left" aria-hidden="true"></i>
                             記事一覧に戻る
                         </a>
+
                     </div>
                 </div>
 
             </article>
 
             <!-- Sidebar -->
-            <aside class="post-sidebar animate-in animate-in-delay-3">
+            <aside class="post-sidebar animate-in anim-d3">
 
                 <!-- Table of Contents -->
-                <div class="sidebar-card" id="toc-card">
+                <div class="sidebar-card">
                     <div class="sidebar-card-title">📋 目次</div>
                     <ul id="toc-list">
                         <li class="toc-empty">読み込み中...</li>
                     </ul>
                 </div>
 
-                <!-- Profile Card -->
+                <!-- Author Profile -->
                 <div class="sidebar-card">
-                    <div class="sidebar-card-title">✍️ 著者</div>
+                    <div class="sidebar-card-title">✍️ 著者について</div>
                     <div class="sidebar-profile">
-                        <div class="sidebar-avatar">🎓</div>
+                        <div class="sidebar-avatar" aria-hidden="true">🎓</div>
                         <div class="sidebar-profile-name">CodeRoute 90</div>
                         <div class="sidebar-profile-bio">40歳・文系営業職から90日でエンジニア転職。最短ルートを事実ベースで公開するメディア。</div>
                     </div>
                 </div>
 
-                <!-- Back to blog -->
+                <!-- Navigation CTA -->
                 <div class="sidebar-card" style="text-align:center;">
                     <div class="sidebar-card-title">🔗 ナビゲーション</div>
-                    <a href="blog.html" class="cta-button" style="display:inline-block; font-size:0.9rem; padding:0.75rem 1.5rem;">
-                        記事一覧を見る
+                    <a href="blog.html" class="sidebar-cta">
+                        <i class="fas fa-list" aria-hidden="true"></i> 記事一覧を見る
                     </a>
                 </div>
 
@@ -991,31 +1188,38 @@
 
     <!-- ===== Footer ===== -->
     <footer>
-        <div class="footer-content">
+        <div class="footer-inner">
             <div class="footer-grid">
+
                 <div class="footer-brand">
-                    <a href="index.html" class="logo">🎓 CodeRoute 90</a>
+                    <a href="index.html" class="logo">
+                        <i class="fas fa-graduation-cap" aria-hidden="true"></i> CodeRoute 90
+                    </a>
                     <p>40歳・文系から90日でエンジニア転職した運営者が、<br>再現可能な最短ルートを事実ベースで公開するメディアです。</p>
                 </div>
-                <div class="footer-nav">
-                    <h4>メニュー</h4>
-                    <ul>
-                        <li><a href="index.html">🏠 ホーム</a></li>
-                        <li><a href="about.html">🙋 about me</a></li>
-                        <li><a href="blog.html">📝 ブログ</a></li>
-                        <li><a href="contact.html">✉️ お問い合わせ</a></li>
+
+                <div>
+                    <div class="footer-col-title">メニュー</div>
+                    <ul class="footer-nav-list">
+                        <li><a href="index.html"><i class="fas fa-home" aria-hidden="true"></i> ホーム</a></li>
+                        <li><a href="about.html"><i class="fas fa-info-circle" aria-hidden="true"></i> CodeRoute 90について</a></li>
+                        <li><a href="profile.html"><i class="fas fa-user" aria-hidden="true"></i> about me</a></li>
+                        <li><a href="blog.html"><i class="fas fa-blog" aria-hidden="true"></i> ブログ</a></li>
+                        <li><a href="contact.html"><i class="fas fa-envelope" aria-hidden="true"></i> お問い合わせ</a></li>
                     </ul>
                 </div>
-                <div class="footer-nav">
-                    <h4>SNS</h4>
-                    <div class="social-links" style="justify-content:flex-start; margin-bottom:0;">
-                        <a href="#" title="X (Twitter)" aria-label="X">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+
+                <div>
+                    <div class="footer-col-title">SNS</div>
+                    <div class="footer-social">
+                        <a href="#" title="X (Twitter)" aria-label="X (Twitter)">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                                 <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
                             </svg>
                         </a>
                     </div>
                 </div>
+
             </div>
             <div class="footer-bottom">
                 <p>© 2026 CodeRoute 90 — 最短距離で「未経験」を脱却する攻略ログ</p>
@@ -1024,225 +1228,378 @@
     </footer>
 
     <!-- ===== Scripts ===== -->
-    <script src="header-scroll.js"></script>
+    <script src="assets/js/header-scroll.js" defer></script>
 
     <script>
-        // ===== Reading Progress Bar =====
-        function updateReadingProgress() {
-            const el = document.getElementById('reading-progress');
-            if (!el) return;
-            const scrollTop = window.scrollY || document.documentElement.scrollTop;
-            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-            const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
-            el.style.width = Math.min(progress, 100) + '%';
-        }
-        window.addEventListener('scroll', updateReadingProgress, { passive: true });
+    /* ============================================================
+       Reading Progress Bar
+    ============================================================ */
+    function updateReadingProgress() {
+        const el = document.getElementById('reading-progress');
+        if (!el) return;
+        const scrollTop = window.scrollY || document.documentElement.scrollTop;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        el.style.width = (docHeight > 0 ? Math.min((scrollTop / docHeight) * 100, 100) : 0) + '%';
+    }
+    window.addEventListener('scroll', updateReadingProgress, { passive: true });
 
-        // ===== Estimated read time =====
-        function estimateReadTime(text) {
-            const words = text.trim().split(/\s+/).length;
-            const minutes = Math.max(1, Math.round(words / 400));
-            return minutes;
+    /* ============================================================
+       Header: scroll shadow
+    ============================================================ */
+    (function () {
+        var header = document.getElementById('site-header');
+        if (!header) return;
+        window.addEventListener('scroll', function () {
+            header.classList.toggle('scrolled', window.scrollY > 20);
+        }, { passive: true });
+    })();
+
+    /* ============================================================
+       Navigation: Hamburger + Active Link
+    ============================================================ */
+    (function () {
+        'use strict';
+        var btn     = document.getElementById('hamburgerBtn');
+        var navList = document.getElementById('navLinks');
+        var overlay = document.getElementById('navOverlay');
+
+        function openMenu() {
+            if (!navList || !overlay || !btn) return;
+            navList.classList.add('open');
+            overlay.classList.add('active');
+            btn.classList.add('open');
+            btn.setAttribute('aria-expanded', 'true');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeMenu() {
+            if (!navList || !overlay || !btn) return;
+            navList.classList.remove('open');
+            overlay.classList.remove('active');
+            btn.classList.remove('open');
+            btn.setAttribute('aria-expanded', 'false');
+            document.body.style.overflow = '';
         }
 
-        // ===== Build Table of Contents =====
-        function buildTOC(contentEl) {
-            const tocList = document.getElementById('toc-list');
-            if (!tocList) return;
-            const headings = contentEl.querySelectorAll('h2, h3');
-            if (headings.length === 0) {
-                tocList.innerHTML = '<li class="toc-empty">目次なし</li>';
-                return;
-            }
-            tocList.innerHTML = '';
-            headings.forEach((h, i) => {
-                if (!h.id) h.id = 'heading-' + i;
-                const li = document.createElement('li');
-                li.className = h.tagName === 'H3' ? 'toc-h3' : 'toc-h2';
-                const a = document.createElement('a');
-                a.href = '#' + h.id;
-                a.textContent = h.textContent;
-                a.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    h.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                });
-                li.appendChild(a);
-                tocList.appendChild(li);
+        if (btn)     btn.addEventListener('click', function () { navList.classList.contains('open') ? closeMenu() : openMenu(); });
+        if (overlay) overlay.addEventListener('click', closeMenu);
+        document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeMenu(); });
+
+        if (navList) {
+            navList.querySelectorAll('a').forEach(function (a) {
+                a.addEventListener('click', closeMenu);
             });
 
-            // Active TOC item on scroll
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    const id = entry.target.id;
-                    const link = tocList.querySelector(`a[href="#${id}"]`);
-                    if (link) {
-                        if (entry.isIntersecting) {
-                            tocList.querySelectorAll('a').forEach(a => a.classList.remove('active'));
-                            link.classList.add('active');
-                        }
-                    }
-                });
-            }, { rootMargin: '-80px 0px -60% 0px' });
+            /* Active highlight */
+            var currentFile = window.location.pathname.split('/').pop() || 'index.html';
+            navList.querySelectorAll('a').forEach(function (a) {
+                var href = a.getAttribute('href') || '';
+                var linkFile = href.split('/').pop().split('?')[0].split('#')[0];
+                if (linkFile === currentFile || (currentFile === 'index.html' && (linkFile === '' || linkFile === 'index.html'))) {
+                    a.classList.add('nav-active');
+                }
+            });
+        }
+    })();
 
-            headings.forEach(h => observer.observe(h));
+    /* ============================================================
+       Estimated Read Time
+    ============================================================ */
+    function estimateReadTime(text) {
+        var words   = (text || '').trim().split(/\s+/).length;
+        var minutes = Math.max(1, Math.round(words / 400));
+        return minutes;
+    }
+
+    /* ============================================================
+       Table of Contents Builder
+    ============================================================ */
+    function buildTOC(contentEl) {
+        var tocList = document.getElementById('toc-list');
+        if (!tocList) return;
+        var headings = contentEl.querySelectorAll('h2, h3');
+
+        if (headings.length === 0) {
+            tocList.innerHTML = '<li class="toc-empty">目次なし</li>';
+            return;
         }
 
-        // ===== Add copy buttons to code blocks =====
-        function addCodeCopyButtons(contentEl) {
-            const pres = contentEl.querySelectorAll('pre');
-            pres.forEach(pre => {
-                const wrapper = document.createElement('div');
-                wrapper.className = 'code-wrapper';
-                pre.parentNode.insertBefore(wrapper, pre);
-                wrapper.appendChild(pre);
+        tocList.innerHTML = '';
+        headings.forEach(function (h, i) {
+            if (!h.id) h.id = 'heading-' + i;
+            var li = document.createElement('li');
+            li.className = h.tagName === 'H3' ? 'toc-h3' : '';
+            var a = document.createElement('a');
+            a.href = '#' + h.id;
+            a.textContent = h.textContent;
+            a.addEventListener('click', function (e) {
+                e.preventDefault();
+                h.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+            li.appendChild(a);
+            tocList.appendChild(li);
+        });
 
-                const btn = document.createElement('button');
-                btn.className = 'code-copy-btn';
-                btn.textContent = 'コピー';
-                btn.addEventListener('click', () => {
-                    const code = pre.querySelector('code');
-                    const text = code ? code.textContent : pre.textContent;
-                    navigator.clipboard.writeText(text).then(() => {
-                        btn.textContent = '✓ コピー済み';
-                        btn.classList.add('copied');
-                        setTimeout(() => {
-                            btn.textContent = 'コピー';
-                            btn.classList.remove('copied');
-                        }, 2000);
+        var observer = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                var link = tocList.querySelector('a[href="#' + entry.target.id + '"]');
+                if (link && entry.isIntersecting) {
+                    tocList.querySelectorAll('a').forEach(function (a) { a.classList.remove('active'); });
+                    link.classList.add('active');
+                }
+            });
+        }, { rootMargin: '-80px 0px -60% 0px' });
+
+        headings.forEach(function (h) { observer.observe(h); });
+    }
+
+    /* ============================================================
+       Code Block Copy Buttons
+    ============================================================ */
+    function addCodeCopyButtons(contentEl) {
+        contentEl.querySelectorAll('pre').forEach(function (pre) {
+            var wrapper = document.createElement('div');
+            wrapper.className = 'code-wrapper';
+            pre.parentNode.insertBefore(wrapper, pre);
+            wrapper.appendChild(pre);
+
+            var btn = document.createElement('button');
+            btn.className = 'code-copy-btn';
+            btn.type = 'button';
+            btn.textContent = 'コピー';
+            btn.addEventListener('click', function () {
+                var code = pre.querySelector('code');
+                var text = code ? code.textContent : pre.textContent;
+                navigator.clipboard.writeText(text).then(function () {
+                    btn.textContent = '✓ コピー済み';
+                    btn.classList.add('copied');
+                    setTimeout(function () {
+                        btn.textContent = 'コピー';
+                        btn.classList.remove('copied');
+                    }, 2000);
+                }).catch(function (err) {
+                    console.warn('[CodeRoute90] clipboard copy failed:', err);
+                });
+            });
+            wrapper.appendChild(btn);
+        });
+    }
+
+    /* ============================================================
+       Helper: Execute <script> tags injected via innerHTML
+       (Browsers do not execute scripts when inserted via innerHTML)
+    ============================================================ */
+    function executeInjectedScripts(container) {
+        if (!container) return;
+
+        container.querySelectorAll('script').forEach(function (oldScript) {
+            var newScript = document.createElement('script');
+
+            // preserve attributes (e.g. src, async, type)
+            Array.from(oldScript.attributes).forEach(function (attr) {
+                newScript.setAttribute(attr.name, attr.value);
+            });
+
+            // preserve inline script content
+            if (oldScript.textContent) {
+                newScript.textContent = oldScript.textContent;
+            }
+
+            oldScript.parentNode.replaceChild(newScript, oldScript);
+        });
+    }
+
+    /* ============================================================
+       Main: Fetch & Render Post
+    ============================================================ */
+    async function fetchPost() {
+        var urlParams    = new URLSearchParams(window.location.search);
+        var postId       = urlParams.get('id');
+        var API_URL      = 'https://coderoute90-api.coderoute90.workers.dev';
+
+        var loadingState   = document.getElementById('loading-state');
+        var errorState     = document.getElementById('error-state');
+        var contentWrapper = document.getElementById('article-content-wrapper');
+        var titleEl        = document.getElementById('post-title');
+
+        /* DOM guard */
+        if (!loadingState || !errorState || !contentWrapper || !titleEl) {
+            console.error('[CodeRoute90] fetchPost: 必要なDOM要素が見つかりません。');
+            return;
+        }
+
+        /* No postId */
+        if (!postId) {
+            console.warn('[CodeRoute90] fetchPost: URLパラメータ ?id が見つかりません。');
+            loadingState.style.display = 'none';
+            errorState.style.display   = 'block';
+            titleEl.textContent = '記事が見つかりません';
+            titleEl.classList.remove('loading-text');
+            return;
+        }
+
+        console.log('[CodeRoute90] fetchPost: 記事取得開始 postId =', postId);
+
+        try {
+            /* --- 1st attempt: individual endpoint --- */
+            console.log('[CodeRoute90] 一次リクエスト:', API_URL + '/' + postId);
+            var res = await fetch(API_URL + '/' + postId, {
+                method: 'GET',
+                mode:   'cors',
+                headers: { 'Accept': 'application/json' }
+            });
+
+            var post = null;
+
+            if (res.ok) {
+                var raw = await res.json();
+                console.log('[CodeRoute90] 一次レスポンス:', raw);
+                if (raw && typeof raw === 'object' && raw.id) {
+                    post = raw;
+                } else {
+                    console.warn('[CodeRoute90] 一次レスポンス構造が想定外 → フォールバックへ', raw);
+                }
+            } else {
+                console.warn('[CodeRoute90] 一次リクエスト失敗 HTTP', res.status, res.statusText);
+            }
+            
+        
+
+            /* --- Fallback: list endpoint --- */
+            if (!post) {
+                console.log('[CodeRoute90] フォールバック: 一覧取得');
+                var listRes = await fetch(API_URL + '?limit=100&orders=-publishedAt', {
+                    method: 'GET',
+                    mode:   'cors',
+                    headers: { 'Accept': 'application/json' }
+                });
+
+                if (!listRes.ok) {
+                    throw new Error('フォールバック一覧取得失敗: HTTP ' + listRes.status + ' ' + listRes.statusText);
+                }
+
+                var listData = await listRes.json();
+                console.log('[CodeRoute90] 一覧件数:', listData && listData.contents && listData.contents.length);
+
+                if (listData && Array.isArray(listData.contents)) {
+                    post = listData.contents.find(function (item) { return item.id === postId; }) || null;
+                    if (!post) console.warn('[CodeRoute90] フォールバックでもID一致なし postId =', postId);
+                } else {
+                    throw new Error('フォールバック一覧: contents 配列が見つかりません');
+                }
+            }
+
+            /* --- Render --- */
+            if (post) {
+                console.log('[CodeRoute90] 記事取得成功:', post);
+
+                /* Safe title */
+                var postTitle = (post.title && typeof post.title === 'string') ? post.title : '(タイトルなし)';
+
+                /* Title */
+                titleEl.textContent = postTitle;
+                titleEl.classList.remove('loading-text');
+                document.title = postTitle + ' - CodeRoute 90';
+
+                /* Breadcrumb */
+                var bcTitle = document.getElementById('breadcrumb-title');
+                if (bcTitle) {
+                    bcTitle.textContent = (postTitle.length > 30) ? postTitle.slice(0, 30) + '…' : postTitle;
+                }
+
+                /* Date */
+                var dateEl = document.getElementById('post-date');
+                if (dateEl && post.publishedAt) {
+                    try {
+                        var d = new Date(post.publishedAt);
+                        dateEl.textContent = d.toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' });
+                    } catch (e) {
+                        console.warn('[CodeRoute90] 日付変換エラー:', e);
+                    }
+                }
+
+                /* Category badge */
+                var badge = document.getElementById('post-category-badge');
+                if (badge && post.category) {
+                    badge.textContent = post.category.name || post.category;
+                    badge.style.display = 'inline-block';
+                }
+
+                /* Tags */
+                var tagsEl = document.getElementById('post-tags');
+                if (tagsEl && post.tags && Array.isArray(post.tags) && post.tags.length > 0) {
+                    post.tags.forEach(function (tag) {
+                        var span = document.createElement('span');
+                        span.className = 'tag';
+                        span.textContent = '#' + (tag.name || tag);
+                        tagsEl.appendChild(span);
                     });
-                });
-                wrapper.appendChild(btn);
-            });
-        }
-
-        // ===== Main: Fetch & Render Post =====
-        async function fetchPost() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const postId = urlParams.get('id');
-            const API_URL = "https://coderoute90-api.coderoute90.workers.dev";
-
-            const loadingState = document.getElementById('loading-state');
-            const errorState   = document.getElementById('error-state');
-            const contentWrapper = document.getElementById('article-content-wrapper');
-            const titleEl      = document.getElementById('post-title');
-
-            if (!postId) {
-                loadingState.style.display = 'none';
-                errorState.style.display   = 'block';
-                titleEl.textContent = '記事が見つかりません';
-                titleEl.classList.remove('loading-text');
-                return;
-            }
-
-            try {
-                const response = await fetch(`${API_URL}/${postId}`);
-
-                let post;
-                if (response.ok) {
-                    post = await response.json();
-                } else {
-                    // Fallback: fetch list and find by id
-                    const listRes = await fetch(API_URL);
-                    const data = await listRes.json();
-                    post = data.contents && data.contents.find(item => item.id === postId);
                 }
 
-                if (post) {
-                    // --- Update title ---
-                    titleEl.textContent = post.title;
-                    titleEl.classList.remove('loading-text');
-                    document.title = `${post.title} - CodeRoute 90`;
+                /* Content */
+                var contentEl = document.getElementById('post-content');
+                if (contentEl) {
+                    contentEl.innerHTML = post.content || '<p>本文がありません。</p>';
+                    executeInjectedScripts(contentEl);
 
-                    // --- Breadcrumb ---
-                    const bcTitle = document.getElementById('breadcrumb-title');
-                    if (bcTitle) {
-                        bcTitle.textContent = post.title.length > 30
-                            ? post.title.slice(0, 30) + '...'
-                            : post.title;
-                    }
+                    /* Read time */
+                    var rtEl = document.getElementById('read-time');
+                    if (rtEl) rtEl.textContent = '約 ' + estimateReadTime(contentEl.textContent) + ' 分で読めます';
 
-                    // --- Date ---
-                    const dateEl = document.getElementById('post-date');
-                    if (dateEl && post.publishedAt) {
-                        const d = new Date(post.publishedAt);
-                        dateEl.textContent = d.toLocaleDateString('ja-JP', {
-                            year: 'numeric', month: 'long', day: 'numeric'
-                        });
-                    }
-
-                    // --- Category badge ---
-                    if (post.category) {
-                        const badge = document.getElementById('post-category-badge');
-                        badge.textContent = post.category.name || post.category;
-                        badge.style.display = 'inline-block';
-                    }
-
-                    // --- Tags ---
-                    if (post.tags && post.tags.length > 0) {
-                        const tagsEl = document.getElementById('post-tags');
-                        post.tags.forEach(tag => {
-                            const span = document.createElement('span');
-                            span.className = 'tag';
-                            span.textContent = '#' + (tag.name || tag);
-                            tagsEl.appendChild(span);
-                        });
-                    }
-
-                    // --- Content ---
-                    const contentEl = document.getElementById('post-content');
-                    contentEl.innerHTML = post.content;
-
-                    // --- Read time ---
-                    const readTimeEl = document.getElementById('read-time');
-                    if (readTimeEl) {
-                        const mins = estimateReadTime(contentEl.textContent);
-                        readTimeEl.textContent = `約 ${mins} 分で読めます`;
-                    }
-
-                    // --- TOC ---
                     buildTOC(contentEl);
-
-                    // --- Code copy buttons ---
                     addCodeCopyButtons(contentEl);
-
-                    // --- Share buttons ---
-                    const shareX = document.getElementById('share-x');
-                    if (shareX) {
-                        const tweet = encodeURIComponent(`${post.title} | CodeRoute 90\n${window.location.href}`);
-                        shareX.href = `https://x.com/intent/tweet?text=${tweet}`;
-                    }
-
-                    const copyBtn = document.getElementById('copy-link-btn');
-                    if (copyBtn) {
-                        copyBtn.addEventListener('click', () => {
-                            navigator.clipboard.writeText(window.location.href).then(() => {
-                                copyBtn.textContent = '✓ コピー済み！';
-                                copyBtn.classList.add('copied');
-                                setTimeout(() => {
-                                    copyBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> URLをコピー`;
-                                    copyBtn.classList.remove('copied');
-                                }, 2500);
-                            });
-                        });
-                    }
-
-                    // Show content
-                    loadingState.style.display = 'none';
-                    contentWrapper.style.display = 'block';
-
-                } else {
-                    throw new Error('Post not found');
                 }
-            } catch (error) {
-                console.error('Error fetching post:', error);
+
+                /* Share X */
+                var shareX = document.getElementById('share-x');
+                if (shareX) {
+                    shareX.href = 'https://x.com/intent/tweet?text=' + encodeURIComponent(postTitle + ' | CodeRoute 90\n' + window.location.href);
+                }
+
+                /* Copy URL */
+                var copyBtn = document.getElementById('copy-link-btn');
+                if (copyBtn) {
+                    copyBtn.addEventListener('click', function () {
+                        navigator.clipboard.writeText(window.location.href).then(function () {
+                            copyBtn.innerHTML = '<i class="fas fa-check" aria-hidden="true"></i> コピー済み！';
+                            copyBtn.classList.add('copied');
+                            setTimeout(function () {
+                                copyBtn.innerHTML = '<i class="fas fa-link" aria-hidden="true"></i> URLをコピー';
+                                copyBtn.classList.remove('copied');
+                            }, 2500);
+                        }).catch(function (e) {
+                            console.warn('[CodeRoute90] clipboard copy failed:', e);
+                        });
+                    });
+                }
+
+                /* Show content */
                 loadingState.style.display = 'none';
-                errorState.style.display   = 'block';
-                titleEl.textContent = '読み込みエラー';
-                titleEl.classList.remove('loading-text');
+                contentWrapper.style.display = 'block';
+
+            } else {
+                console.error('[CodeRoute90] postId に一致する記事なし postId =', postId);
+                throw new Error('記事が見つかりません (id: ' + postId + ')');
+            }
+
+        } catch (err) {
+            console.error('[CodeRoute90] fetchPost エラー', { message: err.message, stack: err.stack, postId: postId });
+            loadingState.style.display = 'none';
+            errorState.style.display   = 'block';
+            titleEl.textContent = '読み込みエラー';
+            titleEl.classList.remove('loading-text');
+
+            /* Append detail for debugging */
+            if (!errorState.querySelector('.error-detail')) {
+                var detail = document.createElement('p');
+                detail.className = 'error-detail';
+                detail.style.cssText = 'font-size:0.76rem;color:#666;margin-top:1rem;word-break:break-all;';
+                detail.textContent = '詳細: ' + err.message;
+                errorState.appendChild(detail);
             }
         }
+    }
 
-        fetchPost();
+    fetchPost();
     </script>
 
 </body>
