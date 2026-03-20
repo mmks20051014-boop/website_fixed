@@ -1,32 +1,91 @@
-export default {
-  async fetch(request, env) {
-    // 1. microCMSからデータを取得するための設定
-    const MICROCMS_URL = "https://coderoute90.microcms.io/api/v1/blog";
-    const API_KEY = "n0P7BLqdjzGt8HJuAPeqNmYHf8Ho44i8nfG1";
+// Site core helpers
+(function () {
+    'use strict';
 
-    try {
-      const response = await fetch(MICROCMS_URL, {
-        headers: {
-          "X-MICROCMS-API-KEY": API_KEY,
-        },
-      });
+    var navState = {
+        nav: null,
+        placeholder: null,
+        originalParent: null,
+        originalNextSibling: null
+    };
 
-      if (!response.ok) {
-        return new Response(`Error: ${response.status}`, { status: response.status });
-      }
-
-      const data = await response.json();
-
-      // 2. ブラウザからのアクセスを許可（CORS設定）してデータを返す
-      return new Response(JSON.stringify(data), {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*", // どのドメインからもアクセス可能にする
-          "Access-Control-Allow-Methods": "GET",
-        },
-      });
-    } catch (error) {
-      return new Response("Internal Server Error", { status: 500 });
+    function getNavElements() {
+        if (!navState.nav) {
+            navState.nav = document.getElementById('navLinks');
+        }
+        var nav = navState.nav;
+        var btn = document.getElementById('hamburgerBtn');
+        var overlay = document.getElementById('navOverlay');
+        return { nav: nav, btn: btn, overlay: overlay };
     }
-  },
-};
+
+    function ensurePlaceholder(nav) {
+        if (!nav || navState.placeholder) return;
+        navState.originalParent = nav.parentNode;
+        navState.originalNextSibling = nav.nextSibling;
+        navState.placeholder = document.createComment('navLinks-placeholder');
+        nav.parentNode.insertBefore(navState.placeholder, nav);
+    }
+
+    function moveNavToBody() {
+        var elements = getNavElements();
+        var nav = elements.nav;
+        if (!nav) return;
+
+        ensurePlaceholder(nav);
+
+        if (nav.parentNode !== document.body) {
+            document.body.appendChild(nav);
+        }
+
+        nav.dataset.navPortal = 'body';
+        nav.style.zIndex = '10000';
+    }
+
+    function restoreNavToHeader() {
+        var elements = getNavElements();
+        var nav = elements.nav;
+        if (!nav || nav.parentNode !== document.body) return;
+
+        if (navState.placeholder && navState.placeholder.parentNode) {
+            navState.placeholder.parentNode.insertBefore(nav, navState.placeholder);
+            navState.placeholder.parentNode.removeChild(navState.placeholder);
+        } else if (navState.originalParent) {
+            if (navState.originalNextSibling && navState.originalNextSibling.parentNode === navState.originalParent) {
+                navState.originalParent.insertBefore(nav, navState.originalNextSibling);
+            } else {
+                navState.originalParent.appendChild(nav);
+            }
+        }
+
+        navState.placeholder = null;
+        nav.dataset.navPortal = 'header';
+        nav.style.zIndex = '';
+    }
+
+    function relocateMobileNav() {
+        var elements = getNavElements();
+        if (!elements.nav) return;
+
+        if (window.innerWidth <= 768) {
+            moveNavToBody();
+        } else {
+            restoreNavToHeader();
+            if (elements.overlay) {
+                elements.overlay.classList.remove('active');
+                elements.overlay.style.display = 'none';
+            }
+            document.body.style.overflow = '';
+        }
+    }
+
+    window.__relocateMobileNav = relocateMobileNav;
+
+    document.addEventListener('DOMContentLoaded', function () {
+        relocateMobileNav();
+    });
+
+    window.addEventListener('resize', function () {
+        relocateMobileNav();
+    });
+})();

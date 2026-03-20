@@ -813,6 +813,7 @@
                 padding: 5rem 1.5rem 2rem !important;
                 gap: 0 !important;
                 z-index: 9999 !important;
+                /* [FIX] body portal でも overlay より上に表示 */
                 transition: right 0.35s cubic-bezier(0.4,0,0.2,1) !important;
                 box-shadow: -4px 0 24px rgba(0,0,0,0.4) !important;
                 overflow-y: auto !important;
@@ -1409,6 +1410,10 @@
             var overlay = document.getElementById('navOverlay');
             if (!btn || !nav) return;
 
+            if (typeof window.__relocateMobileNav === 'function') {
+                window.__relocateMobileNav();
+            }
+
             function openMenu() {
                 btn.classList.add('open');
                 nav.classList.add('open');
@@ -1475,6 +1480,9 @@
             window.addEventListener('resize', function () {
                 if (window.innerWidth > 768 && nav.classList.contains('open')) {
                     closeMenu();
+                }
+                if (typeof window.__relocateMobileNav === 'function') {
+                    window.__relocateMobileNav();
                 }
             });
         });
