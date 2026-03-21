@@ -256,6 +256,7 @@
         /* ============================================================
            Post Page Wrapper
         ============================================================ */
+        .post-wrapper a {
                 display: block;
                 padding: 1rem 0.5rem;
                 font-size: 1rem;
@@ -269,7 +270,7 @@
                 touch-action: manipulation;
                 cursor: pointer;
             }
-        }
+        
 
         /* ============================================================
            Post Page Wrapper
@@ -865,7 +866,7 @@
 
         /* Profile card */
         .sidebar-avatar {
-            width: 64px; height: 64px;
+            width: 80px; height: 80px;
             border-radius: 50%;
             background: var(--gradient-cta);
             display: flex;
@@ -873,6 +874,26 @@
             justify-content: center;
             margin: 0 auto 0.75rem;
             font-size: 1.6rem;
+            overflow: hidden;
+            flex-shrink: 0;
+            border: 2px solid rgba(0, 212, 255, 0.35);
+            box-shadow: 0 0 14px rgba(0, 212, 255, 0.2);
+        }
+
+        /* 著者写真 */
+        .sidebar-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            border-radius: 50%;
+            display: block;
+        }
+
+        /* 写真が読み込めない場合のフォールバック絵文字 */
+        .sidebar-avatar .avatar-fallback {
+            font-size: 1.6rem;
+            line-height: 1;
         }
 
         .sidebar-profile { text-align: center; }
@@ -1023,7 +1044,11 @@
                 padding: 2.5rem 1.5rem 4rem;
             }
 
+            /* [FIX] スマホ・タブレット: 目次を本文より上に表示 */
+            .post-article { order: 2; }
+
             .post-sidebar {
+                order: 1;
                 position: static;
                 display: grid;
                 grid-template-columns: 1fr 1fr;
@@ -1119,7 +1144,7 @@
                             <circle cx="12" cy="12" r="10"/>
                             <polyline points="12 6 12 12 16 14"/>
                         </svg>
-                        <span id="read-time">-- 分で読めます</span>
+                       
                     </div>
                 </div>
 
@@ -1208,7 +1233,15 @@
                 <div class="sidebar-card">
                     <div class="sidebar-card-title">✍️ 著者について</div>
                     <div class="sidebar-profile">
-                        <div class="sidebar-avatar" aria-hidden="true">🎓</div>
+                        <div class="sidebar-avatar">
+                            <!-- ★ 著者写真: src の画像パスを実際のファイルに変更してください -->
+                            <img
+                                src="assets/images/author.jpg"
+                                alt="CodeRoute 90 著者"
+                                onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                            />
+                            <span class="avatar-fallback" aria-hidden="true" style="display:none;">🎓</span>
+                        </div>
                         <div class="sidebar-profile-name">CodeRoute 90</div>
                         <div class="sidebar-profile-bio">40歳・文系営業職から90日でエンジニア転職。最短ルートを事実ベースで公開するメディア。</div>
                     </div>
