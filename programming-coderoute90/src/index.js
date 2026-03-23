@@ -18,10 +18,7 @@ function escapeHtml(str) {
 
 async function fetchArticle(id) {
   const res = await fetch(API_BASE + '/' + encodeURIComponent(id));
-  if (!res.ok) {
-    console.log('fetch失敗 status:', res.status);
-    return null;
-  }
+  if (!res.ok) return null;
   const data = await res.json();
   console.log('取得データ:', JSON.stringify(data).slice(0, 200));
 
