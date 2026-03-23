@@ -1,5 +1,5 @@
 cat wrangler.toml
-name               = "programming"
+name               = "programming-coderoute90"
 main               = "src/index.js"
 compatibility_date = "2026-03-22"
 [assets]
