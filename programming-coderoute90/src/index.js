@@ -87,28 +87,36 @@ export default {
       const id = url.searchParams.get('id');
       if (!id) return env.ASSETS.fetch(request);
 
-      const assetResponse = await env.ASSETS.fetch(
-        new Request(SITE_URL + '/post.html')
-      );
-      if (!assetResponse.ok) return assetResponse;
+      try {
+        const assetResponse = await env.ASSETS.fetch(
+          new Request(SITE_URL + '/post.html')
+        );
+        if (!assetResponse.ok) return assetResponse;
 
-      const article = await fetchArticle(id, env);
-      const meta = article
-        ? {
-            title:       article.title + ' - ' + SITE_NAME,
-            description: stripHtml(article.content).slice(0, 120),
-            image:       (article.eyecatch && article.eyecatch.url) ? article.eyecatch.url : DEFAULT_META.image,
-          }
-        : DEFAULT_META;
+        const article = await fetchArticle(id, env);
+        const meta = article
+          ? {
+              title:       article.title + ' - ' + SITE_NAME,
+              description: stripHtml(article.content).slice(0, 120),
+              image:       (article.eyecatch && article.eyecatch.url) ? article.eyecatch.url : DEFAULT_META.image,
+            }
+          : DEFAULT_META;
 
-      const canonicalUrl = SITE_URL + '/post?id=' + encodeURIComponent(id);
+        const canonicalUrl = SITE_URL + '/post?id=' + encodeURIComponent(id);
 
-      return new HTMLRewriter()
-        .on('title',                 new TitleRewriter(meta.title))
-        .on('meta',                  new ExistingMetaRemover())
-        .on('link[rel="canonical"]', new CanonicalRewriter(canonicalUrl))
-        .on('head',                  new OgpInjector(meta, canonicalUrl))
-        .transform(assetResponse);
+        return new HTMLRewriter()
+          .on('title',                 new TitleRewriter(meta.title))
+          .on('meta',                  new ExistingMetaRemover())
+          .on('link[rel="canonical"]', new CanonicalRewriter(canonicalUrl))
+          .on('head',                  new OgpInjector(meta, canonicalUrl))
+          .transform(assetResponse);
+
+      } catch (err) {
+        return new Response('エラー詳細: ' + err.message + '\n' + err.stack, {
+          status: 500,
+          headers: { 'Content-Type': 'text/plain' }
+        });
+      }
     }
 
     return env.ASSETS.fetch(request);
