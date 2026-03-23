@@ -17,13 +17,17 @@ function escapeHtml(str) {
 }
 
 async function fetchArticle(id) {
-  const res = await fetch(API_BASE + '?limit=100&orders=-publishedAt');
+  const res = await fetch(API_BASE + '?id=' + encodeURIComponent(id));
   if (!res.ok) {
     console.log('fetch失敗 status:', res.status);
     return null;
   }
   const data = await res.json();
-  console.log('取得データ件数:', data.contents ? data.contents.length : 0);
+  console.log('取得データ:', JSON.stringify(data).slice(0, 100));
+
+  if (data && data.id) {
+    return data;
+  }
 
   if (data && Array.isArray(data.contents)) {
     const found = data.contents.find(function(item) {
