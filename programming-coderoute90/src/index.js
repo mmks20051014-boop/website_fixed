@@ -16,27 +16,23 @@ function escapeHtml(str) {
   return String(str ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
 
-async function fetchArticle(id) {
-  const res = await fetch(API_BASE + '?id=' + encodeURIComponent(id));
+async function fetchArticle(id, env) {
+  const base = `https://${env.MICROCMS_SERVICE_DOMAIN}.microcms.io/api/v1/${env.MICROCMS_ENDPOINT}`;
+  const apiUrl = base + '?id=' + encodeURIComponent(id);
+  const res = await fetch(apiUrl, {
+    headers: { 'X-MICROCMS-API-KEY': env.MICROCMS_API_KEY },
+  });
   if (!res.ok) {
     console.log('fetch失敗 status:', res.status);
     return null;
   }
   const data = await res.json();
-  console.log('取得データ:', JSON.stringify(data).slice(0, 100));
-
-  if (data && data.id) {
-    return data;
-  }
-
+  if (data && data.id) return data;
   if (data && Array.isArray(data.contents)) {
-    const found = data.contents.find(function(item) {
+    return data.contents.find(function(item) {
       return item && item.id === id;
-    });
-    console.log('検索結果:', found ? found.title : 'null');
-    return found || null;
+    }) || null;
   }
-
   return null;
 }
 
@@ -96,7 +92,7 @@ export default {
       );
       if (!assetResponse.ok) return assetResponse;
 
-      const article = await fetchArticle(id);
+      const article = await fetchArticle(id, env);
       const meta = article
         ? {
             title:       article.title + ' - ' + SITE_NAME,
