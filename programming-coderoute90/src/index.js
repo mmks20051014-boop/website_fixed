@@ -17,12 +17,9 @@ function escapeHtml(str) {
 }
 
 async function fetchArticle(id) {
-  const res = await fetch(API_BASE + '/' + encodeURIComponent(id));
+  const res = await fetch(API_BASE + '?limit=100&orders=-publishedAt');
   if (!res.ok) {
-<<<<<<<<< Temporary merge branch 1
-=========
     console.log('fetch失敗 status:', res.status);
->>>>>>>>> Temporary merge branch 2
     return null;
   }
   const data = await res.json();
@@ -38,7 +35,6 @@ async function fetchArticle(id) {
 
   return null;
 }
-
 
 class TitleRewriter {
   constructor(title) { this.title = title; }
@@ -99,19 +95,19 @@ export default {
       const article = await fetchArticle(id);
       const meta = article
         ? {
-            title: article.title + ' - ' + SITE_NAME,
+            title:       article.title + ' - ' + SITE_NAME,
             description: stripHtml(article.content).slice(0, 120),
-            image: (article.eyecatch && article.eyecatch.url) ? article.eyecatch.url : DEFAULT_META.image,
+            image:       (article.eyecatch && article.eyecatch.url) ? article.eyecatch.url : DEFAULT_META.image,
           }
         : DEFAULT_META;
 
       const canonicalUrl = SITE_URL + '/post?id=' + encodeURIComponent(id);
 
       return new HTMLRewriter()
-        .on('title', new TitleRewriter(meta.title))
-        .on('meta', new ExistingMetaRemover())
+        .on('title',                 new TitleRewriter(meta.title))
+        .on('meta',                  new ExistingMetaRemover())
         .on('link[rel="canonical"]', new CanonicalRewriter(canonicalUrl))
-        .on('head', new OgpInjector(meta, canonicalUrl))
+        .on('head',                  new OgpInjector(meta, canonicalUrl))
         .transform(assetResponse);
     }
 
