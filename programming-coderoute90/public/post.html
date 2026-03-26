@@ -198,7 +198,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <!-- Site CSS -->
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="style.css">
 
     <style>
         /* ============================================================
@@ -1364,10 +1364,10 @@
 <body>
 
     <!-- Reading Progress Bar -->
-    <div id="reading-progress" role="progressbar" aria-label="読了進捗"></div>
+    <div id="reading-progress" role="progressbar" aria-label="読了進捗" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
 
     <!-- ===== Header ===== -->
-    <header id="site-header">
+    <header id="site-header" role="banner" aria-label="サイトヘッダー" data-header>
         <nav>
             <a href="index.html" class="logo">
                 <i class="fas fa-graduation-cap" aria-hidden="true"></i> CodeRoute 90
@@ -1499,6 +1499,13 @@
                         </a>
 
                     </div>
+                    
+                    <!-- 関連記事表示エリア（JavaScriptで動的に挿入） -->
+                    <div id="related-posts-container"></div>
+                    
+                </div>
+
+                    </div>
                 </div>
 
             </article>
@@ -1527,7 +1534,7 @@
                             />
                             <span class="avatar-fallback" aria-hidden="true" style="display:none;">🎓</span>
                         </div>
-                        <div class="sidebar-profile-name">CodeRoute 90</div>
+                        <div class="sidebar-profile-name">kobayashi yuto</div>
                         <div class="sidebar-profile-bio">40歳・文系営業職から90日でエンジニア転職。最短ルートを事実ベースで公開するメディア。</div>
                     </div>
                 </div>
@@ -1586,7 +1593,124 @@
     </footer>
 
     <!-- ===== Scripts ===== -->
-    <script src="assets/js/header-scroll.js" defer></script>
+    <script src="header-scroll.js" defer></script>
+    <script>
+        // 関連記事機能（インライン化）
+        (function() {
+            'use strict';
+
+            // 関連記事データ
+            const relatedPostsData = [
+                {
+                    id: 1,
+                    title: "40歳文系営業職が3日で挫折した話",
+                    excerpt: "独学でのプログラミング学習は、想像以上に困難だった。挫折した理由と、それでも成功できた転機とは...",
+                    category: "体験談",
+                    date: "2024-01-15",
+                    url: "?id=1"
+                },
+                {
+                    id: 2,
+                    title: "ITスクール選びで失敗しないための5つのポイント",
+                    excerpt: "スクール選びは、転職成功の分かれ道。料金だけで選ばないための重要なチェックポイントを解説。",
+                    category: "スクール選び",
+                    date: "2024-01-20",
+                    url: "?id=2"
+                },
+                {
+                    id: 3,
+                    title: "90日の学習ロードマップを公開",
+                    excerpt: "効率的に学習するための、90日間の詳細なスケジュールと学習内容を完全公開。",
+                    category: "学習ロードマップ",
+                    date: "2024-01-25",
+                    url: "?id=3"
+                }
+            ];
+
+            // 現在の記事IDを取得
+            function getCurrentPostId() {
+                const urlParams = new URLSearchParams(window.location.search);
+                const currentId = urlParams.get('id');
+                return currentId ? parseInt(currentId) : null;
+            }
+
+            // 関連記事を取得（現在の記事を除外）
+            function getRelatedPosts(currentId, count = 3) {
+                const availablePosts = relatedPostsData.filter(post => post.id !== currentId);
+                const shuffled = availablePosts.sort(() => 0.5 - Math.random());
+                return shuffled.slice(0, count);
+            }
+
+            // 日付フォーマット
+            function formatDate(dateString) {
+                const date = new Date(dateString);
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                return `${year}年${month}月${day}日`;
+            }
+
+            // 関連記事カードを作成
+            function createRelatedPostCard(post) {
+                const card = document.createElement('div');
+                card.className = 'related-post-card';
+                
+                card.innerHTML = `
+                    <a href="${post.url}" class="related-post-link">
+                        <div class="related-post-header">
+                            <span class="related-post-category">${post.category}</span>
+                            <h3 class="related-post-title">${post.title}</h3>
+                        </div>
+                        <p class="related-post-excerpt">${post.excerpt}</p>
+                        <div class="related-post-meta">
+                            <span class="related-post-date">
+                                <i class="fas fa-calendar" aria-hidden="true"></i>
+                                ${formatDate(post.date)}
+                            </span>
+                            <span class="related-post-read-more">
+                                記事を読む
+                            </span>
+                        </div>
+                    </a>
+                `;
+                
+                return card;
+            }
+
+            // 関連記事を表示
+            function displayRelatedPosts() {
+                const currentId = getCurrentPostId();
+                const postsToShow = getRelatedPosts(currentId || 1);
+                
+                if (postsToShow.length === 0) return;
+                
+                const container = document.getElementById('related-posts-container');
+                if (!container) return;
+                
+                const section = document.createElement('section');
+                section.className = 'related-posts';
+                
+                section.innerHTML = `
+                    <h2 class="related-posts-title">関連記事</h2>
+                    <div class="related-posts-grid"></div>
+                `;
+                
+                const grid = section.querySelector('.related-posts-grid');
+                postsToShow.forEach(post => {
+                    grid.appendChild(createRelatedPostCard(post));
+                });
+                
+                container.appendChild(section);
+            }
+
+            // 初期化
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', displayRelatedPosts);
+            } else {
+                displayRelatedPosts();
+            }
+        })();
+    </script>
 
     <script>
     /* ============================================================
